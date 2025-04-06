@@ -2,11 +2,39 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 const PORT = process.env.PORT || 3000;
+
+// Configuração do arquivo de persistência
+const PEDIDOS_FILE = path.join(__dirname, 'pedidos.json');
+
+// Funções para persistência
+function carregarPedidos() {
+  try {
+    if (fs.existsSync(PEDIDOS_FILE)) {
+      const data = fs.readFileSync(PEDIDOS_FILE, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error('Erro ao carregar pedidos:', err);
+  }
+  return [];
+}
+
+function salvarPedidos(pedidos) {
+  try {
+    fs.writeFileSync(PEDIDOS_FILE, JSON.stringify(pedidos, null, 2));
+  } catch (err) {
+    console.error('Erro ao salvar pedidos:', err);
+  }
+}
+
+// Carrega pedidos ao iniciar
+let pedidos = carregarPedidos();
 
 // Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, '../public')));
@@ -15,9 +43,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
-
-// Armazenamento em memória (substitui banco de dados)
-let pedidos = [];
 
 // Configuração do Socket.io
 io.on('connection', (socket) => {
@@ -33,7 +58,10 @@ io.on('connection', (socket) => {
     pedido.data = new Date().toLocaleString('pt-BR');
     pedidos.push(pedido);
     
-    // Atualiza todos os clientes (incluindo painel admin)
+    // Persiste no arquivo
+    salvarPedidos(pedidos);
+    
+    // Atualiza todos os clientes
     io.emit('pedidos-atualizados', pedidos);
     console.log('Novo pedido recebido:', pedido);
   });
@@ -43,9 +71,19 @@ io.on('connection', (socket) => {
     const pedido = pedidos.find(p => p.id === id);
     if (pedido) {
       pedido.status = status;
+      // Persiste a mudança
+      salvarPedidos(pedidos);
       io.emit('pedidos-atualizados', pedidos);
       console.log(`Pedido ${id} atualizado para status: ${status}`);
     }
+  });
+
+  // Limpar pedidos concluídos (opcional)
+  socket.on('limpar-pedidos-concluidos', () => {
+    pedidos = pedidos.filter(p => p.status !== 'delivered' && p.status !== 'cancelled');
+    salvarPedidos(pedidos);
+    io.emit('pedidos-atualizados', pedidos);
+    console.log('Pedidos concluídos removidos');
   });
 
   socket.on('disconnect', () => {
@@ -53,6 +91,12 @@ io.on('connection', (socket) => {
   });
 });
 
+// Rota para backup dos pedidos (opcional)
+app.get('/backup-pedidos', (req, res) => {
+  res.download(PEDIDOS_FILE, 'backup-pedidos.json');
+});
+
 server.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`Pedidos carregados: ${pedidos.length}`);
 });

@@ -172,6 +172,16 @@
       margin: 0 auto;
     }
     
+    .checkout-step {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .checkout-step:last-child {
+      border-bottom: none;
+    }
+    
     .delivery-option-card {
       cursor: pointer;
       transition: all 0.3s;
@@ -242,6 +252,95 @@
       background-color: #dc3545;
     }
     
+    /* Kitchen Print Styles */
+    .kitchen-order {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.3;
+      padding: 10px;
+      max-width: 58mm;
+    }
+    
+    .kitchen-order-header {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+      border-bottom: 1px dashed #000;
+      padding-bottom: 5px;
+    }
+    
+    .kitchen-order-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    
+    .kitchen-order-footer {
+      border-top: 1px dashed #000;
+      margin-top: 10px;
+      padding-top: 5px;
+      font-weight: bold;
+    }
+    
+    /* Cart Sidebar Styles */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background-color: white;
+      z-index: 1050;
+      transition: right 0.3s ease;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      overflow-y: auto;
+    }
+    
+    .cart-sidebar.show {
+      right: 0;
+    }
+    
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1040;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+    
+    .cart-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Cart Icon Styles */
+    .cart-icon-container {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .cart-icon-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .product-image {
@@ -250,10 +349,22 @@
       
       .filter-buttons {
         flex-wrap: wrap;
+        justify-content: center;
       }
       
       .filter-btn {
         margin-bottom: 5px;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+      }
+      
+      .checkout-step {
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .cart-sidebar {
+        max-width: 100%;
       }
     }
     
@@ -265,6 +376,71 @@
       .cart-item-quantity {
         flex-direction: column;
         align-items: flex-end;
+      }
+      
+      .checkout-step {
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      
+      .filter-buttons {
+        margin-top: 10px;
+      }
+      
+      .delivery-option-card, .payment-method-card {
+        margin-bottom: 10px;
+      }
+    }
+    
+    /* Admin Panel Improvements */
+    .admin-panel-container {
+      padding-top: 20px;
+    }
+    
+    .admin-stats-card {
+      border-left: 4px solid var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .admin-stats-card .card-body {
+      padding: 1rem;
+    }
+    
+    .admin-stats-card h5 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-stats-card .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .order-actions {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    
+    .order-actions .btn {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Print Styles for Kitchen */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #kitchen-order-print, #kitchen-order-print * {
+        visibility: visible;
+      }
+      #kitchen-order-print {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: auto;
       }
     }
   </style>
@@ -278,13 +454,56 @@
           <h1 class="h3 mb-0 fw-bold"><span class="text-primary">Cozinha</span> da Vivi</h1>
           <p class="mb-0 small text-muted">Comida caseira com amor</p>
         </div>
-        <div id="cart-indicator" class="position-relative" style="cursor: pointer;">
+        <div class="cart-icon-container" id="cart-indicator">
           <i class="fas fa-shopping-bag fa-lg"></i>
-          <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+          <span id="cart-count" class="cart-icon-badge" style="display: none;">0</span>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Cart Overlay -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="card border-0 h-100">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="h5 mb-0"><i class="fas fa-shopping-bag me-2"></i> Seu Pedido</h2>
+        <button class="btn btn-sm btn-outline-light" id="close-cart">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="card-body p-0 d-flex flex-column">
+        <div id="cart-items" class="list-group list-group-flush flex-grow-1">
+          <div class="list-group-item text-center py-4 empty-cart">
+            <i class="fas fa-shopping-bag empty-cart-icon mb-3"></i>
+            <p class="mb-0">Seu carrinho está vazio</p>
+            <small class="text-muted">Adicione itens para continuar</small>
+          </div>
+        </div>
+        <div class="p-3 border-top">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">Subtotal:</span>
+            <span id="subtotal" class="fw-bold">R$ 0,00</span>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center border-top pt-3">
+            <span class="h5 mb-0">Total:</span>
+            <span id="total" class="h4 mb-0 text-primary fw-bold">R$ 0,00</span>
+          </div>
+          
+          <button id="checkout-button" class="btn btn-primary w-100 mt-3 py-2 fw-bold" disabled>
+            <i class="fas fa-check-circle me-2"></i> Finalizar Pedido
+          </button>
+          
+          <p class="small text-muted mt-2 mb-0 text-center">
+            <i class="fas fa-lock me-1"></i> Seus dados estão protegidos
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Main Content -->
   <main class="main-content">
@@ -292,9 +511,9 @@
     <section id="product-section" class="container my-4">
       <div class="row">
         <!-- Seção de Produtos -->
-        <section id="products" class="col-lg-8 mb-5">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h4 fw-bold mb-0">Nosso Cardápio</h2>
+        <section id="products" class="col-12 mb-5">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+            <h2 class="h4 fw-bold mb-3 mb-md-0">Nosso Cardápio</h2>
             <div class="btn-group filter-buttons" role="group">
               <button type="button" class="filter-btn btn btn-outline-secondary active" data-category="all">Todos</button>
               <button type="button" class="filter-btn btn btn-outline-secondary" data-category="pratos">Pratos</button>
@@ -305,7 +524,7 @@
 
           <div class="row g-4" id="product-container">
             <!-- Prato 1 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="1" data-category="pratos">
                 <div class="badge bg-primary position-absolute" style="top: 0.5rem; right: 0.5rem">Mais pedido</div>
                 <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Frango à Parmegiana" class="card-img-top product-image">
@@ -323,7 +542,7 @@
             </div>
 
             <!-- Prato 2 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="2" data-category="pratos">
                 <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Salada Tropical" class="card-img-top product-image">
                 <div class="card-body">
@@ -340,7 +559,7 @@
             </div>
 
             <!-- Prato 3 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="3" data-category="pratos">
                 <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Risoto de Cogumelos" class="card-img-top product-image">
                 <div class="card-body">
@@ -357,7 +576,7 @@
             </div>
 
             <!-- Prato 4 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="4" data-category="pratos">
                 <div class="badge bg-success position-absolute" style="top: 0.5rem; right: 0.5rem">Novidade</div>
                 <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Strogonoff de Carne" class="card-img-top product-image">
@@ -375,7 +594,7 @@
             </div>
 
             <!-- Prato 5 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="5" data-category="pratos">
                 <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Moqueca de Peixe" class="card-img-top product-image">
                 <div class="card-body">
@@ -392,7 +611,7 @@
             </div>
 
             <!-- Prato 6 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="6" data-category="pratos">
                 <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lasanha à Bolonhesa" class="card-img-top product-image">
                 <div class="card-body">
@@ -409,7 +628,7 @@
             </div>
 
             <!-- Sobremesa 1 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="7" data-category="sobremesas">
                 <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Brownie com Sorvete" class="card-img-top product-image">
                 <div class="card-body">
@@ -426,7 +645,7 @@
             </div>
 
             <!-- Bebida 1 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
               <div class="card product h-100 border-0 shadow-sm" data-id="8" data-category="bebidas">
                 <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Suco Natural" class="card-img-top product-image">
                 <div class="card-body">
@@ -443,65 +662,6 @@
             </div>
           </div>
         </section>
-
-        <!-- Sidebar do Carrinho -->
-        <aside class="col-lg-4">
-          <div class="card border-0 shadow-sm sticky-top cart" style="top: 100px;">
-            <div class="card-header bg-primary text-white">
-              <h2 class="h5 mb-0"><i class="fas fa-shopping-bag me-2"></i> Seu Pedido</h2>
-            </div>
-            <div class="card-body p-0">
-              <div id="cart-items" class="list-group list-group-flush">
-                <div class="list-group-item text-center py-4 empty-cart">
-                  <i class="fas fa-shopping-bag empty-cart-icon mb-3"></i>
-                  <p class="mb-0">Seu carrinho está vazio</p>
-                  <small class="text-muted">Adicione itens para continuar</small>
-                </div>
-              </div>
-              <div class="p-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <span class="text-muted">Subtotal:</span>
-                  <span id="subtotal" class="fw-bold">R$ 0,00</span>
-                </div>
-                
-                <!-- Opções de entrega -->
-                <div class="mb-3">
-                  <h3 class="h6 mb-2">Forma de Recebimento</h3>
-                  <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="delivery" id="delivery" value="entrega" checked>
-                    <label class="form-check-label" for="delivery">
-                      <i class="fas fa-motorcycle me-1"></i> Entrega (Taxa: R$ 5,00)
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="delivery" id="pickup" value="retirada">
-                    <label class="form-check-label" for="pickup">
-                      <i class="fas fa-store me-1"></i> Retirada no Local
-                    </label>
-                  </div>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <span class="text-muted">Taxa de Entrega:</span>
-                  <span id="delivery-fee" class="fw-bold">R$ 5,00</span>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center border-top pt-3">
-                  <span class="h5 mb-0">Total:</span>
-                  <span id="total" class="h4 mb-0 text-primary fw-bold">R$ 0,00</span>
-                </div>
-                
-                <button id="checkout-button" class="btn btn-primary w-100 mt-3 py-2 fw-bold" disabled>
-                  <i class="fas fa-check-circle me-2"></i> Finalizar Pedido
-                </button>
-                
-                <p class="small text-muted mt-2 mb-0 text-center">
-                  <i class="fas fa-lock me-1"></i> Seus dados estão protegidos
-                </p>
-              </div>
-            </div>
-          </div>
-        </aside>
       </div>
     </section>
 
@@ -515,7 +675,7 @@
                 <h2 class="h5 mb-0"><i class="fas fa-shopping-bag me-2"></i> Finalizar Pedido</h2>
               </div>
               <div class="card-body">
-                <div class="mb-4">
+                <div class="checkout-step">
                   <h3 class="h5 mb-3">1. Método de Recebimento</h3>
                   <div class="row g-3">
                     <div class="col-md-6">
@@ -543,7 +703,7 @@
                   </div>
                 </div>
 
-                <div class="mb-4">
+                <div class="checkout-step">
                   <h3 class="h5 mb-3">2. Informações do Cliente</h3>
                   <form id="customer-info-form">
                     <div class="row g-3">
@@ -553,11 +713,11 @@
                       </div>
                       <div class="col-md-6">
                         <label for="customer-phone" class="form-label">Telefone *</label>
-                        <input type="tel" class="form-control" id="customer-phone" required>
+                        <input type="tel" class="form-control" id="customer-phone" required placeholder="+351 933 737 672">
                       </div>
                       <div class="col-12 delivery-field">
                         <label for="customer-whatsapp" class="form-label">WhatsApp (para contato)</label>
-                        <input type="tel" class="form-control" id="customer-whatsapp">
+                        <input type="tel" class="form-control" id="customer-whatsapp" placeholder="+351 933 737 672">
                       </div>
                       <div class="col-12 delivery-field">
                         <label for="customer-address" class="form-label">Endereço *</label>
@@ -571,21 +731,25 @@
                         <label for="customer-neighborhood" class="form-label">Bairro *</label>
                         <input type="text" class="form-control" id="customer-neighborhood">
                       </div>
-                      <div class="col-md-8 delivery-field">
+                      <div class="col-12">
                         <label for="customer-instructions" class="form-label">Instruções para entrega</label>
                         <textarea class="form-control" id="customer-instructions" rows="2" placeholder="Ex: Portão azul, tocar campainha"></textarea>
+                      </div>
+                      <div class="col-12">
+                        <label for="order-notes" class="form-label">Observações do pedido</label>
+                        <textarea class="form-control" id="order-notes" rows="2" placeholder="Ex: Sem cebola, bem passado"></textarea>
                       </div>
                     </div>
                   </form>
                 </div>
 
-                <div class="mb-4">
+                <div class="checkout-step">
                   <h3 class="h5 mb-3">3. Método de Pagamento</h3>
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <div class="card payment-method-card p-3" id="mbway-payment">
+                      <div class="card payment-method-card p-3 active" id="mbway-payment">
                         <div class="form-check">
-                          <input class="form-check-input" type="radio" name="payment-method" id="mbway-method" value="mbway">
+                          <input class="form-check-input" type="radio" name="payment-method" id="mbway-method" value="mbway" checked>
                           <label class="form-check-label fw-bold" for="mbway-method">
                             <i class="fas fa-mobile-alt me-2"></i> MB Way
                           </label>
@@ -621,7 +785,7 @@
                   </div>
                 </div>
 
-                <div class="mb-4">
+                <div class="checkout-step">
                   <h3 class="h5 mb-3">4. Resumo do Pedido</h3>
                   <div class="card border-0 shadow-sm">
                     <div class="card-body p-0">
@@ -676,24 +840,27 @@
         </div>
       </nav>
 
-      <div class="container my-4">
+      <div class="container admin-panel-container my-4">
         <div class="row">
           <div class="col-md-3">
-            <div class="card mb-4">
+            <div class="card admin-stats-card mb-4">
               <div class="card-body">
-                <h3 class="h5 card-title">Resumo</h3>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span>Pedidos Hoje:</span>
-                  <span class="badge bg-primary rounded-pill" id="today-orders">0</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span>Em Preparo:</span>
-                  <span class="badge bg-warning rounded-pill" id="preparing-orders">0</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Para Entregar:</span>
-                  <span class="badge bg-info rounded-pill" id="delivery-orders">0</span>
-                </div>
+                <h5 class="card-title">Pedidos Hoje</h5>
+                <div class="stat-value text-primary" id="today-orders">0</div>
+              </div>
+            </div>
+            
+            <div class="card admin-stats-card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">Em Preparo</h5>
+                <div class="stat-value text-warning" id="preparing-orders">0</div>
+              </div>
+            </div>
+            
+            <div class="card admin-stats-card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">Para Entregar</h5>
+                <div class="stat-value text-info" id="delivery-orders">0</div>
               </div>
             </div>
 
@@ -729,7 +896,12 @@
           <div class="col-md-9">
             <div class="card">
               <div class="card-header bg-white">
-                <h3 class="h5 mb-0">Pedidos Recentes</h3>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h3 class="h5 mb-0">Pedidos Recentes</h3>
+                  <div class="small text-muted" id="last-update">
+                    Atualizado: agora
+                  </div>
+                </div>
               </div>
               <div class="card-body p-0">
                 <div id="orders-list" class="list-group list-group-flush">
@@ -796,6 +968,27 @@
     </div>
   </div>
 
+  <!-- Modal para Visualizar Pedido da Cozinha -->
+  <div class="modal fade" id="kitchenOrderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Pedido para Cozinha</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="kitchen-order-content">
+          <!-- Conteúdo do pedido será inserido aqui -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" id="print-kitchen-order">
+            <i class="fas fa-print me-1"></i> Imprimir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="bg-dark text-white py-4">
     <div class="container">
       <div class="row">
@@ -840,19 +1033,24 @@
   <script>
     // Configurações
     const APP_CONFIG = {
-      whatsappNumber: "5531933737672",
+      whatsappNumber: "351933737672",
       deliveryFee: 5.00,
       restaurantName: "Cozinha da Vivi",
       restaurantAddress: "Rua das Flores, 123 - Centro",
       adminCredentials: {
         username: "admin",
         password: "cozinhadavivi123"
-      }
+      },
+      printerIP: "192.168.1.100", // Substitua pelo IP da impressora térmica
+      printerPort: 9100 // Porta padrão para impressoras térmicas
     };
 
     // Estado do carrinho
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    let isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+    let adminUpdateInterval;
+    let lastOrderCount = 0;
 
     // Elementos do DOM
     const DOM = {
@@ -862,15 +1060,14 @@
       cartItems: document.getElementById("cart-items"),
       totalElement: document.getElementById("total"),
       subtotalElement: document.getElementById("subtotal"),
-      deliveryFeeElement: document.getElementById("delivery-fee"),
       checkoutButton: document.getElementById("checkout-button"),
-      deliveryOptions: document.querySelectorAll('input[name="delivery"]'),
       cartCount: document.getElementById("cart-count"),
       cartIndicator: document.getElementById("cart-indicator"),
       productContainer: document.getElementById("product-container"),
       filterButtons: document.querySelectorAll('.filter-btn'),
       confirmationModal: new bootstrap.Modal(document.getElementById('confirmationModal')),
       adminLoginModal: new bootstrap.Modal(document.getElementById('adminLoginModal')),
+      kitchenOrderModal: new bootstrap.Modal(document.getElementById('kitchenOrderModal')),
       adminLoginButton: document.getElementById("admin-login-button"),
       adminLogoutButton: document.getElementById("admin-logout"),
       backToCartButton: document.getElementById("back-to-cart-button"),
@@ -890,7 +1087,13 @@
       deliveryOrders: document.getElementById("delivery-orders"),
       statusFilter: document.getElementById("status-filter"),
       typeFilter: document.getElementById("type-filter"),
-      applyFilters: document.getElementById("apply-filters")
+      applyFilters: document.getElementById("apply-filters"),
+      kitchenOrderContent: document.getElementById("kitchen-order-content"),
+      printKitchenOrder: document.getElementById("print-kitchen-order"),
+      cartSidebar: document.getElementById("cart-sidebar"),
+      cartOverlay: document.getElementById("cart-overlay"),
+      closeCart: document.getElementById("close-cart"),
+      lastUpdate: document.getElementById("last-update")
     };
 
     // Conexão Socket.io com tratamento de erros
@@ -923,8 +1126,18 @@
     // Recebe atualizações de pedidos do servidor
     socket.on('pedidos-atualizados', (pedidosRecebidos) => {
       orders = pedidosRecebidos;
+      localStorage.setItem('orders', JSON.stringify(orders));
+      
       if (!DOM.adminPanel.classList.contains('d-none')) {
         Order.updateAdminPanel();
+        
+        // Verificar se há novos pedidos pendentes
+        const newPendingOrders = orders.filter(o => o.status === 'pending').length;
+        if (newPendingOrders > lastOrderCount) {
+          Utils.playNotificationSound();
+          Utils.showNotification('Novo pedido recebido!', 'success');
+        }
+        lastOrderCount = newPendingOrders;
       }
     });
 
@@ -958,11 +1171,39 @@
         }, 3000);
       },
       validatePhone: (phone) => {
-        return /^(\d{10,11})$/.test(phone);
+        // Aceita números internacionais com código de país
+        return /^\+?[\d\s-]{10,15}$/.test(phone);
       },
       getTodayDate: () => {
         const today = new Date();
         return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+      },
+      playNotificationSound: () => {
+        // Criar um elemento de áudio para tocar o som de notificação
+        const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+        audio.play().catch(e => console.log('Erro ao reproduzir som:', e));
+      },
+      updateTimestamp: () => {
+        const now = new Date();
+        DOM.lastUpdate.textContent = `Atualizado: ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+      },
+      sendToPrinter: async (orderId) => {
+        try {
+          // Em um ambiente real, você enviaria para a impressora térmica via rede
+          // Aqui está uma simulação do que seria feito
+          const order = orders.find(o => o.id === orderId);
+          if (!order) return false;
+          
+          // Em produção, você usaria algo como:
+          // const printer = new NetworkPrinter(APP_CONFIG.printerIP, APP_CONFIG.printerPort);
+          // await printer.print(kitchenOrderText);
+          
+          console.log(`Pedido #${orderId} enviado para impressora`);
+          return true;
+        } catch (error) {
+          console.error('Erro ao enviar para impressora:', error);
+          return false;
+        }
       }
     };
 
@@ -1023,7 +1264,7 @@
 
       getTotals: () => {
         const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const isDelivery = [...DOM.deliveryOptions].find(option => option.checked).value === "entrega";
+        const isDelivery = document.getElementById('delivery-method')?.checked || false;
         const deliveryFee = isDelivery ? APP_CONFIG.deliveryFee : 0;
         const total = subtotal + deliveryFee;
         
@@ -1076,13 +1317,28 @@
         }
 
         DOM.subtotalElement.textContent = Utils.formatCurrency(subtotal);
-        DOM.deliveryFeeElement.textContent = Utils.formatCurrency(deliveryFee);
         DOM.totalElement.textContent = Utils.formatCurrency(total);
         
         DOM.cartCount.textContent = itemCount;
-        DOM.cartCount.style.display = itemCount > 0 ? "block" : "none";
+        DOM.cartCount.style.display = itemCount > 0 ? "flex" : "none";
         
         DOM.checkoutButton.disabled = cart.length === 0;
+      },
+      
+      toggleSidebar: () => {
+        if (cart.length === 0) {
+          DOM.cartSidebar.classList.remove('show');
+          DOM.cartOverlay.classList.remove('show');
+          return;
+        }
+        
+        if (DOM.cartSidebar.classList.contains('show')) {
+          DOM.cartSidebar.classList.remove('show');
+          DOM.cartOverlay.classList.remove('show');
+        } else {
+          DOM.cartSidebar.classList.add('show');
+          DOM.cartOverlay.classList.add('show');
+        }
       }
     };
 
@@ -1090,7 +1346,7 @@
     const Order = {
       create: () => {
         const { subtotal, deliveryFee, total } = Cart.getTotals();
-        const deliveryType = [...DOM.deliveryOptions].find(option => option.checked).value;
+        const deliveryType = document.querySelector('input[name="delivery-method"]:checked').value;
         const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'mbway';
         
         const customerInfo = {
@@ -1100,7 +1356,8 @@
           address: document.getElementById("customer-address").value,
           complement: document.getElementById("customer-complement").value,
           neighborhood: document.getElementById("customer-neighborhood").value,
-          instructions: document.getElementById("customer-instructions").value
+          instructions: document.getElementById("customer-instructions").value,
+          notes: document.getElementById("order-notes").value
         };
         
         return {
@@ -1124,6 +1381,7 @@
             `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}${customerInfo.neighborhood}` : 
             'Retirada no local',
           instrucoes: customerInfo.instructions,
+          observacoes: customerInfo.notes,
           data: new Date().toLocaleString('pt-BR'),
           restaurante: APP_CONFIG.restaurantName,
           enderecoRestaurante: APP_CONFIG.restaurantAddress
@@ -1180,7 +1438,9 @@
           paymentText = `💳 *Pagamento com cartão*%0AMáquina será levada na entrega/retirada`;
         }
         
-        const message = `*📝 Novo Pedido - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${pedido.cliente}%0A📞 *Telefone:* ${pedido.telefone}%0A✉ *WhatsApp:* ${pedido.whatsapp}%0A%0A📦 *Itens do Pedido:*%0A${itemsText}%0A%0A💰 *Valores:*%0A*Subtotal:* ${Utils.formatCurrency(pedido.subtotal)}%0A*Taxa de entrega:* ${Utils.formatCurrency(pedido.taxaEntrega)}%0A*Total:* ${Utils.formatCurrency(pedido.total)}%0A%0A🚚 *Forma de recebimento:* ${pedido.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada no local'}${deliveryText}%0A%0A${paymentText}%0A%0A⏰ *Data/hora:* ${pedido.data}%0A%0A_🔔 Aguardando confirmação do restaurante_`;
+        const notesText = pedido.observacoes ? `%0A%0A📌 *Observações do pedido:*%0A${pedido.observacoes}` : '';
+        
+        const message = `*📝 Novo Pedido - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${pedido.cliente}%0A📞 *Telefone:* ${pedido.telefone}%0A✉ *WhatsApp:* ${pedido.whatsapp}%0A%0A📦 *Itens do Pedido:*%0A${itemsText}%0A%0A💰 *Valores:*%0A*Subtotal:* ${Utils.formatCurrency(pedido.subtotal)}%0A*Taxa de entrega:* ${Utils.formatCurrency(pedido.taxaEntrega)}%0A*Total:* ${Utils.formatCurrency(pedido.total)}%0A%0A🚚 *Forma de recebimento:* ${pedido.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada no local'}${deliveryText}%0A%0A${paymentText}${notesText}%0A%0A⏰ *Data/hora:* ${pedido.data}%0A%0A_🔔 Aguardando confirmação do restaurante_`;
         
         const whatsappURL = `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${message}`;
         
@@ -1192,6 +1452,7 @@
           Cart.clear();
           DOM.productSection.classList.remove("d-none");
           DOM.checkoutSection.classList.add("d-none");
+          Cart.toggleSidebar();
         }, 3000);
       },
 
@@ -1238,6 +1499,7 @@
                 <div class="mb-2">
                   <p class="mb-1 small"><i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-1"></i> ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</p>
                   <p class="mb-1 small text-muted"><i class="fas fa-money-bill-wave me-1"></i> ${Order.getPaymentText(order.metodoPagamento, order.trocoPara)}</p>
+                  ${order.observacoes ? `<p class="mb-1 small text-muted"><i class="fas fa-sticky-note me-1"></i> ${order.observacoes}</p>` : ''}
                 </div>
                 
                 <div class="border-top pt-2 mb-2">
@@ -1255,15 +1517,18 @@
                   </div>
                   <div class="text-end">
                     <div class="small text-muted">Total: ${Utils.formatCurrency(order.total)}</div>
-                    <div class="btn-group btn-group-sm mt-1">
-                      <button class="btn btn-outline-primary update-status" data-id="${order.id}" data-status="preparing">
-                        <i class="fas fa-utensils"></i>
+                    <div class="order-actions mt-1">
+                      <button class="btn btn-outline-primary btn-sm update-status" data-id="${order.id}" data-status="preparing">
+                        <i class="fas fa-utensils me-1"></i> Preparar
                       </button>
-                      <button class="btn btn-outline-success update-status" data-id="${order.id}" data-status="ready">
-                        <i class="fas fa-check"></i>
+                      <button class="btn btn-outline-success btn-sm update-status" data-id="${order.id}" data-status="ready">
+                        <i class="fas fa-check me-1"></i> Pronto
                       </button>
-                      <button class="btn btn-outline-danger update-status" data-id="${order.id}" data-status="cancelled">
-                        <i class="fas fa-times"></i>
+                      <button class="btn btn-outline-danger btn-sm update-status" data-id="${order.id}" data-status="cancelled">
+                        <i class="fas fa-times me-1"></i> Cancelar
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm view-kitchen-order" data-id="${order.id}">
+                        <i class="fas fa-print me-1"></i> Imprimir
                       </button>
                     </div>
                   </div>
@@ -1282,6 +1547,8 @@
         DOM.todayOrders.textContent = todayOrdersCount;
         DOM.preparingOrders.textContent = preparingOrdersCount;
         DOM.deliveryOrders.textContent = deliveryOrdersCount;
+        
+        Utils.updateTimestamp();
       },
       
       getStatusText: (status) => {
@@ -1329,6 +1596,104 @@
           
           Utils.showNotification(`Status do pedido #${orderId.slice(-6)} atualizado para ${Order.getStatusText(newStatus)}`, 'success');
         }
+      },
+      
+      generateKitchenOrder: (orderId) => {
+        const order = orders.find(o => o.id === orderId);
+        if (!order) return '';
+        
+        const itemsText = order.itens.map(item => `
+          <div class="kitchen-order-item">
+            <span>${item.quantidade}x ${item.nome}</span>
+          </div>
+        `).join('');
+        
+        const notes = order.observacoes ? `
+          <div class="kitchen-order-item">
+            <span><strong>OBS:</strong> ${order.observacoes}</span>
+          </div>
+        ` : '';
+        
+        const kitchenOrder = `
+          <div class="kitchen-order" id="kitchen-order-print">
+            <div class="kitchen-order-header">
+              ${APP_CONFIG.restaurantName}<br>
+              Pedido #${order.id.slice(-6)}
+            </div>
+            
+            <div class="kitchen-order-item">
+              <span><strong>Cliente:</strong> ${order.cliente}</span>
+            </div>
+            
+            <div class="kitchen-order-item">
+              <span><strong>${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</strong></span>
+            </div>
+            
+            ${order.tipoEntrega === 'entrega' ? `
+              <div class="kitchen-order-item">
+                <span><strong>Endereço:</strong> ${order.endereco}</span>
+              </div>
+              
+              ${order.instrucoes ? `
+                <div class="kitchen-order-item">
+                  <span><strong>Instruções:</strong> ${order.instrucoes}</span>
+                </div>
+              ` : ''}
+            ` : ''}
+            
+            <div class="kitchen-order-item">
+              <span><strong>Data:</strong> ${order.data}</span>
+            </div>
+            
+            <div style="margin: 10px 0; border-top: 1px dashed #000;"></div>
+            
+            ${itemsText}
+            
+            ${notes}
+            
+            <div class="kitchen-order-footer">
+              Total: ${Utils.formatCurrency(order.total)}
+            </div>
+          </div>
+        `;
+        
+        return kitchenOrder;
+      },
+      
+      printKitchenOrder: (orderId) => {
+        const kitchenOrder = Order.generateKitchenOrder(orderId);
+        DOM.kitchenOrderContent.innerHTML = kitchenOrder;
+        
+        // Enviar para impressora térmica (simulado)
+        Utils.sendToPrinter(orderId).then(success => {
+          if (success) {
+            Utils.showNotification('Pedido enviado para impressora da cozinha', 'success');
+          } else {
+            Utils.showNotification('Erro ao enviar para impressora', 'danger');
+          }
+        });
+        
+        // Também permitir impressão normal
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Pedido Cozinha</title>
+            <style>
+              body { font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.3; }
+              .kitchen-order { max-width: 58mm; padding: 10px; }
+              .kitchen-order-header { text-align: center; font-weight: bold; margin-bottom: 10px; border-bottom: 1px dashed #000; padding-bottom: 5px; }
+              .kitchen-order-item { display: flex; justify-content: space-between; margin-bottom: 3px; }
+              .kitchen-order-footer { border-top: 1px dashed #000; margin-top: 10px; padding-top: 5px; font-weight: bold; }
+            </style>
+          </head>
+          <body onload="window.print();window.close()">
+            ${kitchenOrder}
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
       }
     };
 
@@ -1402,10 +1767,15 @@
     const Admin = {
       login: (username, password) => {
         if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
+          isAdminLoggedIn = true;
+          localStorage.setItem('adminLoggedIn', 'true');
+          
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
           
+          // Iniciar atualização periódica
+          Admin.startAutoUpdate();
           Order.updateAdminPanel();
           
           DOM.adminLoginModal.hide();
@@ -1416,9 +1786,38 @@
       },
       
       logout: () => {
+        isAdminLoggedIn = false;
+        localStorage.setItem('adminLoggedIn', 'false');
+        
+        // Parar atualização periódica
+        Admin.stopAutoUpdate();
+        
         DOM.productSection.classList.remove("d-none");
         DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
+      },
+      
+      checkLoginStatus: () => {
+        if (isAdminLoggedIn) {
+          DOM.productSection.classList.add("d-none");
+          DOM.checkoutSection.classList.add("d-none");
+          DOM.adminPanel.classList.remove("d-none");
+          Admin.startAutoUpdate();
+          Order.updateAdminPanel();
+        }
+      },
+      
+      startAutoUpdate: () => {
+        // Atualizar a cada 5 segundos
+        adminUpdateInterval = setInterval(() => {
+          Order.updateAdminPanel();
+        }, 5000);
+      },
+      
+      stopAutoUpdate: () => {
+        if (adminUpdateInterval) {
+          clearInterval(adminUpdateInterval);
+        }
       }
     };
 
@@ -1460,14 +1859,11 @@
         }
       });
 
-      DOM.deliveryOptions.forEach(option => {
-        option.addEventListener("change", Cart.updateUI);
-      });
-
       DOM.checkoutButton.addEventListener("click", () => {
         DOM.productSection.classList.add("d-none");
         DOM.checkoutSection.classList.remove("d-none");
         Checkout.init();
+        Cart.toggleSidebar();
       });
 
       DOM.backToCartButton.addEventListener("click", () => {
@@ -1510,9 +1906,15 @@
       });
 
       DOM.cartIndicator.addEventListener('click', () => {
-        if (cart.length > 0) {
-          document.querySelector('.card.cart').scrollIntoView({ behavior: 'smooth' });
-        }
+        Cart.toggleSidebar();
+      });
+      
+      DOM.closeCart.addEventListener('click', () => {
+        Cart.toggleSidebar();
+      });
+      
+      DOM.cartOverlay.addEventListener('click', () => {
+        Cart.toggleSidebar();
       });
       
       DOM.deliveryOptionCards.forEach(card => {
@@ -1572,6 +1974,24 @@
           
           Order.updateStatus(orderId, newStatus);
         }
+        
+        if (event.target.closest('.view-kitchen-order')) {
+          const button = event.target.closest('.view-kitchen-order');
+          const orderId = button.getAttribute('data-id');
+          const kitchenOrder = Order.generateKitchenOrder(orderId);
+          
+          DOM.kitchenOrderContent.innerHTML = kitchenOrder;
+          DOM.kitchenOrderModal.show();
+        }
+      });
+      
+      DOM.printKitchenOrder.addEventListener('click', () => {
+        const orderId = document.querySelector('.view-kitchen-order.active')?.getAttribute('data-id') || 
+                        document.querySelector('.view-kitchen-order')?.getAttribute('data-id');
+        if (orderId) {
+          Order.printKitchenOrder(orderId);
+          DOM.kitchenOrderModal.hide();
+        }
       });
       
       DOM.applyFilters.addEventListener('click', () => {
@@ -1585,6 +2005,10 @@
       Cart.updateUI();
       Filter.apply('all');
       Checkout.toggleDeliveryFields(true);
+      Admin.checkLoginStatus();
+      
+      // Inicializar contador de pedidos pendentes
+      lastOrderCount = orders.filter(o => o.status === 'pending').length;
     }
 
     document.addEventListener('DOMContentLoaded', init);
