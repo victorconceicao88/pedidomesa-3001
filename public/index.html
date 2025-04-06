@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Faça seu pedido online no Restaurante Cozinha da Vivi - Comida caseira de qualidade">
+  <title>Cozinha da Vivi - Pedido Online</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <style>
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #ffa502;
+      --dark-color: #2f3542;
+      --light-color: #f1f2f6;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .main-content {
+      flex: 1;
+    }
+    
+    .product {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .product-image {
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    
+    .product:hover .product-image {
+      transform: scale(1.03);
+    }
+    
+    .add-to-cart {
+      background-color: var(--primary-color);
+      border: none;
+      transition: all 0.3s;
+    }
+    
+    .add-to-cart:hover {
+      background-color: #ff5252;
+      transform: scale(1.05);
+    }
+    
+    .card-header {
+      background-color: var(--primary-color) !important;
+    }
+    
+    .remove-item {
+      transition: all 0.3s;
+    }
+    
+    .remove-item:hover {
+      transform: scale(1.1);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: #ff5252;
+      border-color: #ff5252;
+    }
+    
+    #checkout-button {
+      transition: all 0.3s;
+      background-color: var(--primary-color);
+      border: none;
+    }
+    
+    #checkout-button:hover {
+      background-color: #ff5252;
+      transform: translateY(-2px);
+    }
+    
+    #checkout-button:disabled {
+      background-color: #adb5bd;
+    }
+    
+    .badge.bg-primary {
+      background-color: var(--primary-color) !important;
+    }
+    
+    .badge.bg-success {
+      background-color: #20c997 !important;
+    }
+    
+    .sticky-top {
+      top: 1rem;
+    }
+    
+    footer {
+      background-color: var(--dark-color) !important;
+    }
+    
+    .text-primary {
+      color: var(--primary-color) !important;
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+    }
+    
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-color);
+      border: none;
+      cursor: pointer;
+    }
+    
+    .quantity-input {
+      width: 40px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: bold;
+    }
+    
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .empty-cart-icon {
+      font-size: 3rem;
+      opacity: 0.2;
+    }
+    
+    .filter-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    /* Checkout Page Styles */
+    .checkout-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .delivery-option-card {
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    
+    .delivery-option-card:hover {
+      border-color: var(--primary-color);
+    }
+    
+    .delivery-option-card.active {
+      border-color: var(--primary-color);
+      background-color: rgba(255, 107, 107, 0.1);
+    }
+    
+    .payment-method-card {
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    
+    .payment-method-card:hover {
+      border-color: var(--primary-color);
+    }
+    
+    .payment-method-card.active {
+      border-color: var(--primary-color);
+      background-color: rgba(255, 107, 107, 0.1);
+    }
+    
+    /* Admin Panel Styles */
+    .admin-navbar {
+      background-color: var(--dark-color);
+    }
+    
+    .order-card {
+      transition: all 0.3s;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .order-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .order-status-badge {
+      font-size: 0.8rem;
+      padding: 0.35em 0.65em;
+    }
+    
+    .status-pending {
+      background-color: #ffc107;
+    }
+    
+    .status-preparing {
+      background-color: #fd7e14;
+    }
+    
+    .status-ready {
+      background-color: #20c997;
+    }
+    
+    .status-delivered {
+      background-color: #198754;
+    }
+    
+    .status-cancelled {
+      background-color: #dc3545;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .product-image {
+        height: 150px;
+      }
+      
+      .filter-buttons {
+        flex-wrap: wrap;
+      }
+      
+      .filter-btn {
+        margin-bottom: 5px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .product-image {
+        height: 120px;
+      }
+      
+      .cart-item-quantity {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Navigation -->
+  <header class="bg-dark text-white py-3 sticky-top shadow-sm">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-0 fw-bold"><span class="text-primary">Cozinha</span> da Vivi</h1>
+          <p class="mb-0 small text-muted">Comida caseira com amor</p>
+        </div>
+        <div id="cart-indicator" class="position-relative" style="cursor: pointer;">
+          <i class="fas fa-shopping-bag fa-lg"></i>
+          <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Product Section (Visible by default) -->
+    <section id="product-section" class="container my-4">
+      <div class="row">
+        <!-- Seção de Produtos -->
+        <section id="products" class="col-lg-8 mb-5">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h4 fw-bold mb-0">Nosso Cardápio</h2>
+            <div class="btn-group filter-buttons" role="group">
+              <button type="button" class="filter-btn btn btn-outline-secondary active" data-category="all">Todos</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="pratos">Pratos</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="sobremesas">Sobremesas</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="bebidas">Bebidas</button>
+            </div>
+          </div>
+
+          <div class="row g-4" id="product-container">
+            <!-- Prato 1 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="1" data-category="pratos">
+                <div class="badge bg-primary position-absolute" style="top: 0.5rem; right: 0.5rem">Mais pedido</div>
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Frango à Parmegiana" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Frango à Parmegiana</h3>
+                  <p class="card-text text-muted small">Filé de frango empanado com molho de tomate caseiro e queijo derretido</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 32,90</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prato 2 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="2" data-category="pratos">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Salada Tropical" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Salada Tropical</h3>
+                  <p class="card-text text-muted small">Mix de folhas, manga, abacate, nozes e molho de iogurte</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 24,50</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prato 3 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="3" data-category="pratos">
+                <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Risoto de Cogumelos" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Risoto de Cogumelos</h3>
+                  <p class="card-text text-muted small">Risoto cremoso com mix de cogumelos frescos e ervas finas</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 28,90</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prato 4 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="4" data-category="pratos">
+                <div class="badge bg-success position-absolute" style="top: 0.5rem; right: 0.5rem">Novidade</div>
+                <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Strogonoff de Carne" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Strogonoff de Carne</h3>
+                  <p class="card-text text-muted small">Tradicional strogonoff com carne macia, creme de leite e champignons</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 35,90</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prato 5 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="5" data-category="pratos">
+                <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Moqueca de Peixe" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Moqueca de Peixe</h3>
+                  <p class="card-text text-muted small">Peixe branco cozido no leite de coco com dendê e pimentões</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 42,50</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prato 6 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="6" data-category="pratos">
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lasanha à Bolonhesa" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Lasanha à Bolonhesa</h3>
+                  <p class="card-text text-muted small">Camadas de massa fresca com molho bolonhesa e queijos</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 38,90</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sobremesa 1 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="7" data-category="sobremesas">
+                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Brownie com Sorvete" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Brownie com Sorvete</h3>
+                  <p class="card-text text-muted small">Brownie caseiro com sorvete de creme e calda de chocolate</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 18,90</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bebida 1 -->
+            <div class="col-md-6 col-lg-4">
+              <div class="card product h-100 border-0 shadow-sm" data-id="8" data-category="bebidas">
+                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Suco Natural" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Suco Natural (500ml)</h3>
+                  <p class="card-text text-muted small">Opções: Laranja, Maracujá, Abacaxi com Hortelã</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sidebar do Carrinho -->
+        <aside class="col-lg-4">
+          <div class="card border-0 shadow-sm sticky-top cart" style="top: 100px;">
+            <div class="card-header bg-primary text-white">
+              <h2 class="h5 mb-0"><i class="fas fa-shopping-bag me-2"></i> Seu Pedido</h2>
+            </div>
+            <div class="card-body p-0">
+              <div id="cart-items" class="list-group list-group-flush">
+                <div class="list-group-item text-center py-4 empty-cart">
+                  <i class="fas fa-shopping-bag empty-cart-icon mb-3"></i>
+                  <p class="mb-0">Seu carrinho está vazio</p>
+                  <small class="text-muted">Adicione itens para continuar</small>
+                </div>
+              </div>
+              <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-muted">Subtotal:</span>
+                  <span id="subtotal" class="fw-bold">R$ 0,00</span>
+                </div>
+                
+                <!-- Opções de entrega -->
+                <div class="mb-3">
+                  <h3 class="h6 mb-2">Forma de Recebimento</h3>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="delivery" id="delivery" value="entrega" checked>
+                    <label class="form-check-label" for="delivery">
+                      <i class="fas fa-motorcycle me-1"></i> Entrega (Taxa: R$ 5,00)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="delivery" id="pickup" value="retirada">
+                    <label class="form-check-label" for="pickup">
+                      <i class="fas fa-store me-1"></i> Retirada no Local
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-muted">Taxa de Entrega:</span>
+                  <span id="delivery-fee" class="fw-bold">R$ 5,00</span>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                  <span class="h5 mb-0">Total:</span>
+                  <span id="total" class="h4 mb-0 text-primary fw-bold">R$ 0,00</span>
+                </div>
+                
+                <button id="checkout-button" class="btn btn-primary w-100 mt-3 py-2 fw-bold" disabled>
+                  <i class="fas fa-check-circle me-2"></i> Finalizar Pedido
+                </button>
+                
+                <p class="small text-muted mt-2 mb-0 text-center">
+                  <i class="fas fa-lock me-1"></i> Seus dados estão protegidos
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Checkout Section (Hidden by default) -->
+    <section id="checkout-section" class="container my-4 d-none">
+      <div class="checkout-container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0"><i class="fas fa-shopping-bag me-2"></i> Finalizar Pedido</h2>
+              </div>
+              <div class="card-body">
+                <div class="mb-4">
+                  <h3 class="h5 mb-3">1. Método de Recebimento</h3>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="card delivery-option-card p-3 active" id="delivery-option">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="delivery-method" id="delivery-method" value="entrega" checked>
+                          <label class="form-check-label fw-bold" for="delivery-method">
+                            <i class="fas fa-motorcycle me-2"></i> Entrega
+                          </label>
+                        </div>
+                        <p class="small text-muted mt-2">Entregamos no seu endereço (Taxa: R$ 5,00)</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card delivery-option-card p-3" id="pickup-option">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="delivery-method" id="pickup-method" value="retirada">
+                          <label class="form-check-label fw-bold" for="pickup-method">
+                            <i class="fas fa-store me-2"></i> Retirada
+                          </label>
+                        </div>
+                        <p class="small text-muted mt-2">Retire seu pedido no restaurante</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <h3 class="h5 mb-3">2. Informações do Cliente</h3>
+                  <form id="customer-info-form">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="customer-name" class="form-label">Nome Completo *</label>
+                        <input type="text" class="form-control" id="customer-name" required>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="customer-phone" class="form-label">Telefone *</label>
+                        <input type="tel" class="form-control" id="customer-phone" required>
+                      </div>
+                      <div class="col-12 delivery-field">
+                        <label for="customer-whatsapp" class="form-label">WhatsApp (para contato)</label>
+                        <input type="tel" class="form-control" id="customer-whatsapp">
+                      </div>
+                      <div class="col-12 delivery-field">
+                        <label for="customer-address" class="form-label">Endereço *</label>
+                        <input type="text" class="form-control" id="customer-address" placeholder="Rua, Número, Bairro">
+                      </div>
+                      <div class="col-md-6 delivery-field">
+                        <label for="customer-complement" class="form-label">Complemento</label>
+                        <input type="text" class="form-control" id="customer-complement" placeholder="Apto, Bloco, Referência">
+                      </div>
+                      <div class="col-md-6 delivery-field">
+                        <label for="customer-neighborhood" class="form-label">Bairro *</label>
+                        <input type="text" class="form-control" id="customer-neighborhood">
+                      </div>
+                      <div class="col-md-8 delivery-field">
+                        <label for="customer-instructions" class="form-label">Instruções para entrega</label>
+                        <textarea class="form-control" id="customer-instructions" rows="2" placeholder="Ex: Portão azul, tocar campainha"></textarea>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="mb-4">
+                  <h3 class="h5 mb-3">3. Método de Pagamento</h3>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="card payment-method-card p-3" id="mbway-payment">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="payment-method" id="mbway-method" value="mbway">
+                          <label class="form-check-label fw-bold" for="mbway-method">
+                            <i class="fas fa-mobile-alt me-2"></i> MB Way
+                          </label>
+                        </div>
+                        <p class="small text-muted mt-2">Pagamento via MB Way (você receberá uma solicitação)</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card payment-method-card p-3" id="cash-payment">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="payment-method" id="cash-method" value="dinheiro">
+                          <label class="form-check-label fw-bold" for="cash-method">
+                            <i class="fas fa-money-bill-wave me-2"></i> Dinheiro
+                          </label>
+                        </div>
+                        <div id="cash-change-field" class="mt-2 d-none">
+                          <label for="cash-change" class="form-label small">Valor para troco</label>
+                          <input type="text" class="form-control form-control-sm" id="cash-change" placeholder="Ex: 50,00">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card payment-method-card p-3" id="card-payment">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="payment-method" id="card-method" value="cartao">
+                          <label class="form-check-label fw-bold" for="card-method">
+                            <i class="fas fa-credit-card me-2"></i> Cartão
+                          </label>
+                        </div>
+                        <p class="small text-muted mt-2">Pagamento com máquina na entrega/retirada</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <h3 class="h5 mb-3">4. Resumo do Pedido</h3>
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                      <div id="checkout-items" class="list-group list-group-flush">
+                        <!-- Itens serão adicionados dinamicamente aqui -->
+                      </div>
+                      <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <span class="text-muted">Subtotal:</span>
+                          <span id="checkout-subtotal" class="fw-bold">R$ 0,00</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <span class="text-muted">Taxa de Entrega:</span>
+                          <span id="checkout-delivery-fee" class="fw-bold">R$ 5,00</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                          <span class="h5 mb-0">Total:</span>
+                          <span id="checkout-total" class="h4 mb-0 text-primary fw-bold">R$ 0,00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button id="confirm-order-button" class="btn btn-primary btn-lg py-3">
+                    <i class="fas fa-check-circle me-2"></i> Confirmar Pedido
+                  </button>
+                  <button id="back-to-cart-button" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i> Voltar para o Carrinho
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Admin Panel (Hidden by default) -->
+    <section id="admin-panel" class="container-fluid px-0 d-none">
+      <nav class="navbar navbar-dark admin-navbar">
+        <div class="container">
+          <a class="navbar-brand" href="#">
+            <i class="fas fa-utensils me-2"></i> Painel Administrativo
+          </a>
+          <div>
+            <button id="admin-logout" class="btn btn-outline-light btn-sm">
+              <i class="fas fa-sign-out-alt me-1"></i> Sair
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container my-4">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3 class="h5 card-title">Resumo</h3>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span>Pedidos Hoje:</span>
+                  <span class="badge bg-primary rounded-pill" id="today-orders">0</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span>Em Preparo:</span>
+                  <span class="badge bg-warning rounded-pill" id="preparing-orders">0</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>Para Entregar:</span>
+                  <span class="badge bg-info rounded-pill" id="delivery-orders">0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <h3 class="h5 card-title">Filtros</h3>
+                <div class="mb-3">
+                  <label class="form-label">Status</label>
+                  <select class="form-select" id="status-filter">
+                    <option value="all">Todos</option>
+                    <option value="pending">Pendentes</option>
+                    <option value="preparing">Em Preparo</option>
+                    <option value="ready">Prontos</option>
+                    <option value="delivered">Entregues</option>
+                    <option value="cancelled">Cancelados</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Tipo</label>
+                  <select class="form-select" id="type-filter">
+                    <option value="all">Todos</option>
+                    <option value="delivery">Entrega</option>
+                    <option value="pickup">Retirada</option>
+                  </select>
+                </div>
+                <button id="apply-filters" class="btn btn-primary w-100">
+                  <i class="fas fa-filter me-1"></i> Aplicar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header bg-white">
+                <h3 class="h5 mb-0">Pedidos Recentes</h3>
+              </div>
+              <div class="card-body p-0">
+                <div id="orders-list" class="list-group list-group-flush">
+                  <!-- Pedidos serão adicionados dinamicamente aqui -->
+                  <div class="list-group-item text-center py-5">
+                    <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                    <p class="mb-0">Nenhum pedido encontrado</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de Confirmação -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Pedido Confirmado!</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <i class="fas fa-check-circle text-success mb-3" style="font-size: 3rem;"></i>
+          <h4 class="mb-3">Seu pedido foi recebido!</h4>
+          <p class="mb-4">Agora vamos preparar seu pedido com todo cuidado. Você será redirecionado para o WhatsApp para confirmar os detalhes.</p>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Login Admin -->
+  <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Acesso Administrativo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="admin-login-form">
+            <div class="mb-3">
+              <label for="admin-username" class="form-label">Usuário</label>
+              <input type="text" class="form-control" id="admin-username" required>
+            </div>
+            <div class="mb-3">
+              <label for="admin-password" class="form-label">Senha</label>
+              <input type="password" class="form-control" id="admin-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fas fa-sign-in-alt me-1"></i> Entrar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h3 class="h5"><span class="text-primary">Cozinha</span> da Vivi</h3>
+          <p class="small text-muted">Comida caseira feita com ingredientes frescos e muito amor.</p>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h3 class="h5">Horário de Funcionamento</h3>
+          <ul class="list-unstyled small text-muted">
+            <li>Segunda a Sexta: 11h às 22h</li>
+            <li>Sábado: 11h às 23h</li>
+            <li>Domingo: 11h às 17h</li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h3 class="h5">Contato</h3>
+          <ul class="list-unstyled small text-muted">
+            <li><i class="fas fa-phone-alt me-2"></i> (31) 3333-4444</li>
+            <li><i class="fas fa-map-marker-alt me-2"></i> Rua das Flores, 123 - Centro</li>
+            <li><i class="fab fa-whatsapp me-2"></i> (31) 93373-7672</li>
+            <li class="mt-2">
+              <button id="admin-login-button" class="btn btn-sm btn-outline-light">
+                <i class="fas fa-lock me-1"></i> Acesso Restaurante
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4 bg-secondary">
+      <div class="text-center small text-muted">
+        <p class="mb-0">&copy; 2025 Cozinha da Vivi - Todos os direitos reservados</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Socket.io -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  
+  <script>
+    // Configurações
+    const APP_CONFIG = {
+      whatsappNumber: "5531933737672", // Número formatado sem caracteres especiais
+      deliveryFee: 5.00,
+      restaurantName: "Cozinha da Vivi",
+      restaurantAddress: "Rua das Flores, 123 - Centro",
+      adminCredentials: {
+        username: "admin",
+        password: "cozinhadavivi123"
+      }
+    };
+
+    // Estado do carrinho
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+    // Elementos do DOM
+    const DOM = {
+      productSection: document.getElementById("product-section"),
+      checkoutSection: document.getElementById("checkout-section"),
+      adminPanel: document.getElementById("admin-panel"),
+      cartItems: document.getElementById("cart-items"),
+      totalElement: document.getElementById("total"),
+      subtotalElement: document.getElementById("subtotal"),
+      deliveryFeeElement: document.getElementById("delivery-fee"),
+      checkoutButton: document.getElementById("checkout-button"),
+      deliveryOptions: document.querySelectorAll('input[name="delivery"]'),
+      cartCount: document.getElementById("cart-count"),
+      cartIndicator: document.getElementById("cart-indicator"),
+      productContainer: document.getElementById("product-container"),
+      filterButtons: document.querySelectorAll('.filter-btn'),
+      confirmationModal: new bootstrap.Modal(document.getElementById('confirmationModal')),
+      adminLoginModal: new bootstrap.Modal(document.getElementById('adminLoginModal')),
+      adminLoginButton: document.getElementById("admin-login-button"),
+      adminLogoutButton: document.getElementById("admin-logout"),
+      backToCartButton: document.getElementById("back-to-cart-button"),
+      confirmOrderButton: document.getElementById("confirm-order-button"),
+      checkoutItems: document.getElementById("checkout-items"),
+      checkoutSubtotal: document.getElementById("checkout-subtotal"),
+      checkoutDeliveryFee: document.getElementById("checkout-delivery-fee"),
+      checkoutTotal: document.getElementById("checkout-total"),
+      deliveryOptionCards: document.querySelectorAll('.delivery-option-card'),
+      paymentMethodCards: document.querySelectorAll('.payment-method-card'),
+      deliveryFields: document.querySelectorAll('.delivery-field'),
+      customerInfoForm: document.getElementById("customer-info-form"),
+      cashChangeField: document.getElementById("cash-change-field"),
+      ordersList: document.getElementById("orders-list"),
+      todayOrders: document.getElementById("today-orders"),
+      preparingOrders: document.getElementById("preparing-orders"),
+      deliveryOrders: document.getElementById("delivery-orders"),
+      statusFilter: document.getElementById("status-filter"),
+      typeFilter: document.getElementById("type-filter"),
+      applyFilters: document.getElementById("apply-filters")
+    };
+
+    // Conexão Socket.io
+    const socket = io();
+
+    // Funções utilitárias
+    const Utils = {
+      formatCurrency: (value) => {
+        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      },
+      parsePrice: (priceString) => {
+        return parseFloat(priceString.replace("R$", "").replace(",", ".").trim());
+      },
+      animateElement: (element, animation) => {
+        element.classList.add("animate__animated", `animate__${animation}`);
+        setTimeout(() => {
+          element.classList.remove("animate__animated", `animate__${animation}`);
+        }, 1000);
+      },
+      showNotification: (message, type = 'success') => {
+        const notification = document.createElement('div');
+        notification.className = `position-fixed bottom-0 end-0 m-3 alert alert-${type} alert-dismissible fade show`;
+        notification.style.zIndex = '1100';
+        notification.innerHTML = `
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(notification);
+        
+        // Remove após 3 segundos
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => notification.remove(), 150);
+        }, 3000);
+      },
+      validatePhone: (phone) => {
+        return /^(\d{10,11})$/.test(phone);
+      },
+      getTodayDate: () => {
+        const today = new Date();
+        return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+      }
+    };
+
+    // Funções do Carrinho
+    const Cart = {
+      updateStorage: () => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+      },
+
+      addItem: (id, name, price, image = '') => {
+        const existingItem = cart.find(item => item.id === id);
+        
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({ id, name, price, quantity: 1, image });
+        }
+        
+        Cart.updateStorage();
+        Cart.updateUI();
+        
+        // Feedback visual
+        const productElement = document.querySelector(`.product[data-id="${id}"]`);
+        if (productElement) {
+          Utils.animateElement(productElement, 'pulse');
+        }
+        
+        Utils.showNotification(`${name} adicionado ao carrinho!`);
+      },
+
+      updateItemQuantity: (id, newQuantity) => {
+        const item = cart.find(item => item.id === id);
+        if (item) {
+          if (newQuantity <= 0) {
+            Cart.removeItem(id);
+          } else {
+            item.quantity = newQuantity;
+            Cart.updateStorage();
+            Cart.updateUI();
+          }
+        }
+      },
+
+      removeItem: (id) => {
+        const item = cart.find(item => item.id === id);
+        if (item) {
+          cart = cart.filter(item => item.id !== id);
+          Cart.updateStorage();
+          Cart.updateUI();
+          Utils.showNotification(`${item.name} removido do carrinho`, 'warning');
+        }
+      },
+
+      clear: () => {
+        cart = [];
+        Cart.updateStorage();
+        Cart.updateUI();
+      },
+
+      getTotals: () => {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const isDelivery = [...DOM.deliveryOptions].find(option => option.checked).value === "entrega";
+        const deliveryFee = isDelivery ? APP_CONFIG.deliveryFee : 0;
+        const total = subtotal + deliveryFee;
+        
+        return { subtotal, deliveryFee, total };
+      },
+
+      updateUI: () => {
+        // Limpa o carrinho
+        DOM.cartItems.innerHTML = "";
+        
+        const { subtotal, deliveryFee, total } = Cart.getTotals();
+        const itemCount = cart.reduce((count, item) => count + item.quantity, 0);
+
+        // Se carrinho vazio
+        if (cart.length === 0) {
+          DOM.cartItems.innerHTML = `
+            <div class="list-group-item text-center py-4 empty-cart">
+              <i class="fas fa-shopping-bag empty-cart-icon mb-3"></i>
+              <p class="mb-0">Seu carrinho está vazio</p>
+              <small class="text-muted">Adicione itens para continuar</small>
+            </div>
+          `;
+        } else {
+          // Adiciona itens ao carrinho
+          cart.forEach(item => {
+            const li = document.createElement("div");
+            li.className = "list-group-item";
+            li.innerHTML = `
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-1">${item.name}</h6>
+                  <small class="text-muted">${Utils.formatCurrency(item.price)}</small>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <div class="cart-item-quantity">
+                    <button class="quantity-btn decrease" data-id="${item.id}">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="quantity">${item.quantity}</span>
+                    <button class="quantity-btn increase" data-id="${item.id}">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <span class="fw-bold">${Utils.formatCurrency(item.price * item.quantity)}</span>
+                  <button class="remove-item btn btn-sm btn-outline-danger" data-id="${item.id}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+            DOM.cartItems.appendChild(li);
+          });
+        }
+
+        // Atualiza totais
+        DOM.subtotalElement.textContent = Utils.formatCurrency(subtotal);
+        DOM.deliveryFeeElement.textContent = Utils.formatCurrency(deliveryFee);
+        DOM.totalElement.textContent = Utils.formatCurrency(total);
+        
+        // Atualiza contador
+        DOM.cartCount.textContent = itemCount;
+        DOM.cartCount.style.display = itemCount > 0 ? "block" : "none";
+        
+        // Ativa/desativa botão de finalizar
+        DOM.checkoutButton.disabled = cart.length === 0;
+      }
+    };
+
+    // Funções de Pedido
+    const Order = {
+      create: () => {
+        const { subtotal, deliveryFee, total } = Cart.getTotals();
+        const deliveryType = [...DOM.deliveryOptions].find(option => option.checked).value;
+        const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'mbway';
+        
+        const customerInfo = {
+          name: document.getElementById("customer-name").value,
+          phone: document.getElementById("customer-phone").value,
+          whatsapp: document.getElementById("customer-whatsapp").value || document.getElementById("customer-phone").value,
+          address: document.getElementById("customer-address").value,
+          complement: document.getElementById("customer-complement").value,
+          neighborhood: document.getElementById("customer-neighborhood").value,
+          instructions: document.getElementById("customer-instructions").value
+        };
+        
+        return {
+          id: Date.now().toString(),
+          cliente: customerInfo.name,
+          telefone: customerInfo.phone,
+          whatsapp: customerInfo.whatsapp,
+          itens: cart.map(item => ({
+            nome: item.name,
+            quantidade: item.quantity,
+            preco: item.price
+          })),
+          subtotal,
+          taxaEntrega: deliveryFee,
+          total,
+          status: 'pending',
+          tipoEntrega: deliveryType,
+          metodoPagamento: paymentMethod,
+          trocoPara: paymentMethod === 'dinheiro' ? document.getElementById("cash-change").value || '0' : null,
+          endereco: deliveryType === 'entrega' ? 
+            `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}${customerInfo.neighborhood}` : 
+            'Retirada no local',
+          instrucoes: customerInfo.instructions,
+          data: new Date().toLocaleString('pt-BR'),
+          restaurante: APP_CONFIG.restaurantName,
+          enderecoRestaurante: APP_CONFIG.restaurantAddress
+        };
+      },
+
+      saveOrder: (order) => {
+        orders.push(order);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        return order;
+      },
+
+      sendToBackend: async () => {
+        if (cart.length === 0) {
+          Utils.showNotification("Seu carrinho está vazio. Adicione itens para continuar.", 'danger');
+          return null;
+        }
+
+        try {
+          // Mostra loading no botão
+          DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
+          DOM.confirmOrderButton.disabled = true;
+          
+          const order = Order.create();
+          const savedOrder = Order.saveOrder(order);
+          
+          // Simulação de envio para o backend
+          console.log('Pedido a ser enviado:', savedOrder);
+          
+          // Simula um delay de rede
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          // Emite evento via Socket.io
+          socket.emit('novo-pedido', savedOrder);
+          
+          // Retorna o pedido para continuar o fluxo
+          return savedOrder;
+        } catch (error) {
+          console.error('Erro:', error);
+          Utils.showNotification('Erro ao enviar o pedido. Por favor, tente novamente.', 'danger');
+          return null;
+        } finally {
+          DOM.confirmOrderButton.innerHTML = '<i class="fas fa-check-circle me-2"></i> Confirmar Pedido';
+          DOM.confirmOrderButton.disabled = false;
+        }
+      },
+
+      sendToWhatsApp: (pedido) => {
+        // Formata os itens do pedido
+        const itemsText = pedido.itens.map(item => 
+          `➡ ${item.nome} - ${item.quantidade}x ${Utils.formatCurrency(item.preco)} = ${Utils.formatCurrency(item.preco * item.quantidade)}`
+        ).join("%0A");
+        
+        // Formata os totais e informações de entrega
+        const deliveryText = pedido.tipoEntrega === 'entrega' ? 
+          `%0A%0A📍 *Endereço de entrega:*%0A${pedido.endereco}%0A%0A📝 *Instruções:*%0A${pedido.instrucoes || 'Nenhuma instrução adicional'}` : 
+          `%0A%0A🏪 *Retirada no local*%0A${APP_CONFIG.restaurantAddress}`;
+        
+        // Formata o método de pagamento
+        let paymentText = '';
+        if (pedido.metodoPagamento === 'mbway') {
+          paymentText = `💳 *Pagamento via MB Way*%0AVocê receberá uma solicitação de pagamento`;
+        } else if (pedido.metodoPagamento === 'dinheiro') {
+          paymentText = `💵 *Pagamento em dinheiro*%0ATroco para: R$ ${pedido.trocoPara || 'Sem troco'}`;
+        } else {
+          paymentText = `💳 *Pagamento com cartão*%0AMáquina será levada na entrega/retirada`;
+        }
+        
+        // Monta a mensagem completa
+        const message = `*📝 Novo Pedido - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${pedido.cliente}%0A📞 *Telefone:* ${pedido.telefone}%0A✉ *WhatsApp:* ${pedido.whatsapp}%0A%0A📦 *Itens do Pedido:*%0A${itemsText}%0A%0A💰 *Valores:*%0A*Subtotal:* ${Utils.formatCurrency(pedido.subtotal)}%0A*Taxa de entrega:* ${Utils.formatCurrency(pedido.taxaEntrega)}%0A*Total:* ${Utils.formatCurrency(pedido.total)}%0A%0A🚚 *Forma de recebimento:* ${pedido.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada no local'}${deliveryText}%0A%0A${paymentText}%0A%0A⏰ *Data/hora:* ${pedido.data}%0A%0A_🔔 Aguardando confirmação do restaurante_`;
+        
+        // Abre o WhatsApp
+        const whatsappURL = `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${message}`;
+        
+        // Mostra modal de confirmação
+        DOM.confirmationModal.show();
+        
+        // Redireciona para o WhatsApp após 3 segundos
+        setTimeout(() => {
+          window.open(whatsappURL, "_blank");
+          DOM.confirmationModal.hide();
+          Cart.clear();
+          // Volta para a página de produtos
+          DOM.productSection.classList.remove("d-none");
+          DOM.checkoutSection.classList.add("d-none");
+        }, 3000);
+      },
+
+      updateAdminPanel: () => {
+        const statusFilter = DOM.statusFilter.value;
+        const typeFilter = DOM.typeFilter.value;
+        
+        // Filtra os pedidos
+        let filteredOrders = [...orders].reverse(); // Mostra os mais recentes primeiro
+        
+        if (statusFilter !== 'all') {
+          filteredOrders = filteredOrders.filter(order => order.status === statusFilter);
+        }
+        
+        if (typeFilter !== 'all') {
+          filteredOrders = filteredOrders.filter(order => order.tipoEntrega === typeFilter);
+        }
+        
+        // Atualiza a lista de pedidos
+        DOM.ordersList.innerHTML = '';
+        
+        if (filteredOrders.length === 0) {
+          DOM.ordersList.innerHTML = `
+            <div class="list-group-item text-center py-5">
+              <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+              <p class="mb-0">Nenhum pedido encontrado</p>
+            </div>
+          `;
+        } else {
+          filteredOrders.forEach(order => {
+            const orderElement = document.createElement('div');
+            orderElement.className = 'list-group-item';
+            orderElement.innerHTML = `
+              <div class="order-card p-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <div>
+                    <h5 class="mb-1">Pedido #${order.id.slice(-6)}</h5>
+                    <p class="mb-1 small text-muted"><i class="fas fa-user me-1"></i> ${order.cliente}</p>
+                    <p class="mb-1 small text-muted"><i class="fas fa-phone me-1"></i> ${order.telefone}</p>
+                  </div>
+                  <div>
+                    <span class="badge order-status-badge ${Order.getStatusClass(order.status)}">${Order.getStatusText(order.status)}</span>
+                  </div>
+                </div>
+                
+                <div class="mb-2">
+                  <p class="mb-1 small"><i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-1"></i> ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</p>
+                  <p class="mb-1 small text-muted"><i class="fas fa-money-bill-wave me-1"></i> ${Order.getPaymentText(order.metodoPagamento, order.trocoPara)}</p>
+                </div>
+                
+                <div class="border-top pt-2 mb-2">
+                  ${order.itens.map(item => `
+                    <div class="d-flex justify-content-between small">
+                      <span>${item.quantidade}x ${item.nome}</span>
+                      <span>${Utils.formatCurrency(item.preco * item.quantidade)}</span>
+                    </div>
+                  `).join('')}
+                </div>
+                
+                <div class="d-flex justify-content-between border-top pt-2">
+                  <div>
+                    <span class="small text-muted">${order.data}</span>
+                  </div>
+                  <div class="text-end">
+                    <div class="small text-muted">Total: ${Utils.formatCurrency(order.total)}</div>
+                    <div class="btn-group btn-group-sm mt-1">
+                      <button class="btn btn-outline-primary update-status" data-id="${order.id}" data-status="preparing">
+                        <i class="fas fa-utensils"></i>
+                      </button>
+                      <button class="btn btn-outline-success update-status" data-id="${order.id}" data-status="ready">
+                        <i class="fas fa-check"></i>
+                      </button>
+                      <button class="btn btn-outline-danger update-status" data-id="${order.id}" data-status="cancelled">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            DOM.ordersList.appendChild(orderElement);
+          });
+        }
+        
+        // Atualiza os contadores
+        const today = Utils.getTodayDate();
+        const todayOrdersCount = orders.filter(order => order.data.includes(today)).length;
+        const preparingOrdersCount = orders.filter(order => order.status === 'preparing').length;
+        const deliveryOrdersCount = orders.filter(order => order.status === 'ready' && order.tipoEntrega === 'entrega').length;
+        
+        DOM.todayOrders.textContent = todayOrdersCount;
+        DOM.preparingOrders.textContent = preparingOrdersCount;
+        DOM.deliveryOrders.textContent = deliveryOrdersCount;
+      },
+      
+      getStatusText: (status) => {
+        switch(status) {
+          case 'pending': return 'Pendente';
+          case 'preparing': return 'Em Preparo';
+          case 'ready': return 'Pronto';
+          case 'delivered': return 'Entregue';
+          case 'cancelled': return 'Cancelado';
+          default: return status;
+        }
+      },
+      
+      getStatusClass: (status) => {
+        switch(status) {
+          case 'pending': return 'status-pending';
+          case 'preparing': return 'status-preparing';
+          case 'ready': return 'status-ready';
+          case 'delivered': return 'status-delivered';
+          case 'cancelled': return 'status-cancelled';
+          default: return 'bg-secondary';
+        }
+      },
+      
+      getPaymentText: (method, change) => {
+        switch(method) {
+          case 'mbway': return 'MB Way';
+          case 'dinheiro': return `Dinheiro${change ? ' (Troco p/ ' + Utils.formatCurrency(parseFloat(change)) + ')' : ''}`;
+          case 'cartao': return 'Cartão';
+          default: return method;
+        }
+      },
+      
+      updateStatus: (orderId, newStatus) => {
+        const orderIndex = orders.findIndex(order => order.id === orderId);
+        if (orderIndex !== -1) {
+          orders[orderIndex].status = newStatus;
+          localStorage.setItem('orders', JSON.stringify(orders));
+          Order.updateAdminPanel();
+          
+          // Emite evento via Socket.io
+          socket.emit('atualizar-status', {
+            orderId,
+            newStatus
+          });
+          
+          Utils.showNotification(`Status do pedido #${orderId.slice(-6)} atualizado para ${Order.getStatusText(newStatus)}`, 'success');
+        }
+      }
+    };
+
+    // Funções de Filtro
+    const Filter = {
+      apply: (category) => {
+        const products = document.querySelectorAll('.product');
+        
+        products.forEach(product => {
+          if (category === 'all' || product.dataset.category === category) {
+            product.style.display = 'block';
+          } else {
+            product.style.display = 'none';
+          }
+        });
+        
+        // Atualiza botões ativos
+        DOM.filterButtons.forEach(button => {
+          if (button.dataset.category === category) {
+            button.classList.add('active');
+          } else {
+            button.classList.remove('active');
+          }
+        });
+      }
+    };
+
+    // Funções de Checkout
+    const Checkout = {
+      init: () => {
+        // Atualiza o resumo do pedido
+        const { subtotal, deliveryFee, total } = Cart.getTotals();
+        
+        DOM.checkoutSubtotal.textContent = Utils.formatCurrency(subtotal);
+        DOM.checkoutDeliveryFee.textContent = Utils.formatCurrency(deliveryFee);
+        DOM.checkoutTotal.textContent = Utils.formatCurrency(total);
+        
+        // Limpa e adiciona os itens ao resumo
+        DOM.checkoutItems.innerHTML = '';
+        cart.forEach(item => {
+          const li = document.createElement("div");
+          li.className = "list-group-item";
+          li.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="mb-1">${item.name}</h6>
+                <small class="text-muted">${Utils.formatCurrency(item.price)}</small>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <span class="quantity">${item.quantity}x</span>
+                <span class="fw-bold">${Utils.formatCurrency(item.price * item.quantity)}</span>
+              </div>
+            </div>
+          `;
+          DOM.checkoutItems.appendChild(li);
+        });
+      },
+      
+      toggleDeliveryFields: (show) => {
+        DOM.deliveryFields.forEach(field => {
+          field.style.display = show ? 'block' : 'none';
+        });
+        
+        // Atualiza taxa de entrega
+        const deliveryFee = show ? APP_CONFIG.deliveryFee : 0;
+        DOM.checkoutDeliveryFee.textContent = Utils.formatCurrency(deliveryFee);
+        
+        // Atualiza total
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const total = subtotal + deliveryFee;
+        DOM.checkoutTotal.textContent = Utils.formatCurrency(total);
+      }
+    };
+
+    // Funções de Admin
+    const Admin = {
+      login: (username, password) => {
+        if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
+          // Esconde a página de produtos e mostra o painel admin
+          DOM.productSection.classList.add("d-none");
+          DOM.checkoutSection.classList.add("d-none");
+          DOM.adminPanel.classList.remove("d-none");
+          
+          // Atualiza o painel
+          Order.updateAdminPanel();
+          
+          // Esconde o modal de login
+          DOM.adminLoginModal.hide();
+          
+          return true;
+        }
+        return false;
+      },
+      
+      logout: () => {
+        // Volta para a página de produtos
+        DOM.productSection.classList.remove("d-none");
+        DOM.checkoutSection.classList.add("d-none");
+        DOM.adminPanel.classList.add("d-none");
+      }
+    };
+
+    // Event Listeners
+    function setupEventListeners() {
+      // Botões "Adicionar ao Carrinho"
+      document.addEventListener('click', (event) => {
+        if (event.target.closest('.add-to-cart')) {
+          const button = event.target.closest('.add-to-cart');
+          const productElement = button.closest('.product');
+          const id = productElement.getAttribute("data-id");
+          const name = productElement.querySelector(".product-name").textContent;
+          const price = Utils.parsePrice(productElement.querySelector(".product-price").textContent);
+          const image = productElement.querySelector(".product-image")?.src || '';
+          
+          Cart.addItem(id, name, price, image);
+        }
+      });
+
+      // Remover itens do carrinho (delegação de eventos)
+      DOM.cartItems.addEventListener("click", (event) => {
+        if (event.target.closest(".remove-item")) {
+          const id = event.target.closest(".remove-item").getAttribute("data-id");
+          Cart.removeItem(id);
+        }
+        
+        // Aumentar quantidade
+        if (event.target.closest(".increase")) {
+          const id = event.target.closest(".increase").getAttribute("data-id");
+          const item = cart.find(item => item.id === id);
+          if (item) {
+            Cart.updateItemQuantity(id, item.quantity + 1);
+          }
+        }
+        
+        // Diminuir quantidade
+        if (event.target.closest(".decrease")) {
+          const id = event.target.closest(".decrease").getAttribute("data-id");
+          const item = cart.find(item => item.id === id);
+          if (item) {
+            Cart.updateItemQuantity(id, item.quantity - 1);
+          }
+        }
+      });
+
+      // Opções de entrega
+      DOM.deliveryOptions.forEach(option => {
+        option.addEventListener("change", Cart.updateUI);
+      });
+
+      // Finalizar pedido (ir para checkout)
+      DOM.checkoutButton.addEventListener("click", () => {
+        DOM.productSection.classList.add("d-none");
+        DOM.checkoutSection.classList.remove("d-none");
+        Checkout.init();
+      });
+
+      // Voltar para o carrinho
+      DOM.backToCartButton.addEventListener("click", () => {
+        DOM.productSection.classList.remove("d-none");
+        DOM.checkoutSection.classList.add("d-none");
+      });
+
+      // Confirmar pedido no checkout
+      DOM.confirmOrderButton.addEventListener("click", async () => {
+        // Validação do formulário
+        const name = document.getElementById("customer-name").value;
+        const phone = document.getElementById("customer-phone").value;
+        const isDelivery = document.getElementById("delivery-method").checked;
+        const address = document.getElementById("customer-address").value;
+        const neighborhood = document.getElementById("customer-neighborhood").value;
+        
+        if (!name || !phone) {
+          Utils.showNotification("Por favor, preencha seu nome e telefone", 'danger');
+          return;
+        }
+        
+        if (!Utils.validatePhone(phone)) {
+          Utils.showNotification("Por favor, insira um telefone válido", 'danger');
+          return;
+        }
+        
+        if (isDelivery && (!address || !neighborhood)) {
+          Utils.showNotification("Por favor, preencha seu endereço completo", 'danger');
+          return;
+        }
+        
+        const pedido = await Order.sendToBackend();
+        if (pedido) {
+          Order.sendToWhatsApp(pedido);
+        }
+      });
+
+      // Filtros de categoria
+      DOM.filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          Filter.apply(button.dataset.category);
+        });
+      });
+
+      // Abrir carrinho ao clicar no ícone
+      DOM.cartIndicator.addEventListener('click', () => {
+        if (cart.length > 0) {
+          document.querySelector('.card.cart').scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+      
+      // Opções de entrega no checkout
+      DOM.deliveryOptionCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const input = card.querySelector('input');
+          input.checked = true;
+          
+          // Atualiza estilo visual
+          DOM.deliveryOptionCards.forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          
+          // Mostra/esconde campos de entrega
+          Checkout.toggleDeliveryFields(input.value === 'entrega');
+        });
+      });
+      
+      // Métodos de pagamento no checkout
+      DOM.paymentMethodCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const input = card.querySelector('input');
+          input.checked = true;
+          
+          // Atualiza estilo visual
+          DOM.paymentMethodCards.forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          
+          // Mostra campo de troco se for dinheiro
+          if (input.value === 'dinheiro') {
+            DOM.cashChangeField.classList.remove('d-none');
+          } else {
+            DOM.cashChangeField.classList.add('d-none');
+          }
+        });
+      });
+      
+      // Login admin
+      DOM.adminLoginButton.addEventListener('click', () => {
+        DOM.adminLoginModal.show();
+      });
+      
+      document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('admin-username').value;
+        const password = document.getElementById('admin-password').value;
+        
+        if (Admin.login(username, password)) {
+          Utils.showNotification('Login realizado com sucesso!', 'success');
+        } else {
+          Utils.showNotification('Credenciais inválidas', 'danger');
+        }
+      });
+      
+      // Logout admin
+      DOM.adminLogoutButton.addEventListener('click', () => {
+        Admin.logout();
+        Utils.showNotification('Logout realizado com sucesso', 'info');
+      });
+      
+      // Atualizar status do pedido (delegação de eventos)
+      DOM.ordersList.addEventListener('click', (event) => {
+        if (event.target.closest('.update-status')) {
+          const button = event.target.closest('.update-status');
+          const orderId = button.getAttribute('data-id');
+          const newStatus = button.getAttribute('data-status');
+          
+          Order.updateStatus(orderId, newStatus);
+        }
+      });
+      
+      // Aplicar filtros no painel admin
+      DOM.applyFilters.addEventListener('click', () => {
+        Order.updateAdminPanel();
+      });
+    }
+
+    // Socket.io Events
+    socket.on('connect', () => {
+      console.log('Conectado ao servidor Socket.io');
+    });
+
+    socket.on('novo-pedido-admin', (order) => {
+      // Adiciona o pedido à lista local (simulando backend)
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      
+      // Atualiza o painel se estiver visível
+      if (!DOM.adminPanel.classList.contains('d-none')) {
+        Order.updateAdminPanel();
+      }
+      
+      // Mostra notificação
+      Utils.showNotification(`Novo pedido recebido: #${order.id.slice(-6)}`, 'info');
+    });
+
+    socket.on('atualizar-status-admin', (data) => {
+      // Atualiza o status do pedido localmente
+      const orderIndex = orders.findIndex(order => order.id === data.orderId);
+      if (orderIndex !== -1) {
+        orders[orderIndex].status = data.newStatus;
+        localStorage.setItem('orders', JSON.stringify(orders));
+        
+        // Atualiza o painel se estiver visível
+        if (!DOM.adminPanel.classList.contains('d-none')) {
+          Order.updateAdminPanel();
+        }
+      }
+    });
+
+    // Inicialização
+    function init() {
+      setupEventListeners();
+      Cart.updateUI();
+      Filter.apply('all');
+      
+      // Inicializa o checkout com entrega como padrão
+      Checkout.toggleDeliveryFields(true);
+    }
+
+    // Inicia a aplicação
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
