@@ -840,7 +840,7 @@
   <script>
     // Configurações
     const APP_CONFIG = {
-      whatsappNumber: "5531933737672", // Número formatado sem caracteres especiais
+      whatsappNumber: "5531933737672",
       deliveryFee: 5.00,
       restaurantName: "Cozinha da Vivi",
       restaurantAddress: "Rua das Flores, 123 - Centro",
@@ -893,8 +893,40 @@
       applyFilters: document.getElementById("apply-filters")
     };
 
-    // Conexão Socket.io
-    const socket = io();
+    // Conexão Socket.io com tratamento de erros
+    const socket = io(window.location.origin, {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000
+    });
+
+    socket.on('connect', () => {
+      console.log('Conectado ao servidor Socket.io');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Erro na conexão Socket.io:', error);
+      Utils.showNotification('Erro de conexão com o servidor. Recarregue a página.', 'danger');
+    });
+
+    socket.on('disconnect', (reason) => {
+      if (reason === 'io server disconnect') {
+        socket.connect();
+      }
+      Utils.showNotification('Conexão perdida. Tentando reconectar...', 'warning');
+    });
+
+    socket.on('reconnect', (attempt) => {
+      Utils.showNotification('Conexão restabelecida!', 'success');
+    });
+
+    // Recebe atualizações de pedidos do servidor
+    socket.on('pedidos-atualizados', (pedidosRecebidos) => {
+      orders = pedidosRecebidos;
+      if (!DOM.adminPanel.classList.contains('d-none')) {
+        Order.updateAdminPanel();
+      }
+    });
 
     // Funções utilitárias
     const Utils = {
@@ -920,7 +952,6 @@
         `;
         document.body.appendChild(notification);
         
-        // Remove após 3 segundos
         setTimeout(() => {
           notification.classList.remove('show');
           setTimeout(() => notification.remove(), 150);
@@ -953,7 +984,6 @@
         Cart.updateStorage();
         Cart.updateUI();
         
-        // Feedback visual
         const productElement = document.querySelector(`.product[data-id="${id}"]`);
         if (productElement) {
           Utils.animateElement(productElement, 'pulse');
@@ -1001,13 +1031,11 @@
       },
 
       updateUI: () => {
-        // Limpa o carrinho
         DOM.cartItems.innerHTML = "";
         
         const { subtotal, deliveryFee, total } = Cart.getTotals();
         const itemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
-        // Se carrinho vazio
         if (cart.length === 0) {
           DOM.cartItems.innerHTML = `
             <div class="list-group-item text-center py-4 empty-cart">
@@ -1017,7 +1045,6 @@
             </div>
           `;
         } else {
-          // Adiciona itens ao carrinho
           cart.forEach(item => {
             const li = document.createElement("div");
             li.className = "list-group-item";
@@ -1048,16 +1075,13 @@
           });
         }
 
-        // Atualiza totais
         DOM.subtotalElement.textContent = Utils.formatCurrency(subtotal);
         DOM.deliveryFeeElement.textContent = Utils.formatCurrency(deliveryFee);
         DOM.totalElement.textContent = Utils.formatCurrency(total);
         
-        // Atualiza contador
         DOM.cartCount.textContent = itemCount;
         DOM.cartCount.style.display = itemCount > 0 ? "block" : "none";
         
-        // Ativa/desativa botão de finalizar
         DOM.checkoutButton.disabled = cart.length === 0;
       }
     };
@@ -1119,23 +1143,14 @@
         }
 
         try {
-          // Mostra loading no botão
           DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
           DOM.confirmOrderButton.disabled = true;
           
           const order = Order.create();
           const savedOrder = Order.saveOrder(order);
           
-          // Simulação de envio para o backend
-          console.log('Pedido a ser enviado:', savedOrder);
-          
-          // Simula um delay de rede
-          await new Promise(resolve => setTimeout(resolve, 1500));
-          
-          // Emite evento via Socket.io
           socket.emit('novo-pedido', savedOrder);
           
-          // Retorna o pedido para continuar o fluxo
           return savedOrder;
         } catch (error) {
           console.error('Erro:', error);
@@ -1148,17 +1163,14 @@
       },
 
       sendToWhatsApp: (pedido) => {
-        // Formata os itens do pedido
         const itemsText = pedido.itens.map(item => 
           `➡ ${item.nome} - ${item.quantidade}x ${Utils.formatCurrency(item.preco)} = ${Utils.formatCurrency(item.preco * item.quantidade)}`
         ).join("%0A");
         
-        // Formata os totais e informações de entrega
         const deliveryText = pedido.tipoEntrega === 'entrega' ? 
           `%0A%0A📍 *Endereço de entrega:*%0A${pedido.endereco}%0A%0A📝 *Instruções:*%0A${pedido.instrucoes || 'Nenhuma instrução adicional'}` : 
           `%0A%0A🏪 *Retirada no local*%0A${APP_CONFIG.restaurantAddress}`;
         
-        // Formata o método de pagamento
         let paymentText = '';
         if (pedido.metodoPagamento === 'mbway') {
           paymentText = `💳 *Pagamento via MB Way*%0AVocê receberá uma solicitação de pagamento`;
@@ -1168,21 +1180,16 @@
           paymentText = `💳 *Pagamento com cartão*%0AMáquina será levada na entrega/retirada`;
         }
         
-        // Monta a mensagem completa
         const message = `*📝 Novo Pedido - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${pedido.cliente}%0A📞 *Telefone:* ${pedido.telefone}%0A✉ *WhatsApp:* ${pedido.whatsapp}%0A%0A📦 *Itens do Pedido:*%0A${itemsText}%0A%0A💰 *Valores:*%0A*Subtotal:* ${Utils.formatCurrency(pedido.subtotal)}%0A*Taxa de entrega:* ${Utils.formatCurrency(pedido.taxaEntrega)}%0A*Total:* ${Utils.formatCurrency(pedido.total)}%0A%0A🚚 *Forma de recebimento:* ${pedido.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada no local'}${deliveryText}%0A%0A${paymentText}%0A%0A⏰ *Data/hora:* ${pedido.data}%0A%0A_🔔 Aguardando confirmação do restaurante_`;
         
-        // Abre o WhatsApp
         const whatsappURL = `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${message}`;
         
-        // Mostra modal de confirmação
         DOM.confirmationModal.show();
         
-        // Redireciona para o WhatsApp após 3 segundos
         setTimeout(() => {
           window.open(whatsappURL, "_blank");
           DOM.confirmationModal.hide();
           Cart.clear();
-          // Volta para a página de produtos
           DOM.productSection.classList.remove("d-none");
           DOM.checkoutSection.classList.add("d-none");
         }, 3000);
@@ -1192,8 +1199,7 @@
         const statusFilter = DOM.statusFilter.value;
         const typeFilter = DOM.typeFilter.value;
         
-        // Filtra os pedidos
-        let filteredOrders = [...orders].reverse(); // Mostra os mais recentes primeiro
+        let filteredOrders = [...orders].reverse();
         
         if (statusFilter !== 'all') {
           filteredOrders = filteredOrders.filter(order => order.status === statusFilter);
@@ -1203,7 +1209,6 @@
           filteredOrders = filteredOrders.filter(order => order.tipoEntrega === typeFilter);
         }
         
-        // Atualiza a lista de pedidos
         DOM.ordersList.innerHTML = '';
         
         if (filteredOrders.length === 0) {
@@ -1269,7 +1274,6 @@
           });
         }
         
-        // Atualiza os contadores
         const today = Utils.getTodayDate();
         const todayOrdersCount = orders.filter(order => order.data.includes(today)).length;
         const preparingOrdersCount = orders.filter(order => order.status === 'preparing').length;
@@ -1318,7 +1322,6 @@
           localStorage.setItem('orders', JSON.stringify(orders));
           Order.updateAdminPanel();
           
-          // Emite evento via Socket.io
           socket.emit('atualizar-status', {
             orderId,
             newStatus
@@ -1342,7 +1345,6 @@
           }
         });
         
-        // Atualiza botões ativos
         DOM.filterButtons.forEach(button => {
           if (button.dataset.category === category) {
             button.classList.add('active');
@@ -1356,14 +1358,12 @@
     // Funções de Checkout
     const Checkout = {
       init: () => {
-        // Atualiza o resumo do pedido
         const { subtotal, deliveryFee, total } = Cart.getTotals();
         
         DOM.checkoutSubtotal.textContent = Utils.formatCurrency(subtotal);
         DOM.checkoutDeliveryFee.textContent = Utils.formatCurrency(deliveryFee);
         DOM.checkoutTotal.textContent = Utils.formatCurrency(total);
         
-        // Limpa e adiciona os itens ao resumo
         DOM.checkoutItems.innerHTML = '';
         cart.forEach(item => {
           const li = document.createElement("div");
@@ -1389,11 +1389,9 @@
           field.style.display = show ? 'block' : 'none';
         });
         
-        // Atualiza taxa de entrega
         const deliveryFee = show ? APP_CONFIG.deliveryFee : 0;
         DOM.checkoutDeliveryFee.textContent = Utils.formatCurrency(deliveryFee);
         
-        // Atualiza total
         const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const total = subtotal + deliveryFee;
         DOM.checkoutTotal.textContent = Utils.formatCurrency(total);
@@ -1404,15 +1402,12 @@
     const Admin = {
       login: (username, password) => {
         if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
-          // Esconde a página de produtos e mostra o painel admin
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
           
-          // Atualiza o painel
           Order.updateAdminPanel();
           
-          // Esconde o modal de login
           DOM.adminLoginModal.hide();
           
           return true;
@@ -1421,7 +1416,6 @@
       },
       
       logout: () => {
-        // Volta para a página de produtos
         DOM.productSection.classList.remove("d-none");
         DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
@@ -1430,7 +1424,6 @@
 
     // Event Listeners
     function setupEventListeners() {
-      // Botões "Adicionar ao Carrinho"
       document.addEventListener('click', (event) => {
         if (event.target.closest('.add-to-cart')) {
           const button = event.target.closest('.add-to-cart');
@@ -1444,14 +1437,12 @@
         }
       });
 
-      // Remover itens do carrinho (delegação de eventos)
       DOM.cartItems.addEventListener("click", (event) => {
         if (event.target.closest(".remove-item")) {
           const id = event.target.closest(".remove-item").getAttribute("data-id");
           Cart.removeItem(id);
         }
         
-        // Aumentar quantidade
         if (event.target.closest(".increase")) {
           const id = event.target.closest(".increase").getAttribute("data-id");
           const item = cart.find(item => item.id === id);
@@ -1460,7 +1451,6 @@
           }
         }
         
-        // Diminuir quantidade
         if (event.target.closest(".decrease")) {
           const id = event.target.closest(".decrease").getAttribute("data-id");
           const item = cart.find(item => item.id === id);
@@ -1470,27 +1460,22 @@
         }
       });
 
-      // Opções de entrega
       DOM.deliveryOptions.forEach(option => {
         option.addEventListener("change", Cart.updateUI);
       });
 
-      // Finalizar pedido (ir para checkout)
       DOM.checkoutButton.addEventListener("click", () => {
         DOM.productSection.classList.add("d-none");
         DOM.checkoutSection.classList.remove("d-none");
         Checkout.init();
       });
 
-      // Voltar para o carrinho
       DOM.backToCartButton.addEventListener("click", () => {
         DOM.productSection.classList.remove("d-none");
         DOM.checkoutSection.classList.add("d-none");
       });
 
-      // Confirmar pedido no checkout
       DOM.confirmOrderButton.addEventListener("click", async () => {
-        // Validação do formulário
         const name = document.getElementById("customer-name").value;
         const phone = document.getElementById("customer-phone").value;
         const isDelivery = document.getElementById("delivery-method").checked;
@@ -1518,46 +1503,38 @@
         }
       });
 
-      // Filtros de categoria
       DOM.filterButtons.forEach(button => {
         button.addEventListener('click', () => {
           Filter.apply(button.dataset.category);
         });
       });
 
-      // Abrir carrinho ao clicar no ícone
       DOM.cartIndicator.addEventListener('click', () => {
         if (cart.length > 0) {
           document.querySelector('.card.cart').scrollIntoView({ behavior: 'smooth' });
         }
       });
       
-      // Opções de entrega no checkout
       DOM.deliveryOptionCards.forEach(card => {
         card.addEventListener('click', () => {
           const input = card.querySelector('input');
           input.checked = true;
           
-          // Atualiza estilo visual
           DOM.deliveryOptionCards.forEach(c => c.classList.remove('active'));
           card.classList.add('active');
           
-          // Mostra/esconde campos de entrega
           Checkout.toggleDeliveryFields(input.value === 'entrega');
         });
       });
       
-      // Métodos de pagamento no checkout
       DOM.paymentMethodCards.forEach(card => {
         card.addEventListener('click', () => {
           const input = card.querySelector('input');
           input.checked = true;
           
-          // Atualiza estilo visual
           DOM.paymentMethodCards.forEach(c => c.classList.remove('active'));
           card.classList.add('active');
           
-          // Mostra campo de troco se for dinheiro
           if (input.value === 'dinheiro') {
             DOM.cashChangeField.classList.remove('d-none');
           } else {
@@ -1566,7 +1543,6 @@
         });
       });
       
-      // Login admin
       DOM.adminLoginButton.addEventListener('click', () => {
         DOM.adminLoginModal.show();
       });
@@ -1583,13 +1559,11 @@
         }
       });
       
-      // Logout admin
       DOM.adminLogoutButton.addEventListener('click', () => {
         Admin.logout();
         Utils.showNotification('Logout realizado com sucesso', 'info');
       });
       
-      // Atualizar status do pedido (delegação de eventos)
       DOM.ordersList.addEventListener('click', (event) => {
         if (event.target.closest('.update-status')) {
           const button = event.target.closest('.update-status');
@@ -1600,56 +1574,19 @@
         }
       });
       
-      // Aplicar filtros no painel admin
       DOM.applyFilters.addEventListener('click', () => {
         Order.updateAdminPanel();
       });
     }
-
-    // Socket.io Events
-    socket.on('connect', () => {
-      console.log('Conectado ao servidor Socket.io');
-    });
-
-    socket.on('novo-pedido-admin', (order) => {
-      // Adiciona o pedido à lista local (simulando backend)
-      orders.push(order);
-      localStorage.setItem('orders', JSON.stringify(orders));
-      
-      // Atualiza o painel se estiver visível
-      if (!DOM.adminPanel.classList.contains('d-none')) {
-        Order.updateAdminPanel();
-      }
-      
-      // Mostra notificação
-      Utils.showNotification(`Novo pedido recebido: #${order.id.slice(-6)}`, 'info');
-    });
-
-    socket.on('atualizar-status-admin', (data) => {
-      // Atualiza o status do pedido localmente
-      const orderIndex = orders.findIndex(order => order.id === data.orderId);
-      if (orderIndex !== -1) {
-        orders[orderIndex].status = data.newStatus;
-        localStorage.setItem('orders', JSON.stringify(orders));
-        
-        // Atualiza o painel se estiver visível
-        if (!DOM.adminPanel.classList.contains('d-none')) {
-          Order.updateAdminPanel();
-        }
-      }
-    });
 
     // Inicialização
     function init() {
       setupEventListeners();
       Cart.updateUI();
       Filter.apply('all');
-      
-      // Inicializa o checkout com entrega como padrão
       Checkout.toggleDeliveryFields(true);
     }
 
-    // Inicia a aplicação
     document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>

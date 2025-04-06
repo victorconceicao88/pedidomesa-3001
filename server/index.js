@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 // Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, '../public')));
