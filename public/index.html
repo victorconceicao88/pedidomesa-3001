@@ -35,6 +35,62 @@
       flex: 1;
     }
     
+    /* Navbar Fixo */
+    .main-header {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      background-color: var(--dark-color);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Categorias melhoradas */
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none; /* Firefox */
+    }
+    
+    .filter-buttons::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+    
+    .filter-btn {
+      white-space: nowrap;
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid #dee2e6;
+      background-color: white;
+      color: var(--dark-color);
+    }
+    
+    .filter-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2);
+    }
+    
+    .filter-btn:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .filter-btn.active:hover {
+      background-color: #ff5252;
+    }
+    
     .product {
       transition: all 0.3s ease;
       cursor: pointer;
@@ -161,11 +217,6 @@
       opacity: 0.2;
     }
     
-    .filter-btn.active {
-      background-color: var(--primary-color);
-      color: white;
-    }
-    
     /* Checkout Page Styles */
     .checkout-container {
       max-width: 800px;
@@ -186,6 +237,7 @@
       cursor: pointer;
       transition: all 0.3s;
       border: 2px solid transparent;
+      border-radius: 8px;
     }
     
     .delivery-option-card:hover {
@@ -201,6 +253,7 @@
       cursor: pointer;
       transition: all 0.3s;
       border: 2px solid transparent;
+      border-radius: 8px;
     }
     
     .payment-method-card:hover {
@@ -212,6 +265,18 @@
       background-color: rgba(255, 107, 107, 0.1);
     }
     
+    .payment-icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+      color: var(--primary-color);
+    }
+    
+    .payment-method-label {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+    
     /* Admin Panel Styles */
     .admin-navbar {
       background-color: var(--dark-color);
@@ -221,9 +286,24 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     
+    .admin-navbar .navbar-brand {
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .admin-navbar .navbar-brand img {
+      margin-right: 10px;
+    }
+    
     .order-card {
       transition: all 0.3s;
       border-left: 4px solid var(--primary-color);
+      margin-bottom: 15px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     
     .order-card:hover {
@@ -290,15 +370,22 @@
     .cart-sidebar {
       position: fixed;
       top: 0;
-      right: -400px;
+      right: -100%;
       width: 100%;
-      max-width: 400px;
+      max-width: 100%;
       height: 100vh;
       background-color: white;
       z-index: 1050;
       transition: right 0.3s ease;
       box-shadow: -5px 0 15px rgba(0,0,0,0.1);
       overflow-y: auto;
+    }
+    
+    @media (min-width: 768px) {
+      .cart-sidebar {
+        right: -400px;
+        max-width: 400px;
+      }
     }
     
     .cart-sidebar.show {
@@ -375,6 +462,38 @@
       100% { transform: scale(1); }
     }
     
+    /* New Order Notification */
+    .new-order-notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      animation: slideInUp 0.5s, pulse 2s infinite;
+    }
+    
+    .new-order-notification i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
     /* Admin Day Tabs */
     .day-tabs {
       display: flex;
@@ -402,24 +521,46 @@
     }
     
     /* Admin Order Accordion */
+    .order-accordion {
+      margin-bottom: 10px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    
     .order-accordion-header {
       cursor: pointer;
-      padding: 10px;
+      padding: 12px 15px;
       background-color: #f8f9fa;
-      border-radius: 5px;
-      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.2s;
     }
     
     .order-accordion-header:hover {
       background-color: #e9ecef;
     }
     
+    .order-accordion-header .date {
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+    
+    .order-accordion-header .count {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    
     .order-accordion-content {
-      padding: 10px;
       background-color: white;
-      border-radius: 0 0 5px 5px;
-      border: 1px solid #dee2e6;
-      border-top: none;
       display: none;
     }
     
@@ -455,8 +596,19 @@
       margin-bottom: 8px;
     }
     
+    /* Highlight for new orders */
+    .new-order {
+      animation: highlight 2s;
+      border-left: 4px solid var(--primary-color) !important;
+    }
+
+    @keyframes highlight {
+      0% { background-color: rgba(255, 107, 107, 0.3); }
+      100% { background-color: transparent; }
+    }
+
     /* Responsive adjustments */
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
       .product-image {
         height: 150px;
       }
@@ -477,10 +629,6 @@
         margin-bottom: 1.5rem;
       }
       
-      .cart-sidebar {
-        max-width: 100%;
-      }
-      
       .admin-panel-container {
         padding-top: 10px;
       }
@@ -489,9 +637,26 @@
         margin-bottom: 5px;
         width: 100%;
       }
+      
+      .payment-method-card {
+        margin-bottom: 10px;
+      }
+      
+      .order-accordion-header {
+        padding: 10px;
+      }
+      
+      /* Admin panel mobile adjustments */
+      .admin-panel-container .row {
+        flex-direction: column-reverse;
+      }
+      
+      .admin-panel-container .col-md-3 {
+        margin-bottom: 20px;
+      }
     }
     
-    @media (max-width: 576px) {
+    @media (max-width: 768px) {
       .product-image {
         height: 120px;
       }
@@ -516,6 +681,102 @@
       
       .admin-stats-card .stat-value {
         font-size: 1.2rem;
+      }
+      
+      .admin-navbar .navbar-brand {
+        font-size: 1rem;
+      }
+      
+      .order-accordion-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .order-accordion-header .count {
+        margin-top: 5px;
+      }
+      
+      .new-order-notification {
+        width: calc(100% - 40px);
+        left: 20px;
+        right: auto;
+      }
+      
+      .checkout-container {
+        padding: 0 15px;
+      }
+      
+      .card-body {
+        padding: 1rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .product {
+        margin-bottom: 15px;
+      }
+      
+      .product-image {
+        height: 100px;
+      }
+      
+      .product-name {
+        font-size: 1rem;
+      }
+      
+      .product-price {
+        font-size: 1rem;
+      }
+      
+      .add-to-cart {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+      }
+      
+      .checkout-step h3 {
+        font-size: 1.1rem;
+      }
+      
+      .delivery-option-card, .payment-method-card {
+        padding: 1rem;
+      }
+      
+      .payment-method-label {
+        font-size: 0.9rem;
+      }
+      
+      .payment-icon {
+        font-size: 1.2rem;
+      }
+      
+      footer .col-md-4 {
+        margin-bottom: 1.5rem;
+      }
+      
+      .admin-stats-card .card-body {
+        padding: 0.75rem;
+      }
+      
+      .order-card {
+        padding: 1rem;
+      }
+      
+      .order-actions .btn {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+      }
+      
+      .cart-sidebar .card-body {
+        padding: 1rem;
+      }
+      
+      #checkout-button, #confirm-order-button {
+        padding: 0.75rem;
+        font-size: 1rem;
+      }
+      
+      .modal-dialog {
+        margin: 0.5rem auto;
       }
     }
     
@@ -634,14 +895,126 @@
       font-weight: bold;
       margin-left: 5px;
     }
+    
+    /* WhatsApp ready button */
+    .whatsapp-ready-btn {
+      background-color: #25D366;
+      border-color: #25D366;
+    }
+    
+    .whatsapp-ready-btn:hover {
+      background-color: #128C7E;
+      border-color: #128C7E;
+    }
+    
+    /* MB Way payment icon */
+    .mbway-icon {
+      color: #9c27b0;
+    }
+
+    /* New styles for admin panel */
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background-color: var(--dark-color);
+      color: white;
+    }
+
+    .admin-header h1 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .admin-header .timestamp {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .order-details {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .order-details-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .order-number {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .order-date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .order-customer {
+      margin-bottom: 10px;
+    }
+
+    .order-items {
+      margin: 15px 0;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .order-total {
+      font-weight: bold;
+      text-align: right;
+      margin-top: 10px;
+    }
+
+    .order-actions-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .order-actions-container .btn {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .orders-summary {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .summary-item {
+      text-align: center;
+    }
+
+    .summary-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .summary-label {
+      font-size: 0.9rem;
+      color: #666;
+    }
   </style>
 </head>
 <body>
   <!-- Main Navigation -->
-  <header class="bg-dark text-white py-3 sticky-top shadow-sm">
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
+  <header class="main-header">
+    <div class="container navbar-container">
+      <div class="d-flex justify-content-between align-items-center py-3">
+        <div id="main-header">
           <h1 class="h3 mb-0 fw-bold"><span class="text-primary">Cozinha</span> da Vivi</h1>
           <p class="mb-0 small text-muted">Comida caseira com amor</p>
         </div>
@@ -1005,19 +1378,19 @@
                       <div class="card payment-method-card p-3 active" id="mbway-payment">
                         <div class="form-check">
                           <input class="form-check-input" type="radio" name="payment-method" id="mbway-method" value="mbway" checked>
-                          <label class="form-check-label fw-bold" for="mbway-method">
-                            <i class="fas fa-mobile-alt me-2"></i> MB Way
+                          <label class="form-check-label payment-method-label" for="mbway-method">
+                            <i class="fas fa-mobile-alt payment-icon mbway-icon"></i> MB Way
                           </label>
                         </div>
-                        <p class="small text-muted mt-2">Pagamento via MB Way (você receberá uma solicitação)</p>
+                        <p class="small text-muted mt-2">Você receberá uma solicitação de pagamento via MB Way</p>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="card payment-method-card p-3" id="cash-payment">
                         <div class="form-check">
                           <input class="form-check-input" type="radio" name="payment-method" id="cash-method" value="dinheiro">
-                          <label class="form-check-label fw-bold" for="cash-method">
-                            <i class="fas fa-money-bill-wave me-2"></i> Dinheiro
+                          <label class="form-check-label payment-method-label" for="cash-method">
+                            <i class="fas fa-money-bill-wave payment-icon"></i> Dinheiro
                           </label>
                         </div>
                         <div id="cash-change-field" class="mt-2 d-none">
@@ -1030,8 +1403,8 @@
                       <div class="card payment-method-card p-3" id="card-payment">
                         <div class="form-check">
                           <input class="form-check-input" type="radio" name="payment-method" id="card-method" value="cartao">
-                          <label class="form-check-label fw-bold" for="card-method">
-                            <i class="fas fa-credit-card me-2"></i> Cartão
+                          <label class="form-check-label payment-method-label" for="card-method">
+                            <i class="fas fa-credit-card payment-icon"></i> Cartão
                           </label>
                         </div>
                         <p class="small text-muted mt-2">Pagamento com máquina na entrega/retirada</p>
@@ -1085,7 +1458,7 @@
       <nav class="navbar navbar-dark admin-navbar">
         <div class="container">
           <a class="navbar-brand" href="#">
-            <i class="fas fa-utensils me-2"></i> Painel Administrativo
+            <i class="fas fa-utensils me-2"></i> Portrait Administrativo
           </a>
           <div class="d-flex align-items-center">
             <div class="notification-bell" id="notification-bell">
@@ -1166,8 +1539,8 @@
                 <div class="day-tabs" id="day-tabs">
                   <!-- Tabs serão adicionadas dinamicamente aqui -->
                 </div>
-                <div id="orders-list" class="list-group list-group-flush">
-                  <!-- Pedidos serão adicionados dinamicamente aqui -->
+                <div id="orders-accordion">
+                  <!-- Pedidos serão agrupados por data aqui -->
                   <div class="list-group-item text-center py-5">
                     <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
                     <p class="mb-0">Nenhum pedido encontrado</p>
@@ -1349,6 +1722,7 @@
     let lastOrderCount = 0;
     let pendingOrdersCount = 0;
     let currentProductOptions = null;
+    let newOrders = []; // Para rastrear novos pedidos
 
     // Elementos do DOM
     const DOM = {
@@ -1380,7 +1754,7 @@
       deliveryFields: document.querySelectorAll('.delivery-field'),
       customerInfoForm: document.getElementById("customer-info-form"),
       cashChangeField: document.getElementById("cash-change-field"),
-      ordersList: document.getElementById("orders-list"),
+      ordersList: document.getElementById("orders-accordion"),
       todayOrders: document.getElementById("today-orders"),
       preparingOrders: document.getElementById("preparing-orders"),
       deliveryOrders: document.getElementById("delivery-orders"),
@@ -1398,7 +1772,8 @@
       dayTabs: document.getElementById("day-tabs"),
       productOptionsContent: document.getElementById("product-options-content"),
       productOptionsModalTitle: document.getElementById("productOptionsModalTitle"),
-      confirmProductOptions: document.getElementById("confirm-product-options")
+      confirmProductOptions: document.getElementById("confirm-product-options"),
+      mainHeader: document.getElementById("main-header")
     };
 
     // Funções do Firebase
@@ -1475,6 +1850,7 @@
       },
       playNotificationSound: () => {
         const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+        audio.volume = 0.5; // Reduz o volume para não ser muito alto
         audio.play().catch(e => console.log('Erro ao reproduzir som:', e));
       },
       updateTimestamp: () => {
@@ -1484,6 +1860,26 @@
       getDayName: (dayIndex) => {
         const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
         return days[dayIndex];
+      },
+      formatDate: (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('pt-BR');
+      },
+      showNewOrderNotification: (count) => {
+        const notification = document.createElement('div');
+        notification.className = 'new-order-notification';
+        notification.innerHTML = `
+          <i class="fas fa-bell"></i>
+          <span>${count} novo${count > 1 ? 's' : ''} pedido${count > 1 ? 's' : ''} recebido${count > 1 ? 's' : ''}!</span>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Remove a notificação após 5 segundos
+        setTimeout(() => {
+          notification.style.opacity = '0';
+          setTimeout(() => notification.remove(), 300);
+        }, 5000);
       }
     };
 
@@ -1786,28 +2182,28 @@
           filteredOrders = filteredOrders.filter(order => order.tipoEntrega === typeFilter);
         }
         
-        // Agrupa pedidos por dia
-        const ordersByDay = {};
+        // Agrupa pedidos por data
+        const ordersByDate = {};
         filteredOrders.forEach(order => {
           const date = new Date(order.data);
-          const dayKey = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+          const dateKey = Utils.formatDate(order.data);
           
-          if (!ordersByDay[dayKey]) {
-            ordersByDay[dayKey] = [];
+          if (!ordersByDate[dateKey]) {
+            ordersByDate[dateKey] = [];
           }
-          ordersByDay[dayKey].push(order);
+          ordersByDate[dateKey].push(order);
         });
         
         // Atualiza as abas de dias
         DOM.dayTabs.innerHTML = '';
-        Object.keys(ordersByDay).forEach(dayKey => {
+        Object.keys(ordersByDate).forEach(dateKey => {
           const tab = document.createElement('div');
           tab.className = 'day-tab';
-          tab.textContent = dayKey;
+          tab.textContent = dateKey;
           tab.addEventListener('click', () => {
             document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            Order.renderOrdersForDay(dayKey, ordersByDay[dayKey]);
+            Order.renderOrdersForDate(dateKey, ordersByDate[dateKey]);
           });
           
           if (DOM.dayTabs.children.length === 0) {
@@ -1817,10 +2213,35 @@
           DOM.dayTabs.appendChild(tab);
         });
         
-        // Renderiza os pedidos do primeiro dia ou mensagem de nenhum pedido
-        if (Object.keys(ordersByDay).length > 0) {
-          const firstDay = Object.keys(ordersByDay)[0];
-          Order.renderOrdersForDay(firstDay, ordersByDay[firstDay]);
+        // Renderiza os pedidos da primeira data ou mensagem de nenhum pedido
+        DOM.ordersList.innerHTML = '';
+        
+        if (Object.keys(ordersByDate).length > 0) {
+          Object.keys(ordersByDate).forEach(dateKey => {
+            const ordersForDate = ordersByDate[dateKey];
+            const accordion = document.createElement('div');
+            accordion.className = 'order-accordion';
+            
+            accordion.innerHTML = `
+              <div class="order-accordion-header">
+                <span class="date">${dateKey}</span>
+                <span class="count">${ordersForDate.length}</span>
+              </div>
+              <div class="order-accordion-content">
+                ${ordersForDate.map(order => Order.renderOrderItem(order)).join('')}
+              </div>
+            `;
+            
+            DOM.ordersList.appendChild(accordion);
+            
+            // Adiciona evento de clique para expandir/recolher
+            const header = accordion.querySelector('.order-accordion-header');
+            const content = accordion.querySelector('.order-accordion-content');
+            
+            header.addEventListener('click', () => {
+              content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+          });
         } else {
           DOM.ordersList.innerHTML = `
             <div class="list-group-item text-center py-5">
@@ -1842,66 +2263,67 @@
         Utils.updateTimestamp();
       },
       
-      renderOrdersForDay: (dayKey, dayOrders) => {
-        DOM.ordersList.innerHTML = '';
+      renderOrderItem: (order) => {
+        const isNew = newOrders.includes(order.id);
+        const newOrderClass = isNew ? 'new-order' : '';
         
-        dayOrders.forEach(order => {
-          const orderElement = document.createElement('div');
-          orderElement.className = 'list-group-item';
-          orderElement.innerHTML = `
-            <div class="order-card p-3">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                  <h5 class="mb-1">Pedido #${order.id.slice(-6)}</h5>
-                  <p class="mb-1 small text-muted"><i class="fas fa-user me-1"></i> ${order.cliente}</p>
-                  <p class="mb-1 small text-muted"><i class="fas fa-phone me-1"></i> ${order.telefone}</p>
-                </div>
-                <div>
-                  <span class="badge order-status-badge ${Order.getStatusClass(order.status)}">${Order.getStatusText(order.status)}</span>
-                </div>
+        return `
+          <div class="order-card p-3 ${newOrderClass}" data-id="${order.id}">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h5 class="mb-1">Pedido #${order.id.slice(-6)}</h5>
+                <p class="mb-1 small text-muted"><i class="fas fa-user me-1"></i> ${order.cliente}</p>
+                <p class="mb-1 small text-muted"><i class="fas fa-phone me-1"></i> ${order.telefone}</p>
               </div>
-              
-              <div class="mb-2">
-                <p class="mb-1 small"><i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-1"></i> ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</p>
-                <p class="mb-1 small text-muted"><i class="fas fa-money-bill-wave me-1"></i> ${Order.getPaymentText(order.metodoPagamento, order.trocoPara)}</p>
-                ${order.instrucoes ? `<p class="mb-1 small text-muted"><i class="fas fa-sticky-note me-1"></i> ${order.instrucoes}</p>` : ''}
+              <div>
+                <span class="badge order-status-badge ${Order.getStatusClass(order.status)}">${Order.getStatusText(order.status)}</span>
               </div>
-              
-              <div class="border-top pt-2 mb-2">
-                ${order.itens.map(item => `
-                  <div class="d-flex justify-content-between small">
-                    <span>${item.quantidade}x ${item.nome}${item.opcoes && Object.keys(item.opcoes).length > 0 ? ` (${Object.values(item.opcoes).join(', ')})` : ''}</span>
-                    <span>${Utils.formatCurrency(item.preco * item.quantidade)}</span>
-                  </div>
-                `).join('')}
-              </div>
-              
-              <div class="d-flex justify-content-between border-top pt-2">
-                <div>
-                  <span class="small text-muted">${order.data}</span>
+            </div>
+            
+            <div class="mb-2">
+              <p class="mb-1 small"><i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-1"></i> ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</p>
+              <p class="mb-1 small text-muted"><i class="fas fa-money-bill-wave me-1"></i> ${Order.getPaymentText(order.metodoPagamento, order.trocoPara)}</p>
+              ${order.instrucoes ? `<p class="mb-1 small text-muted"><i class="fas fa-sticky-note me-1"></i> ${order.instrucoes}</p>` : ''}
+            </div>
+            
+            <div class="border-top pt-2 mb-2">
+              ${order.itens.map(item => `
+                <div class="d-flex justify-content-between small">
+                  <span>${item.quantidade}x ${item.nome}${item.opcoes && Object.keys(item.opcoes).length > 0 ? ` (${Object.values(item.opcoes).join(', ')})` : ''}</span>
+                  <span>${Utils.formatCurrency(item.preco * item.quantidade)}</span>
                 </div>
-                <div class="text-end">
-                  <div class="small text-muted">Total: ${Utils.formatCurrency(order.total)}</div>
-                  <div class="order-actions mt-1">
-                    <button class="btn btn-outline-primary btn-sm update-status" data-id="${order.id}" data-status="preparing">
-                      <i class="fas fa-utensils me-1"></i> Preparar
-                    </button>
-                    <button class="btn btn-outline-success btn-sm update-status" data-id="${order.id}" data-status="ready">
-                      <i class="fas fa-check me-1"></i> Pronto
-                    </button>
-                    <button class="btn btn-outline-danger btn-sm update-status" data-id="${order.id}" data-status="cancelled">
-                      <i class="fas fa-times me-1"></i> Cancelar
-                    </button>
-                    <button class="btn btn-outline-secondary btn-sm view-kitchen-order" data-id="${order.id}">
-                      <i class="fas fa-print me-1"></i> Imprimir
-                    </button>
-                  </div>
+              `).join('')}
+            </div>
+            
+            <div class="d-flex justify-content-between border-top pt-2">
+              <div>
+                <span class="small text-muted">${order.data}</span>
+              </div>
+              <div class="text-end">
+                <div class="small text-muted">Total: ${Utils.formatCurrency(order.total)}</div>
+                <div class="order-actions mt-1">
+                  <button class="btn btn-outline-primary btn-sm update-status" data-id="${order.id}" data-status="preparing">
+                    <i class="fas fa-utensils me-1"></i> Preparar
+                  </button>
+                  <button class="btn btn-outline-success btn-sm update-status whatsapp-ready-btn" data-id="${order.id}" data-status="ready">
+                    <i class="fab fa-whatsapp me-1"></i> Avisar Pronto
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm update-status" data-id="${order.id}" data-status="cancelled">
+                    <i class="fas fa-times me-1"></i> Cancelar
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm view-kitchen-order" data-id="${order.id}">
+                    <i class="fas fa-print me-1"></i> Imprimir
+                  </button>
                 </div>
               </div>
             </div>
-          `;
-          DOM.ordersList.appendChild(orderElement);
-        });
+          </div>
+        `;
+      },
+      
+      renderOrdersForDate: (dateKey, ordersForDate) => {
+        // Implementação para renderizar pedidos de uma data específica
+        // (já está sendo feito no updateAdminPanel)
       },
       
       getStatusText: (status) => {
@@ -1939,8 +2361,23 @@
         FirebaseService.updateOrderStatus(orderId, newStatus).then(success => {
           if (success) {
             Utils.showNotification(`Status do pedido #${orderId.slice(-6)} atualizado para ${Order.getStatusText(newStatus)}`, 'success');
+            
+            // Se o status for "pronto", enviar mensagem pelo WhatsApp
+            if (newStatus === 'ready') {
+              const order = orders.find(o => o.id === orderId);
+              if (order) {
+                Order.sendReadyNotification(order);
+              }
+            }
           }
         });
+      },
+      
+      sendReadyNotification: (order) => {
+        const message = `*✅ Pedido Pronto - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${order.cliente}%0A📞 *Telefone:* ${order.telefone}%0A%0A📦 *Número do Pedido:* #${order.id.slice(-6)}%0A%0A🚚 *Forma de recebimento:* ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada no local'}%0A%0A💰 *Total do Pedido:* ${Utils.formatCurrency(order.total)}%0A%0A_⌛ Por favor, dirija-se ao restaurante para retirar seu pedido ou aguarde a entrega._`;
+        
+        const whatsappURL = `https://wa.me/${order.whatsapp.replace(/\D/g, '')}?text=${message}`;
+        window.open(whatsappURL, "_blank");
       },
       
       generateKitchenOrder: (orderId) => {
@@ -2106,6 +2543,8 @@
           isAdminLoggedIn = true;
           localStorage.setItem('adminLoggedIn', 'true');
           
+          // Esconde o cabeçalho principal e mostra apenas o painel administrativo
+          DOM.mainHeader.style.display = 'none';
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
@@ -2123,6 +2562,8 @@
         isAdminLoggedIn = false;
         localStorage.setItem('adminLoggedIn', 'false');
         
+        // Mostra o cabeçalho principal novamente
+        DOM.mainHeader.style.display = 'block';
         DOM.productSection.classList.remove("d-none");
         DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
@@ -2130,6 +2571,7 @@
       
       checkLoginStatus: () => {
         if (isAdminLoggedIn) {
+          DOM.mainHeader.style.display = 'none';
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
@@ -2383,6 +2825,7 @@
       DOM.notificationBell.addEventListener('click', () => {
         DOM.notificationBadge.classList.add('d-none');
         pendingOrdersCount = 0;
+        newOrders = []; // Limpa a lista de novos pedidos
       });
       
       DOM.confirmProductOptions.addEventListener('click', () => {
@@ -2399,20 +2842,30 @@
       
       // Inicializa o listener de pedidos do Firebase
       FirebaseService.listenForOrders((ordersFromFirebase) => {
+        const previousOrderCount = orders.length;
         orders = ordersFromFirebase;
         
         // Verifica se há novos pedidos pendentes
-        const newPendingOrders = orders.filter(o => o.status === 'pending').length;
-        if (newPendingOrders > lastOrderCount && isAdminLoggedIn) {
+        const newPendingOrders = orders.filter(o => o.status === 'pending');
+        
+        // Identifica novos pedidos
+        const currentOrderIds = orders.map(o => o.id);
+        const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
+        const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
+        
+        // Atualiza a lista de novos pedidos
+        newOrders = [...new Set([...newOrders, ...newlyAddedOrders])];
+        
+        if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
           Utils.playNotificationSound();
-          Utils.showNotification('Novo pedido recebido!', 'success');
+          Utils.showNotification(`Novo pedido recebido! Total: ${newlyAddedOrders.length}`, 'success');
+          Utils.showNewOrderNotification(newlyAddedOrders.length);
           
           // Atualiza o badge de notificação
-          pendingOrdersCount += (newPendingOrders - lastOrderCount);
+          pendingOrdersCount += newlyAddedOrders.length;
           DOM.notificationBadge.textContent = pendingOrdersCount;
           DOM.notificationBadge.classList.remove('d-none');
         }
-        lastOrderCount = newPendingOrders;
         
         if (isAdminLoggedIn) {
           Order.updateAdminPanel();
