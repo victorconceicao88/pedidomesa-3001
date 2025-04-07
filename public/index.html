@@ -1028,10 +1028,26 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Socket.io -->
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   
   <script>
-    
+
+     // Configuração do Firebase (substitua com suas credenciais)
+     const firebaseConfig = {
+      apiKey: "AIzaSyCV809Fi4JTLZclARfU4MtNSAVkJIrGcfk",
+      authDomain: "cozinha-da-vivi-83d09.firebaseapp.com",
+      databaseURL: "https://cozinha-da-vivi-83d09-default-rtdb.firebaseio.com",
+      projectId: "cozinha-da-vivi-83d09",
+      storageBucket: "cozinha-da-vivi-83d09.appspot.com",
+      messagingSenderId: "740046409209",
+      appId: "1:740046409209:web:f8cff12dc530e22fba4128"
+    };
+
+      // Inicialize o Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+          
     // Configurações
     const APP_CONFIG = {
       whatsappNumber: "351933737672",
@@ -1097,50 +1113,42 @@
       lastUpdate: document.getElementById("last-update")
     };
 
-    // Conexão Socket.io com tratamento de erros
-    const socket = io(window.location.origin, {
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000
-    });
 
-    socket.on('connect', () => {
-      console.log('Conectado ao servidor Socket.io');
-    });
 
-    socket.on('connect_error', (error) => {
-      console.error('Erro na conexão Socket.io:', error);
-      Utils.showNotification('Erro de conexão com o servidor. Recarregue a página.', 'danger');
-    });
-
-    socket.on('disconnect', (reason) => {
-      if (reason === 'io server disconnect') {
-        socket.connect();
-      }
-      Utils.showNotification('Conexão perdida. Tentando reconectar...', 'warning');
-    });
-
-    socket.on('reconnect', (attempt) => {
-      Utils.showNotification('Conexão restabelecida!', 'success');
-    });
-
-    // Recebe atualizações de pedidos do servidor
-    socket.on('pedidos-atualizados', (pedidosRecebidos) => {
-      orders = pedidosRecebidos;
-      localStorage.setItem('orders', JSON.stringify(orders));
-      
-      if (!DOM.adminPanel.classList.contains('d-none')) {
-        Order.updateAdminPanel();
-        
-        // Verificar se há novos pedidos pendentes
-        const newPendingOrders = orders.filter(o => o.status === 'pending').length;
-        if (newPendingOrders > lastOrderCount) {
-          Utils.playNotificationSound();
-          Utils.showNotification('Novo pedido recebido!', 'success');
+    // Funções do Firebase
+    const FirebaseService = {
+      saveOrder: async (order) => {
+        try {
+          const newOrderRef = database.ref('orders').push();
+          await newOrderRef.set(order);
+          return { ...order, id: newOrderRef.key };
+        } catch (error) {
+          console.error("Erro ao salvar pedido:", error);
+          return null;
         }
-        lastOrderCount = newPendingOrders;
+      },
+
+      listenForOrders: (callback) => {
+        database.ref('orders').on('value', (snapshot) => {
+          const ordersData = snapshot.val();
+          const ordersArray = ordersData ? Object.keys(ordersData).map(key => ({
+            id: key,
+            ...ordersData[key]
+          })) : [];
+          callback(ordersArray);
+        });
+      },
+
+      updateOrderStatus: async (orderId, newStatus) => {
+        try {
+          await database.ref(`orders/${orderId}/status`).set(newStatus);
+          return true;
+        } catch (error) {
+          console.error("Erro ao atualizar status:", error);
+          return false;
+        }
       }
-    });
+    };
 
     // Funções utilitárias
     const Utils = {
@@ -1389,10 +1397,8 @@
         };
       },
 
-      saveOrder: (order) => {
-        orders.push(order);
-        localStorage.setItem('orders', JSON.stringify(orders));
-        return order;
+      saveOrder: async (order) => {
+        return await FirebaseService.saveOrder(order);
       },
 
       sendToBackend: async () => {
@@ -1401,25 +1407,27 @@
           return null;
         }
 
-        try {
-          DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
-          DOM.confirmOrderButton.disabled = true;
-          
-          const order = Order.create();
-          const savedOrder = Order.saveOrder(order);
-          
-          socket.emit('novo-pedido', savedOrder);
-          
-          return savedOrder;
-        } catch (error) {
-          console.error('Erro:', error);
-          Utils.showNotification('Erro ao enviar o pedido. Por favor, tente novamente.', 'danger');
-          return null;
-        } finally {
-          DOM.confirmOrderButton.innerHTML = '<i class="fas fa-check-circle me-2"></i> Confirmar Pedido';
-          DOM.confirmOrderButton.disabled = false;
-        }
-      },
+    try {
+      DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
+      DOM.confirmOrderButton.disabled = true;
+      
+      const order = Order.create();
+      const savedOrder = await Order.saveOrder(order);
+      
+      if (savedOrder) {
+        return savedOrder;
+      }
+      
+      throw new Error('Erro ao salvar pedido');
+    } catch (error) {
+      console.error('Erro:', error);
+      Utils.showNotification('Erro ao enviar o pedido. Por favor, tente novamente.', 'danger');
+      return null;
+    } finally {
+      DOM.confirmOrderButton.innerHTML = '<i class="fas fa-check-circle me-2"></i> Confirmar Pedido';
+      DOM.confirmOrderButton.disabled = false;
+    }
+  },
 
       sendToWhatsApp: (pedido) => {
         const itemsText = pedido.itens.map(item => 
@@ -1764,9 +1772,9 @@
       }
     };
 
-    // Funções de Admin
-    const Admin = {
-      login: (username, password) => {
+       // Funções de Admin (adaptadas para Firebase)
+       const Admin = {
+        login: (username, password) => {
         if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
           isAdminLoggedIn = true;
           localStorage.setItem('adminLoggedIn', 'true');
@@ -1775,8 +1783,6 @@
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
           
-          // Iniciar atualização periódica
-          Admin.startAutoUpdate();
           Order.updateAdminPanel();
           
           DOM.adminLoginModal.hide();
@@ -1790,9 +1796,6 @@
         isAdminLoggedIn = false;
         localStorage.setItem('adminLoggedIn', 'false');
         
-        // Parar atualização periódica
-        Admin.stopAutoUpdate();
-        
         DOM.productSection.classList.remove("d-none");
         DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
@@ -1803,21 +1806,7 @@
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
-          Admin.startAutoUpdate();
           Order.updateAdminPanel();
-        }
-      },
-      
-      startAutoUpdate: () => {
-        // Atualizar a cada 5 segundos
-        adminUpdateInterval = setInterval(() => {
-          Order.updateAdminPanel();
-        }, 5000);
-      },
-      
-      stopAutoUpdate: () => {
-        if (adminUpdateInterval) {
-          clearInterval(adminUpdateInterval);
         }
       }
     };
@@ -2010,6 +1999,13 @@
       
       // Inicializar contador de pedidos pendentes
       lastOrderCount = orders.filter(o => o.status === 'pending').length;
+      // Inicializa o listener de pedidos
+      listenForOrders((ordersFromFirebase) => {
+      orders = ordersFromFirebase;
+      if (isAdminLoggedIn) {
+      Order.updateAdminPanel();
+    }
+  });
     }
 
     document.addEventListener('DOMContentLoaded', init);
