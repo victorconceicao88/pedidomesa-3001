@@ -1027,130 +1027,151 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Socket.io -->
+  <!-- firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   
   <script>
-
-     // Configuração do Firebase (substitua com suas credenciais)
-     const firebaseConfig = {
-      apiKey: "AIzaSyCV809Fi4JTLZclARfU4MtNSAVkJIrGcfk",
-      authDomain: "cozinha-da-vivi-83d09.firebaseapp.com",
-      databaseURL: "https://cozinha-da-vivi-83d09-default-rtdb.firebaseio.com",
-      projectId: "cozinha-da-vivi-83d09",
-      storageBucket: "cozinha-da-vivi-83d09.appspot.com",
-      messagingSenderId: "740046409209",
-      appId: "1:740046409209:web:f8cff12dc530e22fba4128"
-    };
-
-      // Inicialize o Firebase
-      firebase.initializeApp(firebaseConfig);
-      const database = firebase.database();
-          
-    // Configurações
-    const APP_CONFIG = {
-      whatsappNumber: "351933737672",
-      deliveryFee: 5.00,
-      restaurantName: "Cozinha da Vivi",
-      restaurantAddress: "Rua das Flores, 123 - Centro",
-      adminCredentials: {
-        username: "admin",
-        password: "cozinhadavivi123"
-      },
-      printerIP: "192.168.1.100", // Substitua pelo IP da impressora térmica
-      printerPort: 9100 // Porta padrão para impressoras térmicas
-    };
-
-    // Estado do carrinho
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let orders = JSON.parse(localStorage.getItem('orders')) || [];
-    let isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-    let adminUpdateInterval;
-    let lastOrderCount = 0;
-
-    // Elementos do DOM
-    const DOM = {
-      productSection: document.getElementById("product-section"),
-      checkoutSection: document.getElementById("checkout-section"),
-      adminPanel: document.getElementById("admin-panel"),
-      cartItems: document.getElementById("cart-items"),
-      totalElement: document.getElementById("total"),
-      subtotalElement: document.getElementById("subtotal"),
-      checkoutButton: document.getElementById("checkout-button"),
-      cartCount: document.getElementById("cart-count"),
-      cartIndicator: document.getElementById("cart-indicator"),
-      productContainer: document.getElementById("product-container"),
-      filterButtons: document.querySelectorAll('.filter-btn'),
-      confirmationModal: new bootstrap.Modal(document.getElementById('confirmationModal')),
-      adminLoginModal: new bootstrap.Modal(document.getElementById('adminLoginModal')),
-      kitchenOrderModal: new bootstrap.Modal(document.getElementById('kitchenOrderModal')),
-      adminLoginButton: document.getElementById("admin-login-button"),
-      adminLogoutButton: document.getElementById("admin-logout"),
-      backToCartButton: document.getElementById("back-to-cart-button"),
-      confirmOrderButton: document.getElementById("confirm-order-button"),
-      checkoutItems: document.getElementById("checkout-items"),
-      checkoutSubtotal: document.getElementById("checkout-subtotal"),
-      checkoutDeliveryFee: document.getElementById("checkout-delivery-fee"),
-      checkoutTotal: document.getElementById("checkout-total"),
-      deliveryOptionCards: document.querySelectorAll('.delivery-option-card'),
-      paymentMethodCards: document.querySelectorAll('.payment-method-card'),
-      deliveryFields: document.querySelectorAll('.delivery-field'),
-      customerInfoForm: document.getElementById("customer-info-form"),
-      cashChangeField: document.getElementById("cash-change-field"),
-      ordersList: document.getElementById("orders-list"),
-      todayOrders: document.getElementById("today-orders"),
-      preparingOrders: document.getElementById("preparing-orders"),
-      deliveryOrders: document.getElementById("delivery-orders"),
-      statusFilter: document.getElementById("status-filter"),
-      typeFilter: document.getElementById("type-filter"),
-      applyFilters: document.getElementById("apply-filters"),
-      kitchenOrderContent: document.getElementById("kitchen-order-content"),
-      printKitchenOrder: document.getElementById("print-kitchen-order"),
-      cartSidebar: document.getElementById("cart-sidebar"),
-      cartOverlay: document.getElementById("cart-overlay"),
-      closeCart: document.getElementById("close-cart"),
-      lastUpdate: document.getElementById("last-update")
-    };
+    // Configurações do Firebase (com suas credenciais)
+  const firebaseConfig = {
+  apiKey: "AIzaSyCV809Fi4JTLZclARfU4MtNSAVkJIrGcfk",
+  authDomain: "cozinha-da-vivi-83d09.firebaseapp.com",
+  projectId: "cozinha-da-vivi-83d09",
+  storageBucket: "cozinha-da-vivi-83d09.firebasestorage.app",
+  messagingSenderId: "740046409209",
+  appId: "1:740046409209:web:f8cff12dc530e22fba4128",
+  databaseURL: "https://cozinha-da-vivi-83d09-default-rtdb.europe-west1.firebasedatabase.app"  // Adicione esta linha
+};
 
 
+// Defina a variável `database` fora do bloco try-catch
+let database;
 
-    // Funções do Firebase
-    const FirebaseService = {
-      saveOrder: async (order) => {
-        try {
-          const newOrderRef = database.ref('orders').push();
-          await newOrderRef.set(order);
-          return { ...order, id: newOrderRef.key };
-        } catch (error) {
-          console.error("Erro ao salvar pedido:", error);
-          return null;
-        }
-      },
+try {
+  // Inicializa o Firebase
+  firebase.initializeApp(firebaseConfig);
+  console.log("Firebase inicializado com sucesso");
 
-      listenForOrders: (callback) => {
-        database.ref('orders').on('value', (snapshot) => {
-          const ordersData = snapshot.val();
-          const ordersArray = ordersData ? Object.keys(ordersData).map(key => ({
-            id: key,
-            ...ordersData[key]
-          })) : [];
-          callback(ordersArray);
-        });
-      },
+  // Agora você pode inicializar o Realtime Database
+  database = firebase.database();
+  console.log("Conexão com Realtime Database estabelecida");
+} catch (error) {
+  console.error("Erro ao inicializar Firebase:", error);
+  Utils.showNotification("Erro de conexão com o banco de dados", 'danger');
+}
 
-      updateOrderStatus: async (orderId, newStatus) => {
-        try {
-          await database.ref(`orders/${orderId}/status`).set(newStatus);
-          return true;
-        } catch (error) {
-          console.error("Erro ao atualizar status:", error);
-          return false;
-        }
-      }
-    };
+// Função para verificar a conexão com o Firebase Realtime Database
+const checkFirebaseConnection = async () => {
+  try {
+    // Verifica a conexão
+    const snapshot = await database.ref('.info/connected').once('value');
+    const connected = snapshot.val();
+    console.log("Conectado ao Firebase:", connected);
+    return connected;
+  } catch (error) {
+    console.error("Verificação de conexão falhou:", error);
+    return false;
+  }
+};
 
-    // Funções utilitárias
+// Configurações do aplicativo
+const APP_CONFIG = {
+  whatsappNumber: "351933737672",
+  deliveryFee: 5.00,
+  restaurantName: "Cozinha da Vivi",
+  restaurantAddress: "Rua das Flores, 123 - Centro",
+  adminCredentials: {
+    username: "admin",
+    password: "cozinhadavivi123"
+  }
+};
+
+// Estado do aplicativo
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let orders = [];
+let isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+let lastOrderCount = 0;
+
+// Elementos do DOM (mantenha os mesmos seletores)
+const DOM = {
+  productSection: document.getElementById("product-section"),
+  checkoutSection: document.getElementById("checkout-section"),
+  adminPanel: document.getElementById("admin-panel"),
+  cartItems: document.getElementById("cart-items"),
+  totalElement: document.getElementById("total"),
+  subtotalElement: document.getElementById("subtotal"),
+  checkoutButton: document.getElementById("checkout-button"),
+  cartCount: document.getElementById("cart-count"),
+  cartIndicator: document.getElementById("cart-indicator"),
+  productContainer: document.getElementById("product-container"),
+  filterButtons: document.querySelectorAll('.filter-btn'),
+  confirmationModal: new bootstrap.Modal(document.getElementById('confirmationModal')),
+  adminLoginModal: new bootstrap.Modal(document.getElementById('adminLoginModal')),
+  kitchenOrderModal: new bootstrap.Modal(document.getElementById('kitchenOrderModal')),
+  adminLoginButton: document.getElementById("admin-login-button"),
+  adminLogoutButton: document.getElementById("admin-logout"),
+  backToCartButton: document.getElementById("back-to-cart-button"),
+  confirmOrderButton: document.getElementById("confirm-order-button"),
+  checkoutItems: document.getElementById("checkout-items"),
+  checkoutSubtotal: document.getElementById("checkout-subtotal"),
+  checkoutDeliveryFee: document.getElementById("checkout-delivery-fee"),
+  checkoutTotal: document.getElementById("checkout-total"),
+  deliveryOptionCards: document.querySelectorAll('.delivery-option-card'),
+  paymentMethodCards: document.querySelectorAll('.payment-method-card'),
+  deliveryFields: document.querySelectorAll('.delivery-field'),
+  customerInfoForm: document.getElementById("customer-info-form"),
+  cashChangeField: document.getElementById("cash-change-field"),
+  ordersList: document.getElementById("orders-list"),
+  todayOrders: document.getElementById("today-orders"),
+  preparingOrders: document.getElementById("preparing-orders"),
+  deliveryOrders: document.getElementById("delivery-orders"),
+  statusFilter: document.getElementById("status-filter"),
+  typeFilter: document.getElementById("type-filter"),
+  applyFilters: document.getElementById("apply-filters"),
+  kitchenOrderContent: document.getElementById("kitchen-order-content"),
+  printKitchenOrder: document.getElementById("print-kitchen-order"),
+  cartSidebar: document.getElementById("cart-sidebar"),
+  cartOverlay: document.getElementById("cart-overlay"),
+  closeCart: document.getElementById("close-cart"),
+  lastUpdate: document.getElementById("last-update")
+};
+
+// Funções do Firebase
+const FirebaseService = {
+  saveOrder: async (order) => {
+    try {
+      const newOrderRef = database.ref('orders').push();
+      await newOrderRef.set(order);
+      return { ...order, id: newOrderRef.key };
+    } catch (error) {
+      console.error("Erro ao salvar pedido:", error);
+      return null;
+    }
+  },
+
+  listenForOrders: (callback) => {
+    database.ref('orders').on('value', (snapshot) => {
+      const ordersData = snapshot.val();
+      const ordersArray = ordersData ? Object.keys(ordersData).map(key => ({
+        id: key,
+        ...ordersData[key]
+      })) : [];
+      callback(ordersArray);
+    });
+  },
+
+  updateOrderStatus: async (orderId, newStatus) => {
+    try {
+      await database.ref(`orders/${orderId}/status`).set(newStatus);
+      return true;
+    } catch (error) {
+      console.error("Erro ao atualizar status:", error);
+      return false;
+    }
+  }
+};
+
+    // Funções utilitárias (mantenha as mesmas)
     const Utils = {
       formatCurrency: (value) => {
         return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -1180,7 +1201,6 @@
         }, 3000);
       },
       validatePhone: (phone) => {
-        // Aceita números internacionais com código de país
         return /^\+?[\d\s-]{10,15}$/.test(phone);
       },
       getTodayDate: () => {
@@ -1188,35 +1208,16 @@
         return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
       },
       playNotificationSound: () => {
-        // Criar um elemento de áudio para tocar o som de notificação
         const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
         audio.play().catch(e => console.log('Erro ao reproduzir som:', e));
       },
       updateTimestamp: () => {
         const now = new Date();
         DOM.lastUpdate.textContent = `Atualizado: ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-      },
-      sendToPrinter: async (orderId) => {
-        try {
-          // Em um ambiente real, você enviaria para a impressora térmica via rede
-          // Aqui está uma simulação do que seria feito
-          const order = orders.find(o => o.id === orderId);
-          if (!order) return false;
-          
-          // Em produção, você usaria algo como:
-          // const printer = new NetworkPrinter(APP_CONFIG.printerIP, APP_CONFIG.printerPort);
-          // await printer.print(kitchenOrderText);
-          
-          console.log(`Pedido #${orderId} enviado para impressora`);
-          return true;
-        } catch (error) {
-          console.error('Erro ao enviar para impressora:', error);
-          return false;
-        }
       }
     };
 
-    // Funções do Carrinho
+    // Funções do Carrinho (mantenha as mesmas)
     const Cart = {
       updateStorage: () => {
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -1351,79 +1352,92 @@
       }
     };
 
-    // Funções de Pedido
+    // Funções de Pedido (adaptadas para Firebase)
     const Order = {
-      create: () => {
-        const { subtotal, deliveryFee, total } = Cart.getTotals();
-        const deliveryType = document.querySelector('input[name="delivery-method"]:checked').value;
-        const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'mbway';
-        
-        const customerInfo = {
-          name: document.getElementById("customer-name").value,
-          phone: document.getElementById("customer-phone").value,
-          whatsapp: document.getElementById("customer-whatsapp").value || document.getElementById("customer-phone").value,
-          address: document.getElementById("customer-address").value,
-          complement: document.getElementById("customer-complement").value,
-          neighborhood: document.getElementById("customer-neighborhood").value,
-          instructions: document.getElementById("customer-instructions").value,
-          notes: document.getElementById("order-notes").value
-        };
-        
-        return {
-          id: Date.now().toString(),
-          cliente: customerInfo.name,
-          telefone: customerInfo.phone,
-          whatsapp: customerInfo.whatsapp,
-          itens: cart.map(item => ({
-            nome: item.name,
-            quantidade: item.quantity,
-            preco: item.price
-          })),
-          subtotal,
-          taxaEntrega: deliveryFee,
-          total,
-          status: 'pending',
-          tipoEntrega: deliveryType,
-          metodoPagamento: paymentMethod,
-          trocoPara: paymentMethod === 'dinheiro' ? document.getElementById("cash-change").value || '0' : null,
-          endereco: deliveryType === 'entrega' ? 
-            `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}${customerInfo.neighborhood}` : 
-            'Retirada no local',
-          instrucoes: customerInfo.instructions,
-          observacoes: customerInfo.notes,
-          data: new Date().toLocaleString('pt-BR'),
-          restaurante: APP_CONFIG.restaurantName,
-          enderecoRestaurante: APP_CONFIG.restaurantAddress
-        };
-      },
+  create: () => {
+    const { subtotal, deliveryFee, total } = Cart.getTotals();
+    const deliveryType = document.querySelector('input[name="delivery-method"]:checked').value;
+    const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'mbway';
+    
+    const customerInfo = {
+      name: document.getElementById("customer-name").value,
+      phone: document.getElementById("customer-phone").value,
+      whatsapp: document.getElementById("customer-whatsapp").value || document.getElementById("customer-phone").value,
+      address: document.getElementById("customer-address").value,
+      complement: document.getElementById("customer-complement").value,
+      neighborhood: document.getElementById("customer-neighborhood").value,
+      instructions: document.getElementById("customer-instructions").value,
+      notes: document.getElementById("order-notes").value
+    };
+    
+    return {
+      cliente: customerInfo.name,
+      telefone: customerInfo.phone,
+      whatsapp: customerInfo.whatsapp,
+      itens: cart.map(item => ({
+        nome: item.name,
+        quantidade: item.quantity,
+        preco: item.price
+      })),
+      subtotal,
+      taxaEntrega: deliveryFee,
+      total,
+      status: 'pending',
+      tipoEntrega: deliveryType,
+      metodoPagamento: paymentMethod,
+      trocoPara: paymentMethod === 'dinheiro' ? document.getElementById("cash-change").value || '0' : null,
+      endereco: deliveryType === 'entrega' ? 
+        `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}${customerInfo.neighborhood}` : 
+        'Retirada no local',
+      instrucoes: customerInfo.instructions,
+      observacoes: customerInfo.notes,
+      data: new Date().toLocaleString('pt-BR'),
+      restaurante: APP_CONFIG.restaurantName,
+      enderecoRestaurante: APP_CONFIG.restaurantAddress
+    };
+  },
 
-      saveOrder: async (order) => {
-        return await FirebaseService.saveOrder(order);
-      },
-
-      sendToBackend: async () => {
-        if (cart.length === 0) {
-          Utils.showNotification("Seu carrinho está vazio. Adicione itens para continuar.", 'danger');
-          return null;
-        }
-
+  saveOrder: async (order) => {
     try {
+      console.log("Salvando pedido no Firebase...");
+      const newOrderRef = database.ref('orders').push();
+      await newOrderRef.set(order);
+      console.log("Pedido salvo com ID:", newOrderRef.key);
+      return { ...order, id: newOrderRef.key };
+    } catch (error) {
+      console.error("Erro ao salvar pedido:", error);
+      throw error; // Rejeita a promise para ser capturada no sendToBackend
+    }
+  },
+
+  sendToBackend: async () => {
+    try {
+      // Validação básica do carrinho
+      if (cart.length === 0) {
+        throw new Error("Carrinho vazio");
+      }
+
+      // Mostra estado de carregamento
       DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
       DOM.confirmOrderButton.disabled = true;
-      
+
+      // Cria e salva o pedido
       const order = Order.create();
       const savedOrder = await Order.saveOrder(order);
       
-      if (savedOrder) {
-        return savedOrder;
+      if (!savedOrder) {
+        throw new Error("Falha ao salvar pedido");
       }
+
+      return savedOrder;
       
-      throw new Error('Erro ao salvar pedido');
     } catch (error) {
-      console.error('Erro:', error);
-      Utils.showNotification('Erro ao enviar o pedido. Por favor, tente novamente.', 'danger');
+      console.error("Erro em sendToBackend:", error);
+      Utils.showNotification(`Erro: ${error.message}`, 'danger');
       return null;
+      
     } finally {
+      // Restaura o botão independentemente do resultado
       DOM.confirmOrderButton.innerHTML = '<i class="fas fa-check-circle me-2"></i> Confirmar Pedido';
       DOM.confirmOrderButton.disabled = false;
     }
@@ -1592,19 +1606,11 @@
       },
       
       updateStatus: (orderId, newStatus) => {
-        const orderIndex = orders.findIndex(order => order.id === orderId);
-        if (orderIndex !== -1) {
-          orders[orderIndex].status = newStatus;
-          localStorage.setItem('orders', JSON.stringify(orders));
-          Order.updateAdminPanel();
-          
-          socket.emit('atualizar-status', {
-            orderId,
-            newStatus
-          });
-          
-          Utils.showNotification(`Status do pedido #${orderId.slice(-6)} atualizado para ${Order.getStatusText(newStatus)}`, 'success');
-        }
+        FirebaseService.updateOrderStatus(orderId, newStatus).then(success => {
+          if (success) {
+            Utils.showNotification(`Status do pedido #${orderId.slice(-6)} atualizado para ${Order.getStatusText(newStatus)}`, 'success');
+          }
+        });
       },
       
       generateKitchenOrder: (orderId) => {
@@ -1673,16 +1679,7 @@
         const kitchenOrder = Order.generateKitchenOrder(orderId);
         DOM.kitchenOrderContent.innerHTML = kitchenOrder;
         
-        // Enviar para impressora térmica (simulado)
-        Utils.sendToPrinter(orderId).then(success => {
-          if (success) {
-            Utils.showNotification('Pedido enviado para impressora da cozinha', 'success');
-          } else {
-            Utils.showNotification('Erro ao enviar para impressora', 'danger');
-          }
-        });
-        
-        // Também permitir impressão normal
+        // Abre janela de impressão
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
           <!DOCTYPE html>
@@ -1706,7 +1703,7 @@
       }
     };
 
-    // Funções de Filtro
+    // Funções de Filtro (mantenha as mesmas)
     const Filter = {
       apply: (category) => {
         const products = document.querySelectorAll('.product');
@@ -1729,7 +1726,7 @@
       }
     };
 
-    // Funções de Checkout
+    // Funções de Checkout (mantenha as mesmas)
     const Checkout = {
       init: () => {
         const { subtotal, deliveryFee, total } = Cart.getTotals();
@@ -1772,9 +1769,9 @@
       }
     };
 
-       // Funções de Admin (adaptadas para Firebase)
-       const Admin = {
-        login: (username, password) => {
+    // Funções de Admin (adaptadas para Firebase)
+    const Admin = {
+      login: (username, password) => {
         if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
           isAdminLoggedIn = true;
           localStorage.setItem('adminLoggedIn', 'true');
@@ -1862,33 +1859,43 @@
       });
 
       DOM.confirmOrderButton.addEventListener("click", async () => {
-        const name = document.getElementById("customer-name").value;
-        const phone = document.getElementById("customer-phone").value;
-        const isDelivery = document.getElementById("delivery-method").checked;
-        const address = document.getElementById("customer-address").value;
-        const neighborhood = document.getElementById("customer-neighborhood").value;
-        
-        if (!name || !phone) {
-          Utils.showNotification("Por favor, preencha seu nome e telefone", 'danger');
-          return;
-        }
-        
-        if (!Utils.validatePhone(phone)) {
-          Utils.showNotification("Por favor, insira um telefone válido", 'danger');
-          return;
-        }
-        
-        if (isDelivery && (!address || !neighborhood)) {
-          Utils.showNotification("Por favor, preencha seu endereço completo", 'danger');
-          return;
-        }
-        
-        const pedido = await Order.sendToBackend();
-        if (pedido) {
-          Order.sendToWhatsApp(pedido);
-        }
-      });
+  // Verifique campos obrigatórios
+  const name = document.getElementById("customer-name").value;
+  const phone = document.getElementById("customer-phone").value;
+  const isDelivery = document.getElementById("delivery-method").checked;
+  const address = document.getElementById("customer-address").value;
+  const neighborhood = document.getElementById("customer-neighborhood").value;
+  
+  if (!name || !phone) {
+    Utils.showNotification("Por favor, preencha seu nome e telefone", 'danger');
+    return;
+  }
+  
+  if (!Utils.validatePhone(phone)) {
+    Utils.showNotification("Por favor, insira um telefone válido", 'danger');
+    return;
+  }
+  
+  if (isDelivery && (!address || !neighborhood)) {
+    Utils.showNotification("Por favor, preencha seu endereço completo", 'danger');
+    return;
+  }
 
+  // Verifique conexão com Firebase
+  const isConnected = await checkFirebaseConnection();
+  if (!isConnected) {
+    Utils.showNotification("Sem conexão com o banco de dados. Tente novamente.", 'danger');
+    return;
+  }
+
+  // Processe o pedido
+  const pedido = await Order.sendToBackend();
+  if (pedido) {
+    Order.sendToWhatsApp(pedido);
+  } else {
+    Utils.showNotification("Falha ao processar pedido. Verifique sua conexão.", 'danger');
+  }
+});
       DOM.filterButtons.forEach(button => {
         button.addEventListener('click', () => {
           Filter.apply(button.dataset.category);
@@ -1995,17 +2002,25 @@
       Cart.updateUI();
       Filter.apply('all');
       Checkout.toggleDeliveryFields(true);
-      Admin.checkLoginStatus();
       
-      // Inicializar contador de pedidos pendentes
-      lastOrderCount = orders.filter(o => o.status === 'pending').length;
-      // Inicializa o listener de pedidos
-      listenForOrders((ordersFromFirebase) => {
-      orders = ordersFromFirebase;
-      if (isAdminLoggedIn) {
-      Order.updateAdminPanel();
-    }
-  });
+      // Inicializa o listener de pedidos do Firebase
+      FirebaseService.listenForOrders((ordersFromFirebase) => {
+        orders = ordersFromFirebase;
+        
+        // Verifica se há novos pedidos pendentes
+        const newPendingOrders = orders.filter(o => o.status === 'pending').length;
+        if (newPendingOrders > lastOrderCount && isAdminLoggedIn) {
+          Utils.playNotificationSound();
+          Utils.showNotification('Novo pedido recebido!', 'success');
+        }
+        lastOrderCount = newPendingOrders;
+        
+        if (isAdminLoggedIn) {
+          Order.updateAdminPanel();
+        }
+      });
+      
+      Admin.checkLoginStatus();
     }
 
     document.addEventListener('DOMContentLoaded', init);
