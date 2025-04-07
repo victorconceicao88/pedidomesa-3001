@@ -1,14 +1,16 @@
 {
   "name": "bot-final",
   "version": "1.0.0",
-  "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
-    "dev": "nodemon server/index.js"
+    "dev": "ntl dev",
+    "build": "npm install && echo 'Build completo' && exit 0"
   },
   "dependencies": {
     "express": "^4.21.2",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "serverless-http": "^3.2.0",
+    "@netlify/functions": "^1.4.0"
   },
   "engines": {
     "node": "18.x"

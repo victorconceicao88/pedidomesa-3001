@@ -1,0 +1,54 @@
+[
+  {
+    "id": "1743981096641",
+    "cliente": "Victor Hugo Pereira da Conceicao",
+    "telefone": "+351933737672",
+    "whatsapp": "933737672",
+    "itens": [
+      {
+        "nome": "Strogonoff de Carne",
+        "quantidade": 1,
+        "preco": 35.9
+      }
+    ],
+    "subtotal": 35.9,
+    "taxaEntrega": 5,
+    "total": 40.9,
+    "status": "pending",
+    "tipoEntrega": "entrega",
+    "metodoPagamento": "mbway",
+    "trocoPara": null,
+    "endereco": "Rua fernao mendes pinto N 133 6 R, london, ewq",
+    "instrucoes": "",
+    "observacoes": "",
+    "data": "07/04/2025, 00:11:36",
+    "restaurante": "Cozinha da Vivi",
+    "enderecoRestaurante": "Rua das Flores, 123 - Centro"
+  },
+  {
+    "id": "1743981151754",
+    "cliente": "Victor Hugo Pereira da Conceicao",
+    "telefone": "+351933737672",
+    "whatsapp": "933737672",
+    "itens": [
+      {
+        "nome": "Salada Tropical",
+        "quantidade": 1,
+        "preco": 24.5
+      }
+    ],
+    "subtotal": 24.5,
+    "taxaEntrega": 5,
+    "total": 29.5,
+    "status": "pending",
+    "tipoEntrega": "entrega",
+    "metodoPagamento": "mbway",
+    "trocoPara": null,
+    "endereco": "Rua fernao mendes pinto N 133 6 R, london, sao",
+    "instrucoes": "",
+    "observacoes": "",
+    "data": "07/04/2025, 00:12:31",
+    "restaurante": "Cozinha da Vivi",
+    "enderecoRestaurante": "Rua das Flores, 123 - Centro"
+  }
+]
