@@ -17,10 +17,13 @@
 
   <style>
     :root {
-      --primary-color: #ff6b6b;
+      --primary-color: #3d1106;
       --secondary-color: #ffa502;
       --dark-color: #2f3542;
       --light-color: #f1f2f6;
+      --header-color: #FFF1EA;
+      --button-hover: #617c33;
+      --footer-color: #ffb501;
     }
     
     body {
@@ -40,14 +43,38 @@
       position: sticky;
       top: 0;
       z-index: 1030;
-      background-color: var(--dark-color);
+      background-color: var(--header-color);
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 10px 0;
     }
     
     .navbar-container {
       max-width: 1200px;
       margin: 0 auto;
       width: 100%;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo-img {
+      height: 50px;
+      width: auto;
+    }
+    
+    .header-text h1 {
+      font-size: 1.5rem;
+      margin: 0;
+      color: var(--primary-color);
+    }
+    
+    .header-text p {
+      font-size: 0.8rem;
+      margin: 0;
+      color: #666;
     }
     
     /* Categorias melhoradas */
@@ -70,9 +97,9 @@
       font-size: 0.85rem;
       font-weight: 500;
       transition: all 0.3s ease;
-      border: 1px solid #dee2e6;
+      border: 1px solid var(--primary-color);
       background-color: white;
-      color: var(--dark-color);
+      color: var(--primary-color);
     }
     
     .filter-btn.active {
@@ -80,7 +107,7 @@
       color: white;
       border-color: var(--primary-color);
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2);
+      box-shadow: 0 4px 8px rgba(61, 17, 6, 0.2);
     }
     
     .filter-btn:hover {
@@ -88,7 +115,15 @@
     }
     
     .filter-btn.active:hover {
-      background-color: #ff5252;
+      background-color: var(--primary-color);
+    }
+    
+    /* Seção de cardápio */
+    #products {
+      background-color: var(--header-color);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
     }
     
     .product {
@@ -96,6 +131,7 @@
       cursor: pointer;
       border-radius: 10px;
       overflow: hidden;
+      border: 1px solid var(--primary-color);
     }
     
     .product:hover {
@@ -105,6 +141,7 @@
     
     .product-image {
       height: 180px;
+      width: 100%;
       object-fit: cover;
       transition: transform 0.3s;
     }
@@ -120,7 +157,7 @@
     }
     
     .add-to-cart:hover {
-      background-color: #ff5252;
+      background-color: var(--button-hover);
       transform: scale(1.05);
     }
     
@@ -142,8 +179,8 @@
     }
     
     .btn-primary:hover {
-      background-color: #ff5252;
-      border-color: #ff5252;
+      background-color: var(--button-hover);
+      border-color: var(--button-hover);
     }
     
     #checkout-button {
@@ -153,7 +190,7 @@
     }
     
     #checkout-button:hover {
-      background-color: #ff5252;
+      background-color: var(--button-hover);
       transform: translateY(-2px);
     }
     
@@ -174,7 +211,8 @@
     }
     
     footer {
-      background-color: var(--dark-color) !important;
+      background-color: var(--footer-color) !important;
+      color: #333;
     }
     
     .text-primary {
@@ -246,7 +284,7 @@
     
     .delivery-option-card.active {
       border-color: var(--primary-color);
-      background-color: rgba(255, 107, 107, 0.1);
+      background-color: rgba(61, 17, 6, 0.1);
     }
     
     .payment-method-card {
@@ -262,7 +300,7 @@
     
     .payment-method-card.active {
       border-color: var(--primary-color);
-      background-color: rgba(255, 107, 107, 0.1);
+      background-color: rgba(61, 17, 6, 0.1);
     }
     
     .payment-icon {
@@ -587,6 +625,9 @@
     .option-group-title {
       font-weight: bold;
       margin-bottom: 10px;
+      color: var(--dark-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
     }
     
     .option-item {
@@ -603,7 +644,7 @@
     }
 
     @keyframes highlight {
-      0% { background-color: rgba(255, 107, 107, 0.3); }
+      0% { background-color: rgba(61, 17, 6, 0.3); }
       100% { background-color: transparent; }
     }
 
@@ -658,7 +699,7 @@
     
     @media (max-width: 768px) {
       .product-image {
-        height: 120px;
+        height: 180px; /* Aumentado para melhor visualização em mobile */
       }
       
       .cart-item-quantity {
@@ -709,6 +750,16 @@
       .card-body {
         padding: 1rem;
       }
+      
+      .logo-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+      
+      .logo-img {
+        height: 40px;
+      }
     }
     
     @media (max-width: 576px) {
@@ -717,7 +768,7 @@
       }
       
       .product-image {
-        height: 100px;
+        height: 200px; /* Aumentado para melhor visualização em mobile */
       }
       
       .product-name {
@@ -1007,16 +1058,25 @@
       font-size: 0.9rem;
       color: #666;
     }
+    
+    /* Custom cart icon color */
+    .fa-shopping-bag {
+      color: #280b04;
+    }
   </style>
 </head>
 <body>
   <!-- Main Navigation -->
   <header class="main-header">
     <div class="container navbar-container">
-      <div class="d-flex justify-content-between align-items-center py-3">
-        <div id="main-header">
-          <h1 class="h3 mb-0 fw-bold"><span class="text-primary">Cozinha</span> da Vivi</h1>
-          <p class="mb-0 small text-muted">Comida caseira com amor</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="logo-container">
+          <!-- Adicione aqui a tag img com seu logo -->
+          <!-- <img src="caminho/para/seu/logo.png" alt="Cozinha da Vivi" class="logo-img"> -->
+          <div class="header-text">
+            <h1>Cozinha da Vivi</h1>
+            <p>Comida caseira com amor</p>
+          </div>
         </div>
         <div class="cart-icon-container" id="cart-indicator">
           <i class="fas fa-shopping-bag fa-lg"></i>
@@ -1693,7 +1753,7 @@
       apiKey: "AIzaSyCV809Fi4JTLZclARfU4MtNSAVkJIrGcfk",
       authDomain: "cozinha-da-vivi-83d09.firebaseapp.com",
       projectId: "cozinha-da-vivi-83d09",
-      storageBucket: "cozinha-da-vivi-83d09.firebasestorage.app",
+      storageBucket: "cozinha-da-vivi-83d09.appspot.com",
       messagingSenderId: "740046409209",
       appId: "1:740046409209:web:f8cff12dc530e22fba4128",
       databaseURL: "https://cozinha-da-vivi-83d09-default-rtdb.europe-west1.firebasedatabase.app"
