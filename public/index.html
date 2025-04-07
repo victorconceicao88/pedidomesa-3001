@@ -215,6 +215,10 @@
     /* Admin Panel Styles */
     .admin-navbar {
       background-color: var(--dark-color);
+      position: sticky;
+      top: 0;
+      z-index: 1020;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     
     .order-card {
@@ -341,6 +345,116 @@
       font-weight: bold;
     }
     
+    /* Admin Notification Bell */
+    .notification-bell {
+      position: relative;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    /* Admin Day Tabs */
+    .day-tabs {
+      display: flex;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .day-tab {
+      padding: 8px 15px;
+      margin-right: 5px;
+      border-radius: 20px;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+    
+    .day-tab.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    /* Admin Order Accordion */
+    .order-accordion-header {
+      cursor: pointer;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+    
+    .order-accordion-header:hover {
+      background-color: #e9ecef;
+    }
+    
+    .order-accordion-content {
+      padding: 10px;
+      background-color: white;
+      border-radius: 0 0 5px 5px;
+      border: 1px solid #dee2e6;
+      border-top: none;
+      display: none;
+    }
+    
+    .order-accordion-content.show {
+      display: block;
+    }
+    
+    /* Product Options Modal */
+    .options-modal .modal-body {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    .option-group {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .option-group:last-child {
+      border-bottom: none;
+    }
+    
+    .option-group-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .option-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .product-image {
@@ -366,6 +480,15 @@
       .cart-sidebar {
         max-width: 100%;
       }
+      
+      .admin-panel-container {
+        padding-top: 10px;
+      }
+      
+      .order-actions .btn {
+        margin-bottom: 5px;
+        width: 100%;
+      }
     }
     
     @media (max-width: 576px) {
@@ -389,6 +512,10 @@
       
       .delivery-option-card, .payment-method-card {
         margin-bottom: 10px;
+      }
+      
+      .admin-stats-card .stat-value {
+        font-size: 1.2rem;
       }
     }
     
@@ -442,6 +569,70 @@
         width: 100%;
         height: auto;
       }
+    }
+    
+    /* Hidden admin access button */
+    .admin-access-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--dark-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+    
+    .admin-access-btn:hover {
+      transform: scale(1.1);
+      background-color: var(--primary-color);
+    }
+    
+    /* Product options styling */
+    .product-options-container {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+    }
+    
+    .option-section {
+      margin-bottom: 20px;
+    }
+    
+    .option-section-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--dark-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+    
+    .option-item {
+      margin-bottom: 10px;
+    }
+    
+    .option-item label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .option-item input[type="checkbox"],
+    .option-item input[type="radio"] {
+      margin-right: 10px;
+    }
+    
+    .option-price {
+      color: var(--primary-color);
+      font-weight: bold;
+      margin-left: 5px;
     }
   </style>
 </head>
@@ -516,143 +707,215 @@
             <h2 class="h4 fw-bold mb-3 mb-md-0">Nosso Cardápio</h2>
             <div class="btn-group filter-buttons" role="group">
               <button type="button" class="filter-btn btn btn-outline-secondary active" data-category="all">Todos</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="pratos">Pratos</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="sobremesas">Sobremesas</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="churrasco">Churrasco</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="burguers">Burguers</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="combos">Combos</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="porcoes">Porções</button>
               <button type="button" class="filter-btn btn btn-outline-secondary" data-category="bebidas">Bebidas</button>
+              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="sobremesas">Sobremesas</button>
             </div>
           </div>
 
           <div class="row g-4" id="product-container">
-            <!-- Prato 1 -->
+            <!-- Churrasco Misto -->
             <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="1" data-category="pratos">
+              <div class="card product h-100 border-0 shadow-sm" data-id="101" data-category="churrasco">
                 <div class="badge bg-primary position-absolute" style="top: 0.5rem; right: 0.5rem">Mais pedido</div>
-                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Frango à Parmegiana" class="card-img-top product-image">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Churrasco Misto" class="card-img-top product-image">
                 <div class="card-body">
-                  <h3 class="h5 card-title product-name">Frango à Parmegiana</h3>
-                  <p class="card-text text-muted small">Filé de frango empanado com molho de tomate caseiro e queijo derretido</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 32,90</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Prato 2 -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="2" data-category="pratos">
-                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Salada Tropical" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Salada Tropical</h3>
-                  <p class="card-text text-muted small">Mix de folhas, manga, abacate, nozes e molho de iogurte</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 24,50</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Prato 3 -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="3" data-category="pratos">
-                <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Risoto de Cogumelos" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Risoto de Cogumelos</h3>
-                  <p class="card-text text-muted small">Risoto cremoso com mix de cogumelos frescos e ervas finas</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 28,90</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Prato 4 -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="4" data-category="pratos">
-                <div class="badge bg-success position-absolute" style="top: 0.5rem; right: 0.5rem">Novidade</div>
-                <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Strogonoff de Carne" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Strogonoff de Carne</h3>
-                  <p class="card-text text-muted small">Tradicional strogonoff com carne macia, creme de leite e champignons</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 35,90</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Prato 5 -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="5" data-category="pratos">
-                <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Moqueca de Peixe" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Moqueca de Peixe</h3>
-                  <p class="card-text text-muted small">Peixe branco cozido no leite de coco com dendê e pimentões</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 42,50</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Prato 6 -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="6" data-category="pratos">
-                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lasanha à Bolonhesa" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Lasanha à Bolonhesa</h3>
-                  <p class="card-text text-muted small">Camadas de massa fresca com molho bolonhesa e queijos</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 38,90</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Sobremesa 1 -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="7" data-category="sobremesas">
-                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Brownie com Sorvete" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Brownie com Sorvete</h3>
-                  <p class="card-text text-muted small">Brownie caseiro com sorvete de creme e calda de chocolate</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 18,90</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bebida 1 -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="8" data-category="bebidas">
-                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Suco Natural" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Suco Natural (500ml)</h3>
-                  <p class="card-text text-muted small">Opções: Laranja, Maracujá, Abacaxi com Hortelã</p>
+                  <h3 class="h5 card-title product-name">Churrasco Misto</h3>
+                  <p class="card-text text-muted small">Refeição completa com carnes e acompanhamentos selecionados</p>
                   <div class="d-flex justify-content-between align-items-center mt-3">
                     <span class="h5 mb-0 product-price">R$ 12,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Maminha -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="102" data-category="churrasco">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Maminha" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Maminha</h3>
+                  <p class="card-text text-muted small">Maminha suculenta grelhada na brasa</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 13,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Linguiça Toscana -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="103" data-category="churrasco">
+                <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Linguiça Toscana" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Linguiça Toscana</h3>
+                  <p class="card-text text-muted small">Linguiça toscana artesanal grelhada</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Costelinha de Porco -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="104" data-category="churrasco">
+                <img src="https://images.unsplash.com/photo-1606851094291-6efae152fa87?w=500&auto=format&fit=crop" alt="Costelinha de Porco" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Costelinha de Porco</h3>
+                  <p class="card-text text-muted small">Costelinha de porco assada lentamente</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- X-Salada -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="201" data-category="burguers">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Salada" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">X-Salada</h3>
+                  <p class="card-text text-muted small">Pão de hambúrguer, bife de hambúrguer, fiambre, queijo, salada, batata palha e milho.</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 6,50</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- X-Bacon -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="202" data-category="burguers">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Bacon" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">X-Bacon</h3>
+                  <p class="card-text text-muted small">Pão, hambúrguer, bacon, queijo, fiambre, ovo, alface, tomate, milho e batata palha.</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 8,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Combo Frango Supreme -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="301" data-category="combos">
+                <div class="badge bg-success position-absolute" style="top: 0.5rem; right: 0.5rem">Combo</div>
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo Frango Supreme" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Combo Frango Supreme</h3>
+                  <p class="card-text text-muted small">Sanduíche de frango com batata frita e bebida</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 10,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Combo X-Tudo -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="302" data-category="combos">
+                <div class="badge bg-success position-absolute" style="top: 0.5rem; right: 0.5rem">Combo</div>
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo X-Tudo" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Combo X-Tudo</h3>
+                  <p class="card-text text-muted small">Sanduíche completo com batata frita e bebida</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Porção de Arroz -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="401" data-category="porcoes">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop" alt="Porção de Arroz" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Porção de Arroz</h3>
+                  <p class="card-text text-muted small">Porção de arroz blanco</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 3,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coca-Cola (lata) -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="5021" data-category="bebidas">
+                <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&auto=format&fit=crop" alt="Coca-Cola (lata)" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Coca-Cola (lata)</h3>
+                  <p class="card-text text-muted small">Refrigerante Coca-Cola em lata 350ml</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 2,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Açai Pequeno -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="601" data-category="sobremesas">
+                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&auto=format&fit=crop" alt="Açai Pequeno" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Açai Pequeno</h3>
+                  <p class="card-text text-muted small">Açai cremoso acompanhado com granola, banana, leite em pó e morango</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 6,00</span>
+                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
+                      <i class="fas fa-plus me-1"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pudim Caseiro -->
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <div class="card product h-100 border-0 shadow-sm" data-id="603" data-category="sobremesas">
+                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&auto=format&fit=crop" alt="Pudim Caseiro" class="card-img-top product-image">
+                <div class="card-body">
+                  <h3 class="h5 card-title product-name">Pudim Caseiro</h3>
+                  <p class="card-text text-muted small">Pudim tradicional caseiro com calda de caramelo</p>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0 product-price">R$ 3,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -713,11 +976,7 @@
                       </div>
                       <div class="col-md-6">
                         <label for="customer-phone" class="form-label">Telefone *</label>
-                        <input type="tel" class="form-control" id="customer-phone" required placeholder="+351 933 737 672">
-                      </div>
-                      <div class="col-12 delivery-field">
-                        <label for="customer-whatsapp" class="form-label">WhatsApp (para contato)</label>
-                        <input type="tel" class="form-control" id="customer-whatsapp" placeholder="+351 933 737 672">
+                        <input type="tel" class="form-control" id="customer-phone" required placeholder="Ex: +351 933 737 672">
                       </div>
                       <div class="col-12 delivery-field">
                         <label for="customer-address" class="form-label">Endereço *</label>
@@ -732,12 +991,8 @@
                         <input type="text" class="form-control" id="customer-neighborhood">
                       </div>
                       <div class="col-12">
-                        <label for="customer-instructions" class="form-label">Instruções para entrega</label>
-                        <textarea class="form-control" id="customer-instructions" rows="2" placeholder="Ex: Portão azul, tocar campainha"></textarea>
-                      </div>
-                      <div class="col-12">
-                        <label for="order-notes" class="form-label">Observações do pedido</label>
-                        <textarea class="form-control" id="order-notes" rows="2" placeholder="Ex: Sem cebola, bem passado"></textarea>
+                        <label for="customer-instructions" class="form-label">Instruções para entrega/pedido</label>
+                        <textarea class="form-control" id="customer-instructions" rows="2" placeholder="Ex: Portão azul, tocar campainha ou Sem cebola, bem passado"></textarea>
                       </div>
                     </div>
                   </form>
@@ -832,7 +1087,11 @@
           <a class="navbar-brand" href="#">
             <i class="fas fa-utensils me-2"></i> Painel Administrativo
           </a>
-          <div>
+          <div class="d-flex align-items-center">
+            <div class="notification-bell" id="notification-bell">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge d-none" id="notification-badge">0</span>
+            </div>
             <button id="admin-logout" class="btn btn-outline-light btn-sm">
               <i class="fas fa-sign-out-alt me-1"></i> Sair
             </button>
@@ -904,6 +1163,9 @@
                 </div>
               </div>
               <div class="card-body p-0">
+                <div class="day-tabs" id="day-tabs">
+                  <!-- Tabs serão adicionadas dinamicamente aqui -->
+                </div>
                 <div id="orders-list" class="list-group list-group-flush">
                   <!-- Pedidos serão adicionados dinamicamente aqui -->
                   <div class="list-group-item text-center py-5">
@@ -989,6 +1251,27 @@
     </div>
   </div>
 
+  <!-- Modal de Opções do Produto -->
+  <div class="modal fade options-modal" id="productOptionsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="productOptionsModalTitle">Opções do Produto</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="product-options-content">
+          <!-- Conteúdo das opções será inserido aqui -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="confirm-product-options">
+            <i class="fas fa-check me-1"></i> Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="bg-dark text-white py-4">
     <div class="container">
       <div class="row">
@@ -1010,11 +1293,6 @@
             <li><i class="fas fa-phone-alt me-2"></i> (31) 3333-4444</li>
             <li><i class="fas fa-map-marker-alt me-2"></i> Rua das Flores, 123 - Centro</li>
             <li><i class="fab fa-whatsapp me-2"></i> (31) 93373-7672</li>
-            <li class="mt-2">
-              <button id="admin-login-button" class="btn btn-sm btn-outline-light">
-                <i class="fas fa-lock me-1"></i> Acesso Restaurante
-              </button>
-            </li>
           </ul>
         </div>
       </div>
@@ -1025,6 +1303,11 @@
     </div>
   </footer>
 
+  <!-- Botão de acesso admin (oculto para usuários comuns) -->
+  <div class="admin-access-btn" id="admin-access-btn">
+    <i class="fas fa-lock"></i>
+  </div>
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- firebase -->
@@ -1033,145 +1316,127 @@
   
   <script>
     // Configurações do Firebase (com suas credenciais)
-  const firebaseConfig = {
-  apiKey: "AIzaSyCV809Fi4JTLZclARfU4MtNSAVkJIrGcfk",
-  authDomain: "cozinha-da-vivi-83d09.firebaseapp.com",
-  projectId: "cozinha-da-vivi-83d09",
-  storageBucket: "cozinha-da-vivi-83d09.firebasestorage.app",
-  messagingSenderId: "740046409209",
-  appId: "1:740046409209:web:f8cff12dc530e22fba4128",
-  databaseURL: "https://cozinha-da-vivi-83d09-default-rtdb.europe-west1.firebasedatabase.app"  // Adicione esta linha
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyCV809Fi4JTLZclARfU4MtNSAVkJIrGcfk",
+      authDomain: "cozinha-da-vivi-83d09.firebaseapp.com",
+      projectId: "cozinha-da-vivi-83d09",
+      storageBucket: "cozinha-da-vivi-83d09.firebasestorage.app",
+      messagingSenderId: "740046409209",
+      appId: "1:740046409209:web:f8cff12dc530e22fba4128",
+      databaseURL: "https://cozinha-da-vivi-83d09-default-rtdb.europe-west1.firebasedatabase.app"
+    };
 
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-// Defina a variável `database` fora do bloco try-catch
-let database;
+    // Configurações do aplicativo
+    const APP_CONFIG = {
+      whatsappNumber: "351933737672",
+      deliveryFee: 5.00,
+      restaurantName: "Cozinha da Vivi",
+      restaurantAddress: "Rua das Flores, 123 - Centro",
+      adminCredentials: {
+        username: "admin",
+        password: "cozinhadavivi123"
+      }
+    };
 
-try {
-  // Inicializa o Firebase
-  firebase.initializeApp(firebaseConfig);
-  console.log("Firebase inicializado com sucesso");
+    // Estado do aplicativo
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let orders = [];
+    let isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+    let lastOrderCount = 0;
+    let pendingOrdersCount = 0;
+    let currentProductOptions = null;
 
-  // Agora você pode inicializar o Realtime Database
-  database = firebase.database();
-  console.log("Conexão com Realtime Database estabelecida");
-} catch (error) {
-  console.error("Erro ao inicializar Firebase:", error);
-  Utils.showNotification("Erro de conexão com o banco de dados", 'danger');
-}
+    // Elementos do DOM
+    const DOM = {
+      productSection: document.getElementById("product-section"),
+      checkoutSection: document.getElementById("checkout-section"),
+      adminPanel: document.getElementById("admin-panel"),
+      cartItems: document.getElementById("cart-items"),
+      totalElement: document.getElementById("total"),
+      subtotalElement: document.getElementById("subtotal"),
+      checkoutButton: document.getElementById("checkout-button"),
+      cartCount: document.getElementById("cart-count"),
+      cartIndicator: document.getElementById("cart-indicator"),
+      productContainer: document.getElementById("product-container"),
+      filterButtons: document.querySelectorAll('.filter-btn'),
+      confirmationModal: new bootstrap.Modal(document.getElementById('confirmationModal')),
+      adminLoginModal: new bootstrap.Modal(document.getElementById('adminLoginModal')),
+      kitchenOrderModal: new bootstrap.Modal(document.getElementById('kitchenOrderModal')),
+      productOptionsModal: new bootstrap.Modal(document.getElementById('productOptionsModal')),
+      adminAccessBtn: document.getElementById("admin-access-btn"),
+      adminLogoutButton: document.getElementById("admin-logout"),
+      backToCartButton: document.getElementById("back-to-cart-button"),
+      confirmOrderButton: document.getElementById("confirm-order-button"),
+      checkoutItems: document.getElementById("checkout-items"),
+      checkoutSubtotal: document.getElementById("checkout-subtotal"),
+      checkoutDeliveryFee: document.getElementById("checkout-delivery-fee"),
+      checkoutTotal: document.getElementById("checkout-total"),
+      deliveryOptionCards: document.querySelectorAll('.delivery-option-card'),
+      paymentMethodCards: document.querySelectorAll('.payment-method-card'),
+      deliveryFields: document.querySelectorAll('.delivery-field'),
+      customerInfoForm: document.getElementById("customer-info-form"),
+      cashChangeField: document.getElementById("cash-change-field"),
+      ordersList: document.getElementById("orders-list"),
+      todayOrders: document.getElementById("today-orders"),
+      preparingOrders: document.getElementById("preparing-orders"),
+      deliveryOrders: document.getElementById("delivery-orders"),
+      statusFilter: document.getElementById("status-filter"),
+      typeFilter: document.getElementById("type-filter"),
+      applyFilters: document.getElementById("apply-filters"),
+      kitchenOrderContent: document.getElementById("kitchen-order-content"),
+      printKitchenOrder: document.getElementById("print-kitchen-order"),
+      cartSidebar: document.getElementById("cart-sidebar"),
+      cartOverlay: document.getElementById("cart-overlay"),
+      closeCart: document.getElementById("close-cart"),
+      lastUpdate: document.getElementById("last-update"),
+      notificationBell: document.getElementById("notification-bell"),
+      notificationBadge: document.getElementById("notification-badge"),
+      dayTabs: document.getElementById("day-tabs"),
+      productOptionsContent: document.getElementById("product-options-content"),
+      productOptionsModalTitle: document.getElementById("productOptionsModalTitle"),
+      confirmProductOptions: document.getElementById("confirm-product-options")
+    };
 
-// Função para verificar a conexão com o Firebase Realtime Database
-const checkFirebaseConnection = async () => {
-  try {
-    // Verifica a conexão
-    const snapshot = await database.ref('.info/connected').once('value');
-    const connected = snapshot.val();
-    console.log("Conectado ao Firebase:", connected);
-    return connected;
-  } catch (error) {
-    console.error("Verificação de conexão falhou:", error);
-    return false;
-  }
-};
+    // Funções do Firebase
+    const FirebaseService = {
+      saveOrder: async (order) => {
+        try {
+          const newOrderRef = database.ref('orders').push();
+          await newOrderRef.set(order);
+          return { ...order, id: newOrderRef.key };
+        } catch (error) {
+          console.error("Erro ao salvar pedido:", error);
+          return null;
+        }
+      },
 
-// Configurações do aplicativo
-const APP_CONFIG = {
-  whatsappNumber: "351933737672",
-  deliveryFee: 5.00,
-  restaurantName: "Cozinha da Vivi",
-  restaurantAddress: "Rua das Flores, 123 - Centro",
-  adminCredentials: {
-    username: "admin",
-    password: "cozinhadavivi123"
-  }
-};
+      listenForOrders: (callback) => {
+        database.ref('orders').on('value', (snapshot) => {
+          const ordersData = snapshot.val();
+          const ordersArray = ordersData ? Object.keys(ordersData).map(key => ({
+            id: key,
+            ...ordersData[key]
+          })) : [];
+          callback(ordersArray);
+        });
+      },
 
-// Estado do aplicativo
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let orders = [];
-let isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-let lastOrderCount = 0;
+      updateOrderStatus: async (orderId, newStatus) => {
+        try {
+          await database.ref(`orders/${orderId}/status`).set(newStatus);
+          return true;
+        } catch (error) {
+          console.error("Erro ao atualizar status:", error);
+          return false;
+        }
+      }
+    };
 
-// Elementos do DOM (mantenha os mesmos seletores)
-const DOM = {
-  productSection: document.getElementById("product-section"),
-  checkoutSection: document.getElementById("checkout-section"),
-  adminPanel: document.getElementById("admin-panel"),
-  cartItems: document.getElementById("cart-items"),
-  totalElement: document.getElementById("total"),
-  subtotalElement: document.getElementById("subtotal"),
-  checkoutButton: document.getElementById("checkout-button"),
-  cartCount: document.getElementById("cart-count"),
-  cartIndicator: document.getElementById("cart-indicator"),
-  productContainer: document.getElementById("product-container"),
-  filterButtons: document.querySelectorAll('.filter-btn'),
-  confirmationModal: new bootstrap.Modal(document.getElementById('confirmationModal')),
-  adminLoginModal: new bootstrap.Modal(document.getElementById('adminLoginModal')),
-  kitchenOrderModal: new bootstrap.Modal(document.getElementById('kitchenOrderModal')),
-  adminLoginButton: document.getElementById("admin-login-button"),
-  adminLogoutButton: document.getElementById("admin-logout"),
-  backToCartButton: document.getElementById("back-to-cart-button"),
-  confirmOrderButton: document.getElementById("confirm-order-button"),
-  checkoutItems: document.getElementById("checkout-items"),
-  checkoutSubtotal: document.getElementById("checkout-subtotal"),
-  checkoutDeliveryFee: document.getElementById("checkout-delivery-fee"),
-  checkoutTotal: document.getElementById("checkout-total"),
-  deliveryOptionCards: document.querySelectorAll('.delivery-option-card'),
-  paymentMethodCards: document.querySelectorAll('.payment-method-card'),
-  deliveryFields: document.querySelectorAll('.delivery-field'),
-  customerInfoForm: document.getElementById("customer-info-form"),
-  cashChangeField: document.getElementById("cash-change-field"),
-  ordersList: document.getElementById("orders-list"),
-  todayOrders: document.getElementById("today-orders"),
-  preparingOrders: document.getElementById("preparing-orders"),
-  deliveryOrders: document.getElementById("delivery-orders"),
-  statusFilter: document.getElementById("status-filter"),
-  typeFilter: document.getElementById("type-filter"),
-  applyFilters: document.getElementById("apply-filters"),
-  kitchenOrderContent: document.getElementById("kitchen-order-content"),
-  printKitchenOrder: document.getElementById("print-kitchen-order"),
-  cartSidebar: document.getElementById("cart-sidebar"),
-  cartOverlay: document.getElementById("cart-overlay"),
-  closeCart: document.getElementById("close-cart"),
-  lastUpdate: document.getElementById("last-update")
-};
-
-// Funções do Firebase
-const FirebaseService = {
-  saveOrder: async (order) => {
-    try {
-      const newOrderRef = database.ref('orders').push();
-      await newOrderRef.set(order);
-      return { ...order, id: newOrderRef.key };
-    } catch (error) {
-      console.error("Erro ao salvar pedido:", error);
-      return null;
-    }
-  },
-
-  listenForOrders: (callback) => {
-    database.ref('orders').on('value', (snapshot) => {
-      const ordersData = snapshot.val();
-      const ordersArray = ordersData ? Object.keys(ordersData).map(key => ({
-        id: key,
-        ...ordersData[key]
-      })) : [];
-      callback(ordersArray);
-    });
-  },
-
-  updateOrderStatus: async (orderId, newStatus) => {
-    try {
-      await database.ref(`orders/${orderId}/status`).set(newStatus);
-      return true;
-    } catch (error) {
-      console.error("Erro ao atualizar status:", error);
-      return false;
-    }
-  }
-};
-
-    // Funções utilitárias (mantenha as mesmas)
+    // Funções utilitárias
     const Utils = {
       formatCurrency: (value) => {
         return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -1201,6 +1466,7 @@ const FirebaseService = {
         }, 3000);
       },
       validatePhone: (phone) => {
+        // Aceita qualquer formato internacional de telefone
         return /^\+?[\d\s-]{10,15}$/.test(phone);
       },
       getTodayDate: () => {
@@ -1214,22 +1480,26 @@ const FirebaseService = {
       updateTimestamp: () => {
         const now = new Date();
         DOM.lastUpdate.textContent = `Atualizado: ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+      },
+      getDayName: (dayIndex) => {
+        const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+        return days[dayIndex];
       }
     };
 
-    // Funções do Carrinho (mantenha as mesmas)
+    // Funções do Carrinho
     const Cart = {
       updateStorage: () => {
         localStorage.setItem('cart', JSON.stringify(cart));
       },
 
-      addItem: (id, name, price, image = '') => {
-        const existingItem = cart.find(item => item.id === id);
+      addItem: (id, name, price, image = '', options = {}) => {
+        const existingItem = cart.find(item => item.id === id && JSON.stringify(item.options) === JSON.stringify(options));
         
         if (existingItem) {
           existingItem.quantity += 1;
         } else {
-          cart.push({ id, name, price, quantity: 1, image });
+          cart.push({ id, name, price, quantity: 1, image, options });
         }
         
         Cart.updateStorage();
@@ -1299,11 +1569,18 @@ const FirebaseService = {
           cart.forEach(item => {
             const li = document.createElement("div");
             li.className = "list-group-item";
+            
+            let optionsText = '';
+            if (item.options && Object.keys(item.options).length > 0) {
+              optionsText = Object.values(item.options).map(opt => opt.join(', ')).join(' | ');
+            }
+            
             li.innerHTML = `
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <h6 class="mb-1">${item.name}</h6>
-                  <small class="text-muted">${Utils.formatCurrency(item.price)}</small>
+                  ${optionsText ? `<small class="text-muted">${optionsText}</small>` : ''}
+                  <small class="d-block text-muted">${Utils.formatCurrency(item.price)}</small>
                 </div>
                 <div class="d-flex align-items-center gap-3">
                   <div class="cart-item-quantity">
@@ -1352,100 +1629,118 @@ const FirebaseService = {
       }
     };
 
-    // Funções de Pedido (adaptadas para Firebase)
+    // Funções de Pedido
     const Order = {
-  create: () => {
-    const { subtotal, deliveryFee, total } = Cart.getTotals();
-    const deliveryType = document.querySelector('input[name="delivery-method"]:checked').value;
-    const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'mbway';
-    
-    const customerInfo = {
-      name: document.getElementById("customer-name").value,
-      phone: document.getElementById("customer-phone").value,
-      whatsapp: document.getElementById("customer-whatsapp").value || document.getElementById("customer-phone").value,
-      address: document.getElementById("customer-address").value,
-      complement: document.getElementById("customer-complement").value,
-      neighborhood: document.getElementById("customer-neighborhood").value,
-      instructions: document.getElementById("customer-instructions").value,
-      notes: document.getElementById("order-notes").value
-    };
-    
-    return {
-      cliente: customerInfo.name,
-      telefone: customerInfo.phone,
-      whatsapp: customerInfo.whatsapp,
-      itens: cart.map(item => ({
-        nome: item.name,
-        quantidade: item.quantity,
-        preco: item.price
-      })),
-      subtotal,
-      taxaEntrega: deliveryFee,
-      total,
-      status: 'pending',
-      tipoEntrega: deliveryType,
-      metodoPagamento: paymentMethod,
-      trocoPara: paymentMethod === 'dinheiro' ? document.getElementById("cash-change").value || '0' : null,
-      endereco: deliveryType === 'entrega' ? 
-        `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}${customerInfo.neighborhood}` : 
-        'Retirada no local',
-      instrucoes: customerInfo.instructions,
-      observacoes: customerInfo.notes,
-      data: new Date().toLocaleString('pt-BR'),
-      restaurante: APP_CONFIG.restaurantName,
-      enderecoRestaurante: APP_CONFIG.restaurantAddress
-    };
-  },
+      create: () => {
+        const { subtotal, deliveryFee, total } = Cart.getTotals();
+        const deliveryType = document.querySelector('input[name="delivery-method"]:checked').value;
+        const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'mbway';
+        
+        const customerInfo = {
+          name: document.getElementById("customer-name").value,
+          phone: document.getElementById("customer-phone").value,
+          whatsapp: document.getElementById("customer-phone").value,
+          address: document.getElementById("customer-address").value,
+          complement: document.getElementById("customer-complement").value,
+          neighborhood: document.getElementById("customer-neighborhood").value,
+          instructions: document.getElementById("customer-instructions").value
+        };
+        
+        return {
+          cliente: customerInfo.name,
+          telefone: customerInfo.phone,
+          whatsapp: customerInfo.whatsapp,
+          itens: cart.map(item => ({
+            nome: item.name,
+            quantidade: item.quantity,
+            preco: item.price,
+            opcoes: item.options || {}
+          })),
+          subtotal,
+          taxaEntrega: deliveryFee,
+          total,
+          status: 'pending',
+          tipoEntrega: deliveryType,
+          metodoPagamento: paymentMethod,
+          trocoPara: paymentMethod === 'dinheiro' ? document.getElementById("cash-change").value || '0' : null,
+          endereco: deliveryType === 'entrega' ? 
+            `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}${customerInfo.neighborhood}` : 
+            'Retirada no local',
+          instrucoes: customerInfo.instructions,
+          data: new Date().toLocaleString('pt-BR'),
+          restaurante: APP_CONFIG.restaurantName,
+          enderecoRestaurante: APP_CONFIG.restaurantAddress
+        };
+      },
 
-  saveOrder: async (order) => {
-    try {
-      console.log("Salvando pedido no Firebase...");
-      const newOrderRef = database.ref('orders').push();
-      await newOrderRef.set(order);
-      console.log("Pedido salvo com ID:", newOrderRef.key);
-      return { ...order, id: newOrderRef.key };
-    } catch (error) {
-      console.error("Erro ao salvar pedido:", error);
-      throw error; // Rejeita a promise para ser capturada no sendToBackend
-    }
-  },
+      saveOrder: async (order) => {
+        try {
+          const newOrderRef = database.ref('orders').push();
+          await newOrderRef.set(order);
+          return { ...order, id: newOrderRef.key };
+        } catch (error) {
+          console.error("Erro ao salvar pedido:", error);
+          throw error;
+        }
+      },
 
-  sendToBackend: async () => {
-    try {
-      // Validação básica do carrinho
-      if (cart.length === 0) {
-        throw new Error("Carrinho vazio");
-      }
+      sendToBackend: async () => {
+        try {
+          // Validação básica do carrinho
+          if (cart.length === 0) {
+            throw new Error("Carrinho vazio");
+          }
 
-      // Mostra estado de carregamento
-      DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
-      DOM.confirmOrderButton.disabled = true;
+          // Validação dos campos obrigatórios
+          const name = document.getElementById("customer-name").value;
+          const phone = document.getElementById("customer-phone").value;
+          const isDelivery = document.getElementById("delivery-method").checked;
+          const address = document.getElementById("customer-address").value;
+          const neighborhood = document.getElementById("customer-neighborhood").value;
+          
+          if (!name || !phone) {
+            throw new Error("Por favor, preencha seu nome e telefone");
+          }
+          
+          if (!Utils.validatePhone(phone)) {
+            throw new Error("Por favor, insira um telefone válido");
+          }
+          
+          if (isDelivery && (!address || !neighborhood)) {
+            throw new Error("Por favor, preencha seu endereço completo");
+          }
 
-      // Cria e salva o pedido
-      const order = Order.create();
-      const savedOrder = await Order.saveOrder(order);
-      
-      if (!savedOrder) {
-        throw new Error("Falha ao salvar pedido");
-      }
+          // Mostra estado de carregamento
+          DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
+          DOM.confirmOrderButton.disabled = true;
 
-      return savedOrder;
-      
-    } catch (error) {
-      console.error("Erro em sendToBackend:", error);
-      Utils.showNotification(`Erro: ${error.message}`, 'danger');
-      return null;
-      
-    } finally {
-      // Restaura o botão independentemente do resultado
-      DOM.confirmOrderButton.innerHTML = '<i class="fas fa-check-circle me-2"></i> Confirmar Pedido';
-      DOM.confirmOrderButton.disabled = false;
-    }
-  },
+          // Cria e salva o pedido
+          const order = Order.create();
+          const savedOrder = await Order.saveOrder(order);
+          
+          if (!savedOrder) {
+            throw new Error("Falha ao salvar pedido");
+          }
+
+          return savedOrder;
+          
+        } catch (error) {
+          console.error("Erro em sendToBackend:", error);
+          Utils.showNotification(`Erro: ${error.message}`, 'danger');
+          return null;
+          
+        } finally {
+          // Restaura o botão independentemente do resultado
+          DOM.confirmOrderButton.innerHTML = '<i class="fas fa-check-circle me-2"></i> Confirmar Pedido';
+          DOM.confirmOrderButton.disabled = false;
+        }
+      },
 
       sendToWhatsApp: (pedido) => {
         const itemsText = pedido.itens.map(item => 
-          `➡ ${item.nome} - ${item.quantidade}x ${Utils.formatCurrency(item.preco)} = ${Utils.formatCurrency(item.preco * item.quantidade)}`
+          `➡ ${item.nome} - ${item.quantidade}x ${Utils.formatCurrency(item.preco)} = ${Utils.formatCurrency(item.preco * item.quantidade)}` +
+          (item.opcoes && Object.keys(item.opcoes).length > 0 ? 
+            `\n   ${Object.entries(item.opcoes).map(([key, val]) => `${key}: ${val.join(', ')}`).join(' | ')}` : '')
         ).join("%0A");
         
         const deliveryText = pedido.tipoEntrega === 'entrega' ? 
@@ -1461,9 +1756,7 @@ const FirebaseService = {
           paymentText = `💳 *Pagamento com cartão*%0AMáquina será levada na entrega/retirada`;
         }
         
-        const notesText = pedido.observacoes ? `%0A%0A📌 *Observações do pedido:*%0A${pedido.observacoes}` : '';
-        
-        const message = `*📝 Novo Pedido - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${pedido.cliente}%0A📞 *Telefone:* ${pedido.telefone}%0A✉ *WhatsApp:* ${pedido.whatsapp}%0A%0A📦 *Itens do Pedido:*%0A${itemsText}%0A%0A💰 *Valores:*%0A*Subtotal:* ${Utils.formatCurrency(pedido.subtotal)}%0A*Taxa de entrega:* ${Utils.formatCurrency(pedido.taxaEntrega)}%0A*Total:* ${Utils.formatCurrency(pedido.total)}%0A%0A🚚 *Forma de recebimento:* ${pedido.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada no local'}${deliveryText}%0A%0A${paymentText}${notesText}%0A%0A⏰ *Data/hora:* ${pedido.data}%0A%0A_🔔 Aguardando confirmação do restaurante_`;
+        const message = `*📝 Novo Pedido - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${pedido.cliente}%0A📞 *Telefone:* ${pedido.telefone}%0A✉ *WhatsApp:* ${pedido.whatsapp}%0A%0A📦 *Itens do Pedido:*%0A${itemsText}%0A%0A💰 *Valores:*%0A*Subtotal:* ${Utils.formatCurrency(pedido.subtotal)}%0A*Taxa de entrega:* ${Utils.formatCurrency(pedido.taxaEntrega)}%0A*Total:* ${Utils.formatCurrency(pedido.total)}%0A%0A🚚 *Forma de recebimento:* ${pedido.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada no local'}${deliveryText}%0A%0A${paymentText}%0A%0A⏰ *Data/hora:* ${pedido.data}%0A%0A_🔔 Aguardando confirmação do restaurante_`;
         
         const whatsappURL = `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${message}`;
         
@@ -1493,73 +1786,48 @@ const FirebaseService = {
           filteredOrders = filteredOrders.filter(order => order.tipoEntrega === typeFilter);
         }
         
-        DOM.ordersList.innerHTML = '';
+        // Agrupa pedidos por dia
+        const ordersByDay = {};
+        filteredOrders.forEach(order => {
+          const date = new Date(order.data);
+          const dayKey = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+          
+          if (!ordersByDay[dayKey]) {
+            ordersByDay[dayKey] = [];
+          }
+          ordersByDay[dayKey].push(order);
+        });
         
-        if (filteredOrders.length === 0) {
+        // Atualiza as abas de dias
+        DOM.dayTabs.innerHTML = '';
+        Object.keys(ordersByDay).forEach(dayKey => {
+          const tab = document.createElement('div');
+          tab.className = 'day-tab';
+          tab.textContent = dayKey;
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            Order.renderOrdersForDay(dayKey, ordersByDay[dayKey]);
+          });
+          
+          if (DOM.dayTabs.children.length === 0) {
+            tab.classList.add('active');
+          }
+          
+          DOM.dayTabs.appendChild(tab);
+        });
+        
+        // Renderiza os pedidos do primeiro dia ou mensagem de nenhum pedido
+        if (Object.keys(ordersByDay).length > 0) {
+          const firstDay = Object.keys(ordersByDay)[0];
+          Order.renderOrdersForDay(firstDay, ordersByDay[firstDay]);
+        } else {
           DOM.ordersList.innerHTML = `
             <div class="list-group-item text-center py-5">
               <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
               <p class="mb-0">Nenhum pedido encontrado</p>
             </div>
           `;
-        } else {
-          filteredOrders.forEach(order => {
-            const orderElement = document.createElement('div');
-            orderElement.className = 'list-group-item';
-            orderElement.innerHTML = `
-              <div class="order-card p-3">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                  <div>
-                    <h5 class="mb-1">Pedido #${order.id.slice(-6)}</h5>
-                    <p class="mb-1 small text-muted"><i class="fas fa-user me-1"></i> ${order.cliente}</p>
-                    <p class="mb-1 small text-muted"><i class="fas fa-phone me-1"></i> ${order.telefone}</p>
-                  </div>
-                  <div>
-                    <span class="badge order-status-badge ${Order.getStatusClass(order.status)}">${Order.getStatusText(order.status)}</span>
-                  </div>
-                </div>
-                
-                <div class="mb-2">
-                  <p class="mb-1 small"><i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-1"></i> ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</p>
-                  <p class="mb-1 small text-muted"><i class="fas fa-money-bill-wave me-1"></i> ${Order.getPaymentText(order.metodoPagamento, order.trocoPara)}</p>
-                  ${order.observacoes ? `<p class="mb-1 small text-muted"><i class="fas fa-sticky-note me-1"></i> ${order.observacoes}</p>` : ''}
-                </div>
-                
-                <div class="border-top pt-2 mb-2">
-                  ${order.itens.map(item => `
-                    <div class="d-flex justify-content-between small">
-                      <span>${item.quantidade}x ${item.nome}</span>
-                      <span>${Utils.formatCurrency(item.preco * item.quantidade)}</span>
-                    </div>
-                  `).join('')}
-                </div>
-                
-                <div class="d-flex justify-content-between border-top pt-2">
-                  <div>
-                    <span class="small text-muted">${order.data}</span>
-                  </div>
-                  <div class="text-end">
-                    <div class="small text-muted">Total: ${Utils.formatCurrency(order.total)}</div>
-                    <div class="order-actions mt-1">
-                      <button class="btn btn-outline-primary btn-sm update-status" data-id="${order.id}" data-status="preparing">
-                        <i class="fas fa-utensils me-1"></i> Preparar
-                      </button>
-                      <button class="btn btn-outline-success btn-sm update-status" data-id="${order.id}" data-status="ready">
-                        <i class="fas fa-check me-1"></i> Pronto
-                      </button>
-                      <button class="btn btn-outline-danger btn-sm update-status" data-id="${order.id}" data-status="cancelled">
-                        <i class="fas fa-times me-1"></i> Cancelar
-                      </button>
-                      <button class="btn btn-outline-secondary btn-sm view-kitchen-order" data-id="${order.id}">
-                        <i class="fas fa-print me-1"></i> Imprimir
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
-            DOM.ordersList.appendChild(orderElement);
-          });
         }
         
         const today = Utils.getTodayDate();
@@ -1572,6 +1840,68 @@ const FirebaseService = {
         DOM.deliveryOrders.textContent = deliveryOrdersCount;
         
         Utils.updateTimestamp();
+      },
+      
+      renderOrdersForDay: (dayKey, dayOrders) => {
+        DOM.ordersList.innerHTML = '';
+        
+        dayOrders.forEach(order => {
+          const orderElement = document.createElement('div');
+          orderElement.className = 'list-group-item';
+          orderElement.innerHTML = `
+            <div class="order-card p-3">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h5 class="mb-1">Pedido #${order.id.slice(-6)}</h5>
+                  <p class="mb-1 small text-muted"><i class="fas fa-user me-1"></i> ${order.cliente}</p>
+                  <p class="mb-1 small text-muted"><i class="fas fa-phone me-1"></i> ${order.telefone}</p>
+                </div>
+                <div>
+                  <span class="badge order-status-badge ${Order.getStatusClass(order.status)}">${Order.getStatusText(order.status)}</span>
+                </div>
+              </div>
+              
+              <div class="mb-2">
+                <p class="mb-1 small"><i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-1"></i> ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</p>
+                <p class="mb-1 small text-muted"><i class="fas fa-money-bill-wave me-1"></i> ${Order.getPaymentText(order.metodoPagamento, order.trocoPara)}</p>
+                ${order.instrucoes ? `<p class="mb-1 small text-muted"><i class="fas fa-sticky-note me-1"></i> ${order.instrucoes}</p>` : ''}
+              </div>
+              
+              <div class="border-top pt-2 mb-2">
+                ${order.itens.map(item => `
+                  <div class="d-flex justify-content-between small">
+                    <span>${item.quantidade}x ${item.nome}${item.opcoes && Object.keys(item.opcoes).length > 0 ? ` (${Object.values(item.opcoes).join(', ')})` : ''}</span>
+                    <span>${Utils.formatCurrency(item.preco * item.quantidade)}</span>
+                  </div>
+                `).join('')}
+              </div>
+              
+              <div class="d-flex justify-content-between border-top pt-2">
+                <div>
+                  <span class="small text-muted">${order.data}</span>
+                </div>
+                <div class="text-end">
+                  <div class="small text-muted">Total: ${Utils.formatCurrency(order.total)}</div>
+                  <div class="order-actions mt-1">
+                    <button class="btn btn-outline-primary btn-sm update-status" data-id="${order.id}" data-status="preparing">
+                      <i class="fas fa-utensils me-1"></i> Preparar
+                    </button>
+                    <button class="btn btn-outline-success btn-sm update-status" data-id="${order.id}" data-status="ready">
+                      <i class="fas fa-check me-1"></i> Pronto
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm update-status" data-id="${order.id}" data-status="cancelled">
+                      <i class="fas fa-times me-1"></i> Cancelar
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm view-kitchen-order" data-id="${order.id}">
+                      <i class="fas fa-print me-1"></i> Imprimir
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          DOM.ordersList.appendChild(orderElement);
+        });
       },
       
       getStatusText: (status) => {
@@ -1619,13 +1949,13 @@ const FirebaseService = {
         
         const itemsText = order.itens.map(item => `
           <div class="kitchen-order-item">
-            <span>${item.quantidade}x ${item.nome}</span>
+            <span>${item.quantidade}x ${item.nome}${item.opcoes && Object.keys(item.opcoes).length > 0 ? ` (${Object.values(item.opcoes).join(', ')})` : ''}</span>
           </div>
         `).join('');
         
-        const notes = order.observacoes ? `
+        const notes = order.instrucoes ? `
           <div class="kitchen-order-item">
-            <span><strong>OBS:</strong> ${order.observacoes}</span>
+            <span><strong>OBS:</strong> ${order.instrucoes}</span>
           </div>
         ` : '';
         
@@ -1648,12 +1978,6 @@ const FirebaseService = {
               <div class="kitchen-order-item">
                 <span><strong>Endereço:</strong> ${order.endereco}</span>
               </div>
-              
-              ${order.instrucoes ? `
-                <div class="kitchen-order-item">
-                  <span><strong>Instruções:</strong> ${order.instrucoes}</span>
-                </div>
-              ` : ''}
             ` : ''}
             
             <div class="kitchen-order-item">
@@ -1703,7 +2027,7 @@ const FirebaseService = {
       }
     };
 
-    // Funções de Filtro (mantenha as mesmas)
+    // Funções de Filtro
     const Filter = {
       apply: (category) => {
         const products = document.querySelectorAll('.product');
@@ -1726,7 +2050,7 @@ const FirebaseService = {
       }
     };
 
-    // Funções de Checkout (mantenha as mesmas)
+    // Funções de Checkout
     const Checkout = {
       init: () => {
         const { subtotal, deliveryFee, total } = Cart.getTotals();
@@ -1739,11 +2063,17 @@ const FirebaseService = {
         cart.forEach(item => {
           const li = document.createElement("div");
           li.className = "list-group-item";
+          
+          let optionsText = '';
+          if (item.options && Object.keys(item.options).length > 0) {
+            optionsText = Object.values(item.options).map(opt => opt.join(', ')).join(' | ');
+          }
+          
           li.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="mb-1">${item.name}</h6>
-                <small class="text-muted">${Utils.formatCurrency(item.price)}</small>
+                ${optionsText ? `<small class="text-muted">${optionsText}</small>` : ''}
               </div>
               <div class="d-flex align-items-center gap-3">
                 <span class="quantity">${item.quantity}x</span>
@@ -1769,7 +2099,7 @@ const FirebaseService = {
       }
     };
 
-    // Funções de Admin (adaptadas para Firebase)
+    // Funções de Admin
     const Admin = {
       login: (username, password) => {
         if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
@@ -1808,6 +2138,87 @@ const FirebaseService = {
       }
     };
 
+    // Funções para lidar com opções de produtos
+    const ProductOptions = {
+      showOptions: (productId, productName) => {
+        // Aqui você pode implementar a lógica para mostrar opções específicas para cada produto
+        // Por enquanto, vamos apenas mostrar um modal genérico
+        DOM.productOptionsModalTitle.textContent = `Opções: ${productName}`;
+        DOM.productOptionsContent.innerHTML = `
+          <div class="option-section">
+            <div class="option-section-title">Acompanhamentos</div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="acompanhamento" value="Arroz">
+                Arroz
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="acompanhamento" value="Feijão">
+                Feijão
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="acompanhamento" value="Farofa">
+                Farofa
+              </label>
+            </div>
+          </div>
+          <div class="option-section">
+            <div class="option-section-title">Saladas</div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="salada" value="Salada Mista">
+                Salada Mista
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="salada" value="Vinagrete">
+                Vinagrete
+              </label>
+            </div>
+          </div>
+        `;
+        
+        currentProductOptions = {
+          id: productId,
+          name: productName,
+          price: 0 // Você pode ajustar isso com base no produto real
+        };
+        
+        DOM.productOptionsModal.show();
+      },
+      
+      handleOptionsConfirmation: () => {
+        if (!currentProductOptions) return;
+        
+        const selectedOptions = {};
+        const checkboxes = DOM.productOptionsContent.querySelectorAll('input[type="checkbox"]:checked');
+        
+        checkboxes.forEach(checkbox => {
+          const group = checkbox.name;
+          if (!selectedOptions[group]) {
+            selectedOptions[group] = [];
+          }
+          selectedOptions[group].push(checkbox.value);
+        });
+        
+        Cart.addItem(
+          currentProductOptions.id,
+          currentProductOptions.name,
+          currentProductOptions.price,
+          '',
+          selectedOptions
+        );
+        
+        DOM.productOptionsModal.hide();
+        currentProductOptions = null;
+      }
+    };
+
     // Event Listeners
     function setupEventListeners() {
       document.addEventListener('click', (event) => {
@@ -1819,7 +2230,12 @@ const FirebaseService = {
           const price = Utils.parsePrice(productElement.querySelector(".product-price").textContent);
           const image = productElement.querySelector(".product-image")?.src || '';
           
-          Cart.addItem(id, name, price, image);
+          // Verifica se o produto tem opções (você pode adicionar uma classe ou atributo para identificar)
+          if (productElement.hasAttribute('data-has-options')) {
+            ProductOptions.showOptions(id, name);
+          } else {
+            Cart.addItem(id, name, price, image);
+          }
         }
       });
 
@@ -1859,43 +2275,12 @@ const FirebaseService = {
       });
 
       DOM.confirmOrderButton.addEventListener("click", async () => {
-  // Verifique campos obrigatórios
-  const name = document.getElementById("customer-name").value;
-  const phone = document.getElementById("customer-phone").value;
-  const isDelivery = document.getElementById("delivery-method").checked;
-  const address = document.getElementById("customer-address").value;
-  const neighborhood = document.getElementById("customer-neighborhood").value;
-  
-  if (!name || !phone) {
-    Utils.showNotification("Por favor, preencha seu nome e telefone", 'danger');
-    return;
-  }
-  
-  if (!Utils.validatePhone(phone)) {
-    Utils.showNotification("Por favor, insira um telefone válido", 'danger');
-    return;
-  }
-  
-  if (isDelivery && (!address || !neighborhood)) {
-    Utils.showNotification("Por favor, preencha seu endereço completo", 'danger');
-    return;
-  }
+        const pedido = await Order.sendToBackend();
+        if (pedido) {
+          Order.sendToWhatsApp(pedido);
+        }
+      });
 
-  // Verifique conexão com Firebase
-  const isConnected = await checkFirebaseConnection();
-  if (!isConnected) {
-    Utils.showNotification("Sem conexão com o banco de dados. Tente novamente.", 'danger');
-    return;
-  }
-
-  // Processe o pedido
-  const pedido = await Order.sendToBackend();
-  if (pedido) {
-    Order.sendToWhatsApp(pedido);
-  } else {
-    Utils.showNotification("Falha ao processar pedido. Verifique sua conexão.", 'danger');
-  }
-});
       DOM.filterButtons.forEach(button => {
         button.addEventListener('click', () => {
           Filter.apply(button.dataset.category);
@@ -1942,7 +2327,7 @@ const FirebaseService = {
         });
       });
       
-      DOM.adminLoginButton.addEventListener('click', () => {
+      DOM.adminAccessBtn.addEventListener('click', () => {
         DOM.adminLoginModal.show();
       });
       
@@ -1994,6 +2379,15 @@ const FirebaseService = {
       DOM.applyFilters.addEventListener('click', () => {
         Order.updateAdminPanel();
       });
+      
+      DOM.notificationBell.addEventListener('click', () => {
+        DOM.notificationBadge.classList.add('d-none');
+        pendingOrdersCount = 0;
+      });
+      
+      DOM.confirmProductOptions.addEventListener('click', () => {
+        ProductOptions.handleOptionsConfirmation();
+      });
     }
 
     // Inicialização
@@ -2012,6 +2406,11 @@ const FirebaseService = {
         if (newPendingOrders > lastOrderCount && isAdminLoggedIn) {
           Utils.playNotificationSound();
           Utils.showNotification('Novo pedido recebido!', 'success');
+          
+          // Atualiza o badge de notificação
+          pendingOrdersCount += (newPendingOrders - lastOrderCount);
+          DOM.notificationBadge.textContent = pendingOrdersCount;
+          DOM.notificationBadge.classList.remove('d-none');
         }
         lastOrderCount = newPendingOrders;
         
