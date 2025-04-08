@@ -21,6 +21,7 @@
       --secondary-color: #ffb501;
       --dark-color: #2f3542;
       --light-color: #f1f2f6;
+      --success-color: #617c33;
     }
     
     body {
@@ -59,8 +60,27 @@
     
     .logo-img {
       height: 60px;
-      width: auto;
+      width: 60px;
       border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .logo-text h1 {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+      line-height: 1.2;
+    }
+    
+    .logo-text p {
+      font-size: 0.75rem;
+      margin-bottom: 0;
     }
     
     /* Categorias melhoradas */
@@ -111,6 +131,9 @@
       overflow: hidden;
       border: 1px solid #e0d6d0;
       margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
     
     .product:hover {
@@ -135,6 +158,15 @@
       color: var(--secondary-color);
       border: 1px solid var(--primary-color);
       transition: all 0.3s;
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .add-to-cart.added {
+      background-color: var(--success-color);
+      border-color: var(--success-color);
     }
     
     .add-to-cart:hover {
@@ -736,7 +768,16 @@
       }
       
       .logo-img {
-        height: 40px;
+        height: 50px;
+        width: 50px;
+      }
+      
+      .logo-text h1 {
+        font-size: 1.1rem;
+      }
+      
+      .logo-text p {
+        font-size: 0.7rem;
       }
     }
     
@@ -760,6 +801,7 @@
       .add-to-cart {
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
+        min-width: 80px;
       }
       
       .checkout-step h3 {
@@ -809,7 +851,16 @@
       }
       
       .logo-img {
-        height: 35px;
+        height: 45px;
+        width: 45px;
+      }
+      
+      .logo-text h1 {
+        font-size: 1rem;
+      }
+      
+      .logo-text p {
+        font-size: 0.65rem;
       }
     }
     
@@ -1061,6 +1112,28 @@
       border-color: #280b04;
       opacity: 0.2;
     }
+    
+    /* Product card footer */
+    .product .card-footer {
+      margin-top: auto;
+      background: transparent;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      padding: 0.75rem 1.25rem;
+    }
+    
+    /* Price and button container */
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    
+    /* Ensure price and button are aligned */
+    .product-price {
+      font-weight: 600;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -1069,10 +1142,10 @@
     <div class="container navbar-container">
       <div class="d-flex justify-content-between align-items-center py-3">
         <div id="main-header" class="logo-container">
-          <img src="vivi.jpg" alt="Cozinha da Vivi" class="logo-img">
-          <div>
-            <h1 class="h3 mb-0 fw-bold"><span class="text-primary">Cozinha</span> da Vivi</h1>
-            <p class="mb-0 small text-muted">Comida caseira com amor</p>
+          <img src="vivi.jpg" alt="Cozinha da Vivi" class="logo-img" id="logo-home">
+          <div class="logo-text">
+            <h1 class="mb-0 fw-bold"><span class="text-primary">Cozinha</span> da Vivi</h1>
+            <p class="mb-0">Comida caseira com amor</p>
           </div>
         </div>
         <div class="cart-icon-container" id="cart-indicator">
@@ -1106,12 +1179,12 @@
         <div class="p-3 border-top">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-muted">Subtotal:</span>
-            <span id="subtotal" class="fw-bold">R$ 0,00</span>
+            <span id="subtotal" class="fw-bold">€ 0,00</span>
           </div>
           
           <div class="d-flex justify-content-between align-items-center border-top pt-3">
             <span class="h5 mb-0">Total:</span>
-            <span id="total" class="h4 mb-0 text-primary fw-bold">R$ 0,00</span>
+            <span id="total" class="h4 mb-0 text-primary fw-bold">€ 0,00</span>
           </div>
           
           <button id="checkout-button" class="btn btn-primary w-100 mt-3 py-2 fw-bold" disabled>
@@ -1155,8 +1228,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Churrasco Misto</h3>
                   <p class="card-text text-muted small">Refeição completa com carnes e acompanhamentos selecionados</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 12,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1172,8 +1247,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Maminha</h3>
                   <p class="card-text text-muted small">Maminha suculenta grelhada na brasa</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 13,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 13,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1189,8 +1266,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Linguiça Toscana</h3>
                   <p class="card-text text-muted small">Linguiça toscana artesanal grelhada</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 12,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1206,8 +1285,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Costelinha de Porco</h3>
                   <p class="card-text text-muted small">Costelinha de porco assada lentamente</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 12,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1223,8 +1304,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">X-Salada</h3>
                   <p class="card-text text-muted small">Pão de hambúrguer, bife de hambúrguer, fiambre, queijo, salada, batata palha e milho.</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 6,50</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 6,50</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1240,8 +1323,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">X-Bacon</h3>
                   <p class="card-text text-muted small">Pão, hambúrguer, bacon, queijo, fiambre, ovo, alface, tomate, milho e batata palha.</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 8,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 8,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1258,8 +1343,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Combo Frango Supreme</h3>
                   <p class="card-text text-muted small">Sanduíche de frango com batata frita e bebida</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 10,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 10,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1276,8 +1363,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Combo X-Tudo</h3>
                   <p class="card-text text-muted small">Sanduíche completo com batata frita e bebida</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 12,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 12,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1293,8 +1382,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Porção de Arroz</h3>
                   <p class="card-text text-muted small">Porção de arroz blanco</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 3,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 3,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1310,8 +1401,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Coca-Cola (lata)</h3>
                   <p class="card-text text-muted small">Refrigerante Coca-Cola em lata 350ml</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 2,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 2,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1327,8 +1420,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Açai Pequeno</h3>
                   <p class="card-text text-muted small">Açai cremoso acompanhado com granola, banana, leite em pó e morango</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 6,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 6,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1344,8 +1439,10 @@
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Pudim Caseiro</h3>
                   <p class="card-text text-muted small">Pudim tradicional caseiro com calda de caramelo</p>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="h5 mb-0 product-price">R$ 3,00</span>
+                </div>
+                <div class="card-footer">
+                  <div class="product-footer">
+                    <span class="h5 mb-0 product-price">€ 3,00</span>
                     <button class="add-to-cart btn btn-primary rounded-pill px-3">
                       <i class="fas fa-plus me-1"></i> Adicionar
                     </button>
@@ -1379,7 +1476,7 @@
                             <i class="fas fa-motorcycle me-2"></i> Entrega
                           </label>
                         </div>
-                        <p class="small text-muted mt-2">Entregamos no seu endereço (Taxa: R$ 5,00)</p>
+                        <p class="small text-muted mt-2">Entregamos no seu endereço (Taxa: € 5,00)</p>
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -1480,15 +1577,15 @@
                       <div class="p-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                           <span class="text-muted">Subtotal:</span>
-                          <span id="checkout-subtotal" class="fw-bold">R$ 0,00</span>
+                          <span id="checkout-subtotal" class="fw-bold">€ 0,00</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
                           <span class="text-muted">Taxa de Entrega:</span>
-                          <span id="checkout-delivery-fee" class="fw-bold">R$ 5,00</span>
+                          <span id="checkout-delivery-fee" class="fw-bold">€ 5,00</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center border-top pt-3">
                           <span class="h5 mb-0">Total:</span>
-                          <span id="checkout-total" class="h4 mb-0 text-primary fw-bold">R$ 0,00</span>
+                          <span id="checkout-total" class="h4 mb-0 text-primary fw-bold">€ 0,00</span>
                         </div>
                       </div>
                     </div>
@@ -1780,6 +1877,7 @@
     let pendingOrdersCount = 0;
     let currentProductOptions = null;
     let newOrders = []; // Para rastrear novos pedidos
+    let notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
 
     // Elementos do DOM
     const DOM = {
@@ -1830,7 +1928,8 @@
       productOptionsContent: document.getElementById("product-options-content"),
       productOptionsModalTitle: document.getElementById("productOptionsModalTitle"),
       confirmProductOptions: document.getElementById("confirm-product-options"),
-      mainHeader: document.getElementById("main-header")
+      mainHeader: document.getElementById("main-header"),
+      logoHome: document.getElementById("logo-home")
     };
 
     // Funções do Firebase
@@ -1871,10 +1970,10 @@
     // Funções utilitárias
     const Utils = {
       formatCurrency: (value) => {
-        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        return value.toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
       },
       parsePrice: (priceString) => {
-        return parseFloat(priceString.replace("R$", "").replace(",", ".").trim());
+        return parseFloat(priceString.replace("€", "").replace(",", ".").trim());
       },
       animateElement: (element, animation) => {
         element.classList.add("animate__animated", `animate__${animation}`);
@@ -1905,29 +2004,20 @@
         const today = new Date();
         return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
       },
-      // Substitua a função existente por esta versão melhorada
-        playNotificationSound: () => {
-          try {
-            const audio = new Audio('mixkit-wrong-answer-fail-notification-946.wav');
-            audio.volume = 0.9;
-            
-            // Adiciona um event listener para lidar com a reprodução
-            audio.addEventListener('canplaythrough', () => {
-              audio.play().catch(e => {
-                console.log('Reprodução automática bloqueada:', e);
-                // Tenta reproduzir após interação do usuário
-                document.body.addEventListener('click', () => {
-                  audio.play().catch(e => console.log('Erro ao reproduzir som:', e));
-                }, { once: true });
-              });
-            });
-            
-            // Carrega o áudio
-            audio.load();
-          } catch (e) {
-            console.log('Erro ao carregar som:', e);
-          }
-        },
+      playNotificationSound: () => {
+        try {
+          notificationSound.volume = 0.9;
+          notificationSound.play().catch(e => {
+            console.log('Reprodução automática bloqueada:', e);
+            // Tenta reproduzir após interação do usuário
+            document.body.addEventListener('click', () => {
+              notificationSound.play().catch(e => console.log('Erro ao reproduzir som:', e));
+            }, { once: true });
+          });
+        } catch (e) {
+          console.log('Erro ao carregar som:', e);
+        }
+      },
       updateTimestamp: () => {
         const now = new Date();
         DOM.lastUpdate.textContent = `Atualizado: ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
@@ -1981,7 +2071,18 @@
           Utils.animateElement(productElement, 'pulse');
         }
         
-        Utils.showNotification(`${name} adicionado ao carrinho!`);
+        // Muda o botão para "Adicionado" e cor verde
+        const addButton = productElement.querySelector('.add-to-cart');
+        if (addButton) {
+          addButton.innerHTML = '<i class="fas fa-check me-1"></i> Adicionado';
+          addButton.classList.add('added');
+          
+          // Retorna ao estado original após 2 segundos
+          setTimeout(() => {
+            addButton.innerHTML = '<i class="fas fa-plus me-1"></i> Adicionar';
+            addButton.classList.remove('added');
+          }, 2000);
+        }
       },
 
       updateItemQuantity: (id, newQuantity) => {
@@ -2003,7 +2104,6 @@
           cart = cart.filter(item => item.id !== id);
           Cart.updateStorage();
           Cart.updateUI();
-          Utils.showNotification(`${item.name} removido do carrinho`, 'warning');
         }
       },
 
@@ -2222,7 +2322,7 @@
         if (pedido.metodoPagamento === 'mbway') {
           paymentText = `💳 *Pagamento via MB Way*%0AVocê receberá uma solicitação de pagamento`;
         } else if (pedido.metodoPagamento === 'dinheiro') {
-          paymentText = `💵 *Pagamento em dinheiro*%0ATroco para: R$ ${pedido.trocoPara || 'Sem troco'}`;
+          paymentText = `💵 *Pagamento em dinheiro*%0ATroco para: € ${pedido.trocoPara || 'Sem troco'}`;
         } else {
           paymentText = `💳 *Pagamento com cartão*%0AMáquina será levada na entrega/retirada`;
         }
@@ -2906,6 +3006,13 @@
       DOM.confirmProductOptions.addEventListener('click', () => {
         ProductOptions.handleOptionsConfirmation();
       });
+      
+      DOM.logoHome.addEventListener('click', () => {
+        DOM.productSection.classList.remove("d-none");
+        DOM.checkoutSection.classList.add("d-none");
+        DOM.adminPanel.classList.add("d-none");
+        DOM.mainHeader.style.display = 'block';
+      });
     }
 
     // Inicialização
@@ -2916,37 +3023,35 @@
       Checkout.toggleDeliveryFields(true);
       
       // Inicializa o listener de pedidos do Firebase
-     // No listener de pedidos do Firebase, atualize esta parte:
-FirebaseService.listenForOrders((ordersFromFirebase) => {
-  const previousOrderCount = orders.length;
-  orders = ordersFromFirebase;
-  
-  // Verifica se há novos pedidos pendentes
-  const newPendingOrders = orders.filter(o => o.status === 'pending');
-  
-  // Identifica novos pedidos
-  const currentOrderIds = orders.map(o => o.id);
-  const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
-  const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
-  
-  // Atualiza a lista de novos pedidos
-  newOrders = [...new Set([...newOrders, ...newlyAddedOrders])];
-  
-  if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
-    Utils.playNotificationSound(); // Chamada para tocar o som
-    Utils.showNotification(`Novo pedido recebido! Total: ${newlyAddedOrders.length}`, 'success');
-    Utils.showNewOrderNotification(newlyAddedOrders.length);
-    
-    // Atualiza o badge de notificação
-    pendingOrdersCount += newlyAddedOrders.length;
-    DOM.notificationBadge.textContent = pendingOrdersCount;
-    DOM.notificationBadge.classList.remove('d-none');
-  }
-  
-  if (isAdminLoggedIn) {
-    Order.updateAdminPanel();
-  }
-});
+      FirebaseService.listenForOrders((ordersFromFirebase) => {
+        const previousOrderCount = orders.length;
+        orders = ordersFromFirebase;
+        
+        // Verifica se há novos pedidos pendentes
+        const newPendingOrders = orders.filter(o => o.status === 'pending');
+        
+        // Identifica novos pedidos
+        const currentOrderIds = orders.map(o => o.id);
+        const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
+        const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
+        
+        // Atualiza a lista de novos pedidos
+        newOrders = [...new Set([...newOrders, ...newlyAddedOrders])];
+        
+        if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
+          Utils.playNotificationSound(); // Chamada para tocar o som imediatamente
+          Utils.showNewOrderNotification(newlyAddedOrders.length);
+          
+          // Atualiza o badge de notificação
+          pendingOrdersCount += newlyAddedOrders.length;
+          DOM.notificationBadge.textContent = pendingOrdersCount;
+          DOM.notificationBadge.classList.remove('d-none');
+        }
+        
+        if (isAdminLoggedIn) {
+          Order.updateAdminPanel();
+        }
+      });
       
       Admin.checkLoginStatus();
     }
