@@ -59,11 +59,12 @@
     }
     
     .logo-img {
-      height: 60px;
-      width: 60px;
+      height: 50px;
+      width: 50px;
       border-radius: 50%;
       object-fit: cover;
       cursor: pointer;
+      border: 2px solid var(--primary-color);
     }
     
     .logo-text {
@@ -76,11 +77,14 @@
       font-size: 1.25rem;
       margin-bottom: 0.25rem;
       line-height: 1.2;
+      color: var(--primary-color);
+      font-weight: 700;
     }
     
     .logo-text p {
       font-size: 0.75rem;
       margin-bottom: 0;
+      color: #5a4a42;
     }
     
     /* Categorias melhoradas */
@@ -90,6 +94,7 @@
       overflow-x: auto;
       padding-bottom: 10px;
       scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
     }
     
     .filter-buttons::-webkit-scrollbar {
@@ -134,6 +139,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      background-color: white;
     }
     
     .product:hover {
@@ -162,15 +168,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: 500;
     }
     
     .add-to-cart.added {
       background-color: var(--success-color);
       border-color: var(--success-color);
+      color: white;
     }
     
     .add-to-cart:hover {
-      background-color: #3a1307;
+      background-color: var(--primary-color);
       color: var(--secondary-color);
       transform: scale(1.05);
     }
@@ -195,8 +203,8 @@
     }
     
     .btn-primary:hover {
-      background-color: #3a1307;
-      border-color: #3a1307;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
       color: var(--secondary-color);
     }
     
@@ -208,7 +216,7 @@
     }
     
     #checkout-button:hover {
-      background-color: #3a1307;
+      background-color: var(--primary-color);
       color: var(--secondary-color);
     }
     
@@ -248,6 +256,7 @@
       background-color: var(--light-color);
       border: none;
       cursor: pointer;
+      padding: 0;
     }
     
     .quantity-input {
@@ -331,7 +340,7 @@
     
     /* Admin Panel Styles */
     .admin-navbar {
-      background-color: var(--dark-color);
+      background-color: var(--primary-color);
       position: sticky;
       top: 0;
       z-index: 1020;
@@ -343,10 +352,21 @@
       font-size: 1.1rem;
       display: flex;
       align-items: center;
+      color: var(--secondary-color);
     }
     
     .admin-navbar .navbar-brand img {
       margin-right: 10px;
+    }
+    
+    .admin-navbar .btn-outline-light {
+      color: var(--secondary-color);
+      border-color: var(--secondary-color);
+    }
+    
+    .admin-navbar .btn-outline-light:hover {
+      background-color: var(--secondary-color);
+      color: var(--primary-color);
     }
     
     .order-card {
@@ -356,6 +376,7 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      background-color: white;
     }
     
     .order-card:hover {
@@ -370,22 +391,27 @@
     
     .status-pending {
       background-color: #ffc107;
+      color: #212529;
     }
     
     .status-preparing {
       background-color: #fd7e14;
+      color: white;
     }
     
     .status-ready {
       background-color: #20c997;
+      color: white;
     }
     
     .status-delivered {
       background-color: #198754;
+      color: white;
     }
     
     .status-cancelled {
       background-color: #dc3545;
+      color: white;
     }
     
     /* Kitchen Print Styles */
@@ -489,14 +515,16 @@
       position: relative;
       margin-right: 15px;
       cursor: pointer;
+      color: var(--secondary-color);
+      font-size: 1.2rem;
     }
     
     .notification-badge {
       position: absolute;
       top: -5px;
       right: -5px;
-      background-color: var(--primary-color);
-      color: var(--secondary-color);
+      background-color: var(--secondary-color);
+      color: var(--primary-color);
       border-radius: 50%;
       width: 20px;
       height: 20px;
@@ -599,27 +627,6 @@
       color: var(--dark-color);
     }
     
-    .order-accordion-header .count {
-      background-color: var(--primary-color);
-      color: var(--secondary-color);
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-    }
-    
-    .order-accordion-content {
-      background-color: white;
-      display: none;
-    }
-    
-    .order-accordion-content.show {
-      display: block;
-    }
-    
     /* Product Options Modal */
     .options-modal .modal-body {
       max-height: 60vh;
@@ -654,16 +661,60 @@
       animation: highlight 2s;
       border-left: 4px solid var(--primary-color) !important;
     }
-    /* Adicione ao seu CSS */
-    audio {
-      display: none;
-    }
-
+    
     @keyframes highlight {
       0% { background-color: rgba(40, 11, 4, 0.3); }
       100% { background-color: transparent; }
     }
 
+    /* Menu Section Styling */
+    .menu-section {
+      margin-bottom: 3rem;
+    }
+    
+    .menu-title {
+      font-family: 'Playfair+Display', serif;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .menu-title:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background-color: var(--secondary-color);
+    }
+    
+    /* Product Card Styling */
+    .product .card-body {
+      padding: 1.25rem;
+    }
+    
+    .product-name {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-description {
+      font-size: 0.875rem;
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
+    
+    .product-price {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 992px) {
       .product-image {
@@ -719,8 +770,9 @@
       }
       
       .cart-item-quantity {
-        flex-direction: column;
-        align-items: flex-end;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
       }
       
       .checkout-step {
@@ -749,10 +801,6 @@
         align-items: flex-start;
       }
       
-      .order-accordion-header .count {
-        margin-top: 5px;
-      }
-      
       .new-order-notification {
         width: calc(100% - 40px);
         left: 20px;
@@ -768,8 +816,8 @@
       }
       
       .logo-img {
-        height: 50px;
-        width: 50px;
+        height: 45px;
+        width: 45px;
       }
       
       .logo-text h1 {
@@ -778,6 +826,34 @@
       
       .logo-text p {
         font-size: 0.7rem;
+      }
+      
+      .menu-title {
+        font-size: 1.5rem;
+      }
+
+      /* Correção para o cardápio em mobile */
+      .menu-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .filter-buttons {
+        margin-top: 15px;
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      .product-container .row {
+        margin-left: -5px;
+        margin-right: -5px;
+      }
+      
+      .product-container .col-md-6, 
+      .product-container .col-lg-4, 
+      .product-container .col-xl-3 {
+        padding-left: 5px;
+        padding-right: 5px;
       }
     }
     
@@ -802,6 +878,11 @@
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
         min-width: 80px;
+      }
+      
+      .filter-btn {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
       }
       
       .checkout-step h3 {
@@ -851,8 +932,8 @@
       }
       
       .logo-img {
-        height: 45px;
-        width: 45px;
+        height: 40px;
+        width: 40px;
       }
       
       .logo-text h1 {
@@ -861,6 +942,10 @@
       
       .logo-text p {
         font-size: 0.65rem;
+      }
+      
+      .menu-title {
+        font-size: 1.5rem;
       }
     }
     
@@ -872,20 +957,25 @@
     .admin-stats-card {
       border-left: 4px solid var(--primary-color);
       margin-bottom: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     
     .admin-stats-card .card-body {
-      padding: 1rem;
+      padding: 1.5rem;
     }
     
     .admin-stats-card h5 {
       font-size: 1rem;
       margin-bottom: 0.5rem;
+      color: var(--dark-color);
     }
     
     .admin-stats-card .stat-value {
       font-size: 1.5rem;
       font-weight: bold;
+      color: var(--primary-color);
     }
     
     .order-actions {
@@ -1002,18 +1092,20 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px;
-      background-color: var(--dark-color);
+      background-color: var(--primary-color);
       color: white;
     }
 
     .admin-header h1 {
       font-size: 1.5rem;
       margin: 0;
+      color: var(--secondary-color);
     }
 
     .admin-header .timestamp {
       font-size: 0.9rem;
       opacity: 0.8;
+      color: var(--secondary-color);
     }
 
     .order-details {
@@ -1134,6 +1226,41 @@
       font-weight: 600;
       margin: 0;
     }
+    
+    /* Menu section improvements */
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    /* Admin panel improvements */
+    .admin-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      border: none;
+    }
+    
+    .admin-card .card-header {
+      border-radius: 10px 10px 0 0 !important;
+    }
+    
+    /* Hide date count in admin panel */
+    .order-accordion-header .count {
+      display: none;
+    }
+    
+    /* Remove blue hover effect from buttons */
+    .btn:hover {
+      filter: brightness(90%);
+    }
+    
+    /* Professional cart icon */
+    .cart-icon {
+      font-size: 1.25rem;
+      color: var(--primary-color);
+    }
   </style>
 </head>
 <body>
@@ -1144,12 +1271,12 @@
         <div id="main-header" class="logo-container">
           <img src="vivi.jpg" alt="Cozinha da Vivi" class="logo-img" id="logo-home">
           <div class="logo-text">
-            <h1 class="mb-0 fw-bold"><span class="text-primary">Cozinha</span> da Vivi</h1>
+            <h1 class="mb-0">Cozinha da Vivi</h1>
             <p class="mb-0">Comida caseira com amor</p>
           </div>
         </div>
         <div class="cart-icon-container" id="cart-indicator">
-          <i class="fas fa-shopping-bag fa-lg"></i>
+          <i class="fas fa-shopping-cart cart-icon"></i>
           <span id="cart-count" class="cart-icon-badge" style="display: none;">0</span>
         </div>
       </div>
@@ -1163,7 +1290,7 @@
   <div class="cart-sidebar" id="cart-sidebar">
     <div class="card border-0 h-100">
       <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h2 class="h5 mb-0"><i class="fas fa-shopping-bag me-2"></i> Seu Pedido</h2>
+        <h2 class="h5 mb-0"><i class="fas fa-shopping-cart me-2"></i> Seu Pedido</h2>
         <button class="btn btn-sm btn-outline-light" id="close-cart">
           <i class="fas fa-times"></i>
         </button>
@@ -1171,7 +1298,7 @@
       <div class="card-body p-0 d-flex flex-column">
         <div id="cart-items" class="list-group list-group-flush flex-grow-1">
           <div class="list-group-item text-center py-4 empty-cart">
-            <i class="fas fa-shopping-bag empty-cart-icon mb-3"></i>
+            <i class="fas fa-shopping-cart empty-cart-icon mb-3"></i>
             <p class="mb-0">Seu carrinho está vazio</p>
             <small class="text-muted">Adicione itens para continuar</small>
           </div>
@@ -1206,8 +1333,8 @@
       <div class="row">
         <!-- Seção de Produtos -->
         <section id="products" class="col-12 mb-5">
-          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
-            <h2 class="h4 fw-bold mb-3 mb-md-0">Nosso Cardápio</h2>
+          <div class="menu-header">
+            <h2 class="menu-title">Nosso Cardápio</h2>
             <div class="btn-group filter-buttons" role="group">
               <button type="button" class="filter-btn btn btn-outline-secondary active" data-category="all">Todos</button>
               <button type="button" class="filter-btn btn btn-outline-secondary" data-category="churrasco">Churrasco</button>
@@ -1227,7 +1354,7 @@
                 <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Churrasco Misto" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Churrasco Misto</h3>
-                  <p class="card-text text-muted small">Refeição completa com carnes e acompanhamentos selecionados</p>
+                  <p class="card-text product-description">Refeição completa com carnes e acompanhamentos selecionados</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1246,7 +1373,7 @@
                 <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Maminha" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Maminha</h3>
-                  <p class="card-text text-muted small">Maminha suculenta grelhada na brasa</p>
+                  <p class="card-text product-description">Maminha suculenta grelhada na brasa</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1265,7 +1392,7 @@
                 <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Linguiça Toscana" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Linguiça Toscana</h3>
-                  <p class="card-text text-muted small">Linguiça toscana artesanal grelhada</p>
+                  <p class="card-text product-description">Linguiça toscana artesanal grelhada</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1284,7 +1411,7 @@
                 <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Costelinha de Porco" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Costelinha de Porco</h3>
-                  <p class="card-text text-muted small">Costelinha de porco assada lentamente</p>
+                  <p class="card-text product-description">Costelinha de porco assada lentamente</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1303,7 +1430,7 @@
                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Salada" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">X-Salada</h3>
-                  <p class="card-text text-muted small">Pão de hambúrguer, bife de hambúrguer, fiambre, queijo, salada, batata palha e milho.</p>
+                  <p class="card-text product-description">Pão de hambúrguer, bife de hambúrguer, fiambre, queijo, salada, batata palha e milho.</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1322,7 +1449,7 @@
                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Bacon" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">X-Bacon</h3>
-                  <p class="card-text text-muted small">Pão, hambúrguer, bacon, queijo, fiambre, ovo, alface, tomate, milho e batata palha.</p>
+                  <p class="card-text product-description">Pão, hambúrguer, bacon, queijo, fiambre, ovo, alface, tomate, milho e batata palha.</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1342,7 +1469,7 @@
                 <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo Frango Supreme" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Combo Frango Supreme</h3>
-                  <p class="card-text text-muted small">Sanduíche de frango com batata frita e bebida</p>
+                  <p class="card-text product-description">Sanduíche de frango com batata frita e bebida</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1362,7 +1489,7 @@
                 <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo X-Tudo" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Combo X-Tudo</h3>
-                  <p class="card-text text-muted small">Sanduíche completo com batata frita e bebida</p>
+                  <p class="card-text product-description">Sanduíche completo com batata frita e bebida</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1381,7 +1508,7 @@
                 <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop" alt="Porção de Arroz" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Porção de Arroz</h3>
-                  <p class="card-text text-muted small">Porção de arroz blanco</p>
+                  <p class="card-text product-description">Porção de arroz blanco</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1400,7 +1527,7 @@
                 <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&auto=format&fit=crop" alt="Coca-Cola (lata)" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Coca-Cola (lata)</h3>
-                  <p class="card-text text-muted small">Refrigerante Coca-Cola em lata 350ml</p>
+                  <p class="card-text product-description">Refrigerante Coca-Cola em lata 350ml</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1419,7 +1546,7 @@
                 <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&auto=format&fit=crop" alt="Açai Pequeno" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Açai Pequeno</h3>
-                  <p class="card-text text-muted small">Açai cremoso acompanhado com granola, banana, leite em pó e morango</p>
+                  <p class="card-text product-description">Açai cremoso acompanhado com granola, banana, leite em pó e morango</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1438,7 +1565,7 @@
                 <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&auto=format&fit=crop" alt="Pudim Caseiro" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Pudim Caseiro</h3>
-                  <p class="card-text text-muted small">Pudim tradicional caseiro com calda de caramelo</p>
+                  <p class="card-text product-description">Pudim tradicional caseiro com calda de caramelo</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1462,7 +1589,7 @@
           <div class="col-lg-8 mx-auto">
             <div class="card border-0 shadow-sm mb-4">
               <div class="card-header bg-primary text-white">
-                <h2 class="h5 mb-0"><i class="fas fa-shopping-bag me-2"></i> Finalizar Pedido</h2>
+                <h2 class="h5 mb-0"><i class="fas fa-shopping-cart me-2"></i> Finalizar Pedido</h2>
               </div>
               <div class="card-body">
                 <div class="checkout-step">
@@ -1609,7 +1736,7 @@
 
     <!-- Admin Panel (Hidden by default) -->
     <section id="admin-panel" class="container-fluid px-0 d-none">
-      <nav class="navbar navbar-dark admin-navbar bg-[#FFF1E4]">
+      <nav class="navbar navbar-dark admin-navbar">
         <div class="container">
           <a class="navbar-brand" href="#">
             <i class="fas fa-utensils me-2"></i> Painel Administrativo
@@ -1650,7 +1777,7 @@
               </div>
             </div>
 
-            <div class="card">
+            <div class="card admin-card">
               <div class="card-body">
                 <h3 class="h5 card-title">Filtros</h3>
                 <div class="mb-3">
@@ -1680,7 +1807,7 @@
           </div>
 
           <div class="col-md-9">
-            <div class="card">
+            <div class="card admin-card">
               <div class="card-header bg-white">
                 <div class="d-flex justify-content-between align-items-center">
                   <h3 class="h5 mb-0">Pedidos Recentes</h3>
@@ -1690,9 +1817,7 @@
                 </div>
               </div>
               <div class="card-body p-0">
-                <div class="day-tabs" id="day-tabs">
-                  <!-- Tabs serão adicionadas dinamicamente aqui -->
-                </div>
+                <div id="day-tabs" class="day-tabs"></div>
                 <div id="orders-accordion">
                   <!-- Pedidos serão agrupados por data aqui -->
                   <div class="list-group-item text-center py-5">
@@ -1878,6 +2003,7 @@
     let currentProductOptions = null;
     let newOrders = []; // Para rastrear novos pedidos
     let notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+    let lastNotificationTime = 0;
 
     // Elementos do DOM
     const DOM = {
@@ -2005,17 +2131,22 @@
         return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
       },
       playNotificationSound: () => {
-        try {
-          notificationSound.volume = 0.9;
-          notificationSound.play().catch(e => {
-            console.log('Reprodução automática bloqueada:', e);
-            // Tenta reproduzir após interação do usuário
-            document.body.addEventListener('click', () => {
-              notificationSound.play().catch(e => console.log('Erro ao reproduzir som:', e));
-            }, { once: true });
-          });
-        } catch (e) {
-          console.log('Erro ao carregar som:', e);
+        const now = Date.now();
+        // Só toca o som se passou pelo menos 10 segundos desde a última notificação
+        if (now - lastNotificationTime > 10000) {
+          try {
+            notificationSound.volume = 0.9;
+            notificationSound.play().catch(e => {
+              console.log('Reprodução automática bloqueada:', e);
+              // Tenta reproduzir após interação do usuário
+              document.body.addEventListener('click', () => {
+                notificationSound.play().catch(e => console.log('Erro ao reproduzir som:', e));
+              }, { once: true });
+            });
+            lastNotificationTime = now;
+          } catch (e) {
+            console.log('Erro ao carregar som:', e);
+          }
         }
       },
       updateTimestamp: () => {
@@ -2131,7 +2262,7 @@
         if (cart.length === 0) {
           DOM.cartItems.innerHTML = `
             <div class="list-group-item text-center py-4 empty-cart">
-              <i class="fas fa-shopping-bag empty-cart-icon mb-3"></i>
+              <i class="fas fa-shopping-cart empty-cart-icon mb-3"></i>
               <p class="mb-0">Seu carrinho está vazio</p>
               <small class="text-muted">Adicione itens para continuar</small>
             </div>
@@ -2153,18 +2284,18 @@
                   ${optionsText ? `<small class="text-muted">${optionsText}</small>` : ''}
                   <small class="d-block text-muted">${Utils.formatCurrency(item.price)}</small>
                 </div>
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
                   <div class="cart-item-quantity">
                     <button class="quantity-btn decrease" data-id="${item.id}">
                       <i class="fas fa-minus"></i>
                     </button>
-                    <span class="quantity">${item.quantity}</span>
+                    <span class="quantity mx-1">${item.quantity}</span>
                     <button class="quantity-btn increase" data-id="${item.id}">
                       <i class="fas fa-plus"></i>
                     </button>
                   </div>
-                  <span class="fw-bold">${Utils.formatCurrency(item.price * item.quantity)}</span>
-                  <button class="remove-item btn btn-sm btn-outline-danger" data-id="${item.id}">
+                  <span class="fw-bold ms-2">${Utils.formatCurrency(item.price * item.quantity)}</span>
+                  <button class="remove-item btn btn-sm btn-outline-danger ms-2" data-id="${item.id}">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -2344,6 +2475,7 @@
       },
 
       updateAdminPanel: () => {
+        newOrders = [];
         const statusFilter = DOM.statusFilter.value;
         const typeFilter = DOM.typeFilter.value;
         
@@ -2392,31 +2524,8 @@
         DOM.ordersList.innerHTML = '';
         
         if (Object.keys(ordersByDate).length > 0) {
-          Object.keys(ordersByDate).forEach(dateKey => {
-            const ordersForDate = ordersByDate[dateKey];
-            const accordion = document.createElement('div');
-            accordion.className = 'order-accordion';
-            
-            accordion.innerHTML = `
-              <div class="order-accordion-header">
-                <span class="date">${dateKey}</span>
-                <span class="count">${ordersForDate.length}</span>
-              </div>
-              <div class="order-accordion-content">
-                ${ordersForDate.map(order => Order.renderOrderItem(order)).join('')}
-              </div>
-            `;
-            
-            DOM.ordersList.appendChild(accordion);
-            
-            // Adiciona evento de clique para expandir/recolher
-            const header = accordion.querySelector('.order-accordion-header');
-            const content = accordion.querySelector('.order-accordion-content');
-            
-            header.addEventListener('click', () => {
-              content.style.display = content.style.display === 'block' ? 'none' : 'block';
-            });
-          });
+          const firstDate = Object.keys(ordersByDate)[0];
+          Order.renderOrdersForDate(firstDate, ordersByDate[firstDate]);
         } else {
           DOM.ordersList.innerHTML = `
             <div class="list-group-item text-center py-5">
@@ -2438,12 +2547,17 @@
         Utils.updateTimestamp();
       },
       
-      renderOrderItem: (order) => {
-        const isNew = newOrders.includes(order.id);
-        const newOrderClass = isNew ? 'new-order' : '';
+      renderOrdersForDate: (dateKey, ordersForDate) => {
+        DOM.ordersList.innerHTML = '';
         
-        return `
-          <div class="order-card p-3 ${newOrderClass}" data-id="${order.id}">
+        ordersForDate.forEach(order => {
+          const orderElement = document.createElement('div');
+          orderElement.className = 'order-card p-3 mb-3';
+          if (newOrders.includes(order.id)) {
+            orderElement.classList.add('new-order');
+          }
+          
+          orderElement.innerHTML = `
             <div class="d-flex justify-content-between align-items-start mb-2">
               <div>
                 <h5 class="mb-1">Pedido #${order.id.slice(-6)}</h5>
@@ -2492,13 +2606,10 @@
                 </div>
               </div>
             </div>
-          </div>
-        `;
-      },
-      
-      renderOrdersForDate: (dateKey, ordersForDate) => {
-        // Implementação para renderizar pedidos de uma data específica
-        // (já está sendo feito no updateAdminPanel)
+          `;
+          
+          DOM.ordersList.appendChild(orderElement);
+        });
       },
       
       getStatusText: (status) => {
@@ -2724,10 +2835,15 @@
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
           
-          Order.updateAdminPanel();
+          // Esconde o botão de acesso admin
+          DOM.adminAccessBtn.style.display = 'none';
           
+          // Esconde o modal de login imediatamente
           DOM.adminLoginModal.hide();
           
+          Order.updateAdminPanel();
+          
+          Utils.showNotification('Login realizado com sucesso!', 'success');
           return true;
         }
         return false;
@@ -2742,6 +2858,7 @@
         DOM.productSection.classList.remove("d-none");
         DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
+        DOM.adminAccessBtn.style.display = 'flex';
       },
       
       checkLoginStatus: () => {
@@ -2750,6 +2867,7 @@
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
+          DOM.adminAccessBtn.style.display = 'none';
           Order.updateAdminPanel();
         }
       }
@@ -2945,7 +3063,11 @@
       });
       
       DOM.adminAccessBtn.addEventListener('click', () => {
-        DOM.adminLoginModal.show();
+        if (isAdminLoggedIn) {
+          Utils.showNotification('Você já está logado', 'info');
+        } else {
+          DOM.adminLoginModal.show();
+        }
       });
       
       document.getElementById('admin-login-form').addEventListener('submit', (e) => {
@@ -2953,11 +3075,7 @@
         const username = document.getElementById('admin-username').value;
         const password = document.getElementById('admin-password').value;
         
-        if (Admin.login(username, password)) {
-          Utils.showNotification('Login realizado com sucesso!', 'success');
-        } else {
-          Utils.showNotification('Credenciais inválidas', 'danger');
-        }
+        Admin.login(username, password);
       });
       
       DOM.adminLogoutButton.addEventListener('click', () => {
@@ -3012,51 +3130,69 @@
         DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
         DOM.mainHeader.style.display = 'block';
+        DOM.adminAccessBtn.style.display = isAdminLoggedIn ? 'none' : 'flex';
       });
     }
 
     // Inicialização
-    function init() {
-      setupEventListeners();
-      Cart.updateUI();
-      Filter.apply('all');
-      Checkout.toggleDeliveryFields(true);
+   // Inicialização
+function init() {
+  // Limpa o estado de novos pedidos ao iniciar
+  newOrders = [];
+  pendingOrdersCount = 0;
+  DOM.notificationBadge.classList.add('d-none');
+  
+  setupEventListeners();
+  Cart.updateUI();
+  Filter.apply('all');
+  Checkout.toggleDeliveryFields(true);
+  
+  // Configura o listener de pedidos do Firebase
+  FirebaseService.listenForOrders((ordersFromFirebase) => {
+    const previousOrderCount = orders.length;
+    orders = ordersFromFirebase;
+    
+    // Identifica novos pedidos apenas após a carga inicial
+    if (previousOrderCount > 0) {
+      const currentOrderIds = orders.map(o => o.id);
+      const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
+      const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
       
-      // Inicializa o listener de pedidos do Firebase
-      FirebaseService.listenForOrders((ordersFromFirebase) => {
-        const previousOrderCount = orders.length;
-        orders = ordersFromFirebase;
-        
-        // Verifica se há novos pedidos pendentes
-        const newPendingOrders = orders.filter(o => o.status === 'pending');
-        
-        // Identifica novos pedidos
-        const currentOrderIds = orders.map(o => o.id);
-        const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
-        const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
-        
+      if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
         // Atualiza a lista de novos pedidos
         newOrders = [...new Set([...newOrders, ...newlyAddedOrders])];
         
-        if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
-          Utils.playNotificationSound(); // Chamada para tocar o som imediatamente
-          Utils.showNewOrderNotification(newlyAddedOrders.length);
-          
-          // Atualiza o badge de notificação
-          pendingOrdersCount += newlyAddedOrders.length;
-          DOM.notificationBadge.textContent = pendingOrdersCount;
-          DOM.notificationBadge.classList.remove('d-none');
-        }
+        // Atualiza notificações
+        pendingOrdersCount += newlyAddedOrders.length;
+        DOM.notificationBadge.textContent = pendingOrdersCount;
+        DOM.notificationBadge.classList.remove('d-none');
         
-        if (isAdminLoggedIn) {
-          Order.updateAdminPanel();
-        }
-      });
-      
-      Admin.checkLoginStatus();
+        Utils.playNotificationSound();
+        Utils.showNewOrderNotification(newlyAddedOrders.length);
+      }
     }
+    
+    if (isAdminLoggedIn) {
+      Order.updateAdminPanel();
+    }
+  });
+  
+  Admin.checkLoginStatus();
+}
 
-    document.addEventListener('DOMContentLoaded', init);
+// Implementação do listener do Firebase
+FirebaseService.listenForOrders = (callback) => {
+  database.ref('orders').on('value', (snapshot) => {
+    const ordersData = snapshot.val();
+    const ordersArray = ordersData ? Object.keys(ordersData).map(key => ({
+      id: key,
+      ...ordersData[key]
+    })) : [];
+    callback(ordersArray);
+  });
+};
+
+document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
