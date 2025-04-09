@@ -44,18 +44,21 @@
       z-index: 1030;
       background-color: #fff1e4;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 0.5rem 0;
     }
     
     .navbar-container {
       max-width: 1200px;
       margin: 0 auto;
       width: 100%;
+      padding: 0 15px;
     }
     
     .logo-container {
       display: flex;
       align-items: center;
       gap: 15px;
+      cursor: pointer;
     }
     
     .logo-img {
@@ -63,8 +66,12 @@
       width: 50px;
       border-radius: 50%;
       object-fit: cover;
-      cursor: pointer;
       border: 2px solid var(--primary-color);
+      transition: transform 0.2s;
+    }
+    
+    .logo-img:hover {
+      transform: scale(1.05);
     }
     
     .logo-text {
@@ -715,6 +722,126 @@
       margin: 0;
     }
     
+    /* Footer styles */
+    footer {
+      background-color: #ffb501 !important;
+      color: #333333;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    footer h3 {
+      font-weight: 600;
+      color: #280b04;
+    }
+    
+    footer .text-muted {
+      color: #5a4a42 !important;
+    }
+    
+    footer hr {
+      border-color: #280b04;
+      opacity: 0.2;
+    }
+    
+    /* Product card footer */
+    .product .card-footer {
+      margin-top: auto;
+      background: transparent;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      padding: 0.75rem 1.25rem;
+    }
+    
+    /* Price and button container */
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    
+    /* Professional cart icon */
+    .cart-icon {
+      font-size: 1.25rem;
+      color: var(--primary-color);
+    }
+
+    /* New professional admin orders styling */
+    .admin-orders-container {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .admin-order-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 15px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .admin-order-card:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .admin-order-header {
+      background-color: #f1f2f6;
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .admin-order-body {
+      padding: 15px;
+    }
+
+    .admin-order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .admin-order-item:last-child {
+      border-bottom: none;
+    }
+
+    .admin-order-footer {
+      background-color: #f8f9fa;
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .admin-order-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .admin-order-total {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .admin-order-status {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .admin-order-new {
+      background-color: rgba(40, 11, 4, 0.1);
+      border-left: 4px solid var(--primary-color);
+    }
+
     /* Responsive adjustments */
     @media (max-width: 992px) {
       .product-image {
@@ -761,6 +888,15 @@
       
       .admin-panel-container .col-md-3 {
         margin-bottom: 20px;
+      }
+
+      .admin-order-actions {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .admin-order-actions .btn {
+        width: 100%;
       }
     }
     
@@ -854,6 +990,23 @@
       .product-container .col-xl-3 {
         padding-left: 5px;
         padding-right: 5px;
+      }
+
+      .admin-order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .admin-order-footer {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .admin-order-total {
+        width: 100%;
+        text-align: left;
       }
     }
     
@@ -1030,46 +1183,6 @@
       background-color: var(--primary-color);
     }
     
-    /* Product options styling */
-    .product-options-container {
-      max-height: 400px;
-      overflow-y: auto;
-      padding: 15px;
-    }
-    
-    .option-section {
-      margin-bottom: 20px;
-    }
-    
-    .option-section-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--dark-color);
-      border-bottom: 1px solid #eee;
-      padding-bottom: 5px;
-    }
-    
-    .option-item {
-      margin-bottom: 10px;
-    }
-    
-    .option-item label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-    
-    .option-item input[type="checkbox"],
-    .option-item input[type="radio"] {
-      margin-right: 10px;
-    }
-    
-    .option-price {
-      color: var(--primary-color);
-      font-weight: bold;
-      margin-left: 5px;
-    }
-    
     /* WhatsApp ready button */
     .whatsapp-ready-btn {
       background-color: #25D366;
@@ -1183,83 +1296,137 @@
       font-size: 0.9rem;
       color: #666;
     }
-    
-    /* Footer styles */
-    footer {
-      background-color: #ffb501 !important;
-      color: #333333;
-      font-family: 'Poppins', sans-serif;
+
+    /* Improved admin panel buttons */
+    .admin-btn {
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
-    
-    footer h3 {
-      font-weight: 600;
-      color: #280b04;
+
+    .admin-btn i {
+      font-size: 0.9rem;
     }
-    
-    footer .text-muted {
-      color: #5a4a42 !important;
+
+    /* Improved admin order card spacing */
+    .admin-order-card {
+      margin-bottom: 20px;
     }
-    
-    footer hr {
-      border-color: #280b04;
-      opacity: 0.2;
+
+    .admin-order-body {
+      padding: 20px;
     }
-    
-    /* Product card footer */
-    .product .card-footer {
-      margin-top: auto;
-      background: transparent;
-      border-top: 1px solid rgba(0,0,0,0.1);
-      padding: 0.75rem 1.25rem;
+
+    /* Better alignment for admin order items */
+    .admin-order-item {
+      padding: 10px 0;
     }
-    
-    /* Price and button container */
-    .product-footer {
+
+    /* Enhanced admin panel header */
+    .admin-panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
     }
-    
-    /* Ensure price and button are aligned */
-    .product-price {
-      font-weight: 600;
-      margin: 0;
+
+    /* Improved filter dropdowns */
+    .admin-filter-dropdown {
+      border-radius: 8px;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      font-size: 0.9rem;
     }
-    
-    /* Menu section improvements */
-    .menu-header {
-      display: flex;
-      justify-content: space-between;
+
+    /* Better spacing for admin stats cards */
+    .admin-stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    /* Enhanced status badges */
+    .status-badge {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 2rem;
+      gap: 5px;
+    }
+
+    /* Improved mobile menu section */
+    .mobile-menu-section {
+      padding: 0 10px;
+    }
+
+    .mobile-menu-section .row {
+      margin-left: -5px;
+      margin-right: -5px;
+    }
+
+    .mobile-menu-section .col-6 {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    /* Better cart visibility control */
+    .cart-visibility-control {
+      display: block !important;
+    }
+
+    .admin-panel .cart-visibility-control {
+      display: none !important;
     }
     
-    /* Admin panel improvements */
-    .admin-card {
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      border: none;
+    /* Product options styling */
+    .option-section {
+      margin-bottom: 15px;
     }
     
-    .admin-card .card-header {
-      border-radius: 10px 10px 0 0 !important;
-    }
-    
-    /* Hide date count in admin panel */
-    .order-accordion-header .count {
-      display: none;
-    }
-    
-    /* Remove blue hover effect from buttons */
-    .btn:hover {
-      filter: brightness(90%);
-    }
-    
-    /* Professional cart icon */
-    .cart-icon {
-      font-size: 1.25rem;
+    .option-section-title {
+      font-weight: bold;
+      margin-bottom: 10px;
       color: var(--primary-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+    
+    .option-item {
+      margin-bottom: 8px;
+    }
+    
+    .option-item label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .option-item input[type="checkbox"],
+    .option-item input[type="radio"] {
+      margin-right: 8px;
+    }
+    
+    .required-option {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    
+    /* Additional price styling */
+    .additional-price {
+      color: var(--success-color);
+      font-weight: bold;
+      margin-left: 5px;
     }
   </style>
 </head>
@@ -1267,15 +1434,15 @@
   <!-- Main Navigation -->
   <header class="main-header">
     <div class="container navbar-container">
-      <div class="d-flex justify-content-between align-items-center py-3">
+      <div class="d-flex justify-content-between align-items-center py-1">
         <div id="main-header" class="logo-container">
-          <img src="vivi.jpg" alt="Cozinha da Vivi" class="logo-img" id="logo-home">
+          <img src="vivi.jpg" alt="Cozinha da Vivi" class="logo-img">
           <div class="logo-text">
             <h1 class="mb-0">Cozinha da Vivi</h1>
             <p class="mb-0">Comida caseira com amor</p>
           </div>
         </div>
-        <div class="cart-icon-container" id="cart-indicator">
+        <div class="cart-icon-container cart-visibility-control" id="cart-indicator" style="display: none;">
           <i class="fas fa-shopping-cart cart-icon"></i>
           <span id="cart-count" class="cart-icon-badge" style="display: none;">0</span>
         </div>
@@ -1307,6 +1474,11 @@
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-muted">Subtotal:</span>
             <span id="subtotal" class="fw-bold">€ 0,00</span>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted">Taxa de Entrega:</span>
+            <span id="delivery-fee" class="fw-bold">€ 5,00</span>
           </div>
           
           <div class="d-flex justify-content-between align-items-center border-top pt-3">
@@ -1349,7 +1521,7 @@
           <div class="row g-4" id="product-container">
             <!-- Churrasco Misto -->
             <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="101" data-category="churrasco">
+              <div class="card product h-100 border-0 shadow-sm" data-id="101" data-category="churrasco" data-has-options="true">
                 <div class="badge bg-primary position-absolute" style="top: 0.5rem; right: 0.5rem">Mais pedido</div>
                 <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Churrasco Misto" class="card-img-top product-image">
                 <div class="card-body">
@@ -1369,7 +1541,7 @@
 
             <!-- Maminha -->
             <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="102" data-category="churrasco">
+              <div class="card product h-100 border-0 shadow-sm" data-id="102" data-category="churrasco" data-has-options="true">
                 <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Maminha" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Maminha</h3>
@@ -1388,7 +1560,7 @@
 
             <!-- Linguiça Toscana -->
             <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="103" data-category="churrasco">
+              <div class="card product h-100 border-0 shadow-sm" data-id="103" data-category="churrasco" data-has-options="true">
                 <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Linguiça Toscana" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Linguiça Toscana</h3>
@@ -1407,7 +1579,7 @@
 
             <!-- Costelinha de Porco -->
             <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="104" data-category="churrasco">
+              <div class="card product h-100 border-0 shadow-sm" data-id="104" data-category="churrasco" data-has-options="true">
                 <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Costelinha de Porco" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Costelinha de Porco</h3>
@@ -1508,7 +1680,7 @@
                 <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop" alt="Porção de Arroz" class="card-img-top product-image">
                 <div class="card-body">
                   <h3 class="h5 card-title product-name">Porção de Arroz</h3>
-                  <p class="card-text product-description">Porção de arroz blanco</p>
+                  <p class="card-text product-description">Porção de arroz branco</p>
                 </div>
                 <div class="card-footer">
                   <div class="product-footer">
@@ -1634,15 +1806,11 @@
                       </div>
                       <div class="col-12 delivery-field">
                         <label for="customer-address" class="form-label">Endereço *</label>
-                        <input type="text" class="form-control" id="customer-address" placeholder="Rua, Número, Bairro">
+                        <input type="text" class="form-control" id="customer-address" placeholder="Rua, Número">
                       </div>
-                      <div class="col-md-6 delivery-field">
+                      <div class="col-md-12 delivery-field">
                         <label for="customer-complement" class="form-label">Complemento</label>
                         <input type="text" class="form-control" id="customer-complement" placeholder="Apto, Bloco, Referência">
-                      </div>
-                      <div class="col-md-6 delivery-field">
-                        <label for="customer-neighborhood" class="form-label">Bairro *</label>
-                        <input type="text" class="form-control" id="customer-neighborhood">
                       </div>
                       <div class="col-12">
                         <label for="customer-instructions" class="form-label">Instruções para entrega/pedido</label>
@@ -1756,24 +1924,26 @@
       <div class="container admin-panel-container my-4">
         <div class="row">
           <div class="col-md-3">
-            <div class="card admin-stats-card mb-4">
-              <div class="card-body">
-                <h5 class="card-title">Pedidos Hoje</h5>
-                <div class="stat-value text-primary" id="today-orders">0</div>
+            <div class="admin-stats-container">
+              <div class="card admin-stats-card">
+                <div class="card-body">
+                  <h5 class="card-title">Pedidos Hoje</h5>
+                  <div class="stat-value text-primary" id="today-orders">0</div>
+                </div>
               </div>
-            </div>
-            
-            <div class="card admin-stats-card mb-4">
-              <div class="card-body">
-                <h5 class="card-title">Em Preparo</h5>
-                <div class="stat-value text-warning" id="preparing-orders">0</div>
+              
+              <div class="card admin-stats-card">
+                <div class="card-body">
+                  <h5 class="card-title">Em Preparo</h5>
+                  <div class="stat-value text-warning" id="preparing-orders">0</div>
+                </div>
               </div>
-            </div>
-            
-            <div class="card admin-stats-card mb-4">
-              <div class="card-body">
-                <h5 class="card-title">Para Entregar</h5>
-                <div class="stat-value text-info" id="delivery-orders">0</div>
+              
+              <div class="card admin-stats-card">
+                <div class="card-body">
+                  <h5 class="card-title">Para Entregar</h5>
+                  <div class="stat-value text-info" id="delivery-orders">0</div>
+                </div>
               </div>
             </div>
 
@@ -1782,7 +1952,7 @@
                 <h3 class="h5 card-title">Filtros</h3>
                 <div class="mb-3">
                   <label class="form-label">Status</label>
-                  <select class="form-select" id="status-filter">
+                  <select class="form-select admin-filter-dropdown" id="status-filter">
                     <option value="all">Todos</option>
                     <option value="pending">Pendentes</option>
                     <option value="preparing">Em Preparo</option>
@@ -1793,13 +1963,13 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Tipo</label>
-                  <select class="form-select" id="type-filter">
+                  <select class="form-select admin-filter-dropdown" id="type-filter">
                     <option value="all">Todos</option>
                     <option value="delivery">Entrega</option>
                     <option value="pickup">Retirada</option>
                   </select>
                 </div>
-                <button id="apply-filters" class="btn btn-primary w-100">
+                <button id="apply-filters" class="btn btn-primary w-100 admin-btn">
                   <i class="fas fa-filter me-1"></i> Aplicar
                 </button>
               </div>
@@ -1818,7 +1988,7 @@
               </div>
               <div class="card-body p-0">
                 <div id="day-tabs" class="day-tabs"></div>
-                <div id="orders-accordion">
+                <div class="admin-orders-container" id="orders-accordion">
                   <!-- Pedidos serão agrupados por data aqui -->
                   <div class="list-group-item text-center py-5">
                     <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
@@ -2002,7 +2172,6 @@
     let pendingOrdersCount = 0;
     let currentProductOptions = null;
     let newOrders = []; // Para rastrear novos pedidos
-    let notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
     let lastNotificationTime = 0;
 
     // Elementos do DOM
@@ -2129,25 +2298,6 @@
       getTodayDate: () => {
         const today = new Date();
         return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
-      },
-      playNotificationSound: () => {
-        const now = Date.now();
-        // Só toca o som se passou pelo menos 10 segundos desde a última notificação
-        if (now - lastNotificationTime > 10000) {
-          try {
-            notificationSound.volume = 0.9;
-            notificationSound.play().catch(e => {
-              console.log('Reprodução automática bloqueada:', e);
-              // Tenta reproduzir após interação do usuário
-              document.body.addEventListener('click', () => {
-                notificationSound.play().catch(e => console.log('Erro ao reproduzir som:', e));
-              }, { once: true });
-            });
-            lastNotificationTime = now;
-          } catch (e) {
-            console.log('Erro ao carregar som:', e);
-          }
-        }
       },
       updateTimestamp: () => {
         const now = new Date();
@@ -2306,10 +2456,12 @@
         }
 
         DOM.subtotalElement.textContent = Utils.formatCurrency(subtotal);
+        document.getElementById("delivery-fee").textContent = Utils.formatCurrency(deliveryFee);
         DOM.totalElement.textContent = Utils.formatCurrency(total);
         
         DOM.cartCount.textContent = itemCount;
         DOM.cartCount.style.display = itemCount > 0 ? "flex" : "none";
+        DOM.cartIndicator.style.display = "flex";
         
         DOM.checkoutButton.disabled = cart.length === 0;
       },
@@ -2344,7 +2496,6 @@
           whatsapp: document.getElementById("customer-phone").value,
           address: document.getElementById("customer-address").value,
           complement: document.getElementById("customer-complement").value,
-          neighborhood: document.getElementById("customer-neighborhood").value,
           instructions: document.getElementById("customer-instructions").value
         };
         
@@ -2366,7 +2517,7 @@
           metodoPagamento: paymentMethod,
           trocoPara: paymentMethod === 'dinheiro' ? document.getElementById("cash-change").value || '0' : null,
           endereco: deliveryType === 'entrega' ? 
-            `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}${customerInfo.neighborhood}` : 
+            `${customerInfo.address}, ${customerInfo.complement ? customerInfo.complement + ', ' : ''}` : 
             'Retirada no local',
           instrucoes: customerInfo.instructions,
           data: new Date().toLocaleString('pt-BR'),
@@ -2398,7 +2549,6 @@
           const phone = document.getElementById("customer-phone").value;
           const isDelivery = document.getElementById("delivery-method").checked;
           const address = document.getElementById("customer-address").value;
-          const neighborhood = document.getElementById("customer-neighborhood").value;
           
           if (!name || !phone) {
             throw new Error("Por favor, preencha seu nome e telefone");
@@ -2408,7 +2558,7 @@
             throw new Error("Por favor, insira um telefone válido");
           }
           
-          if (isDelivery && (!address || !neighborhood)) {
+          if (isDelivery && !address) {
             throw new Error("Por favor, preencha seu endereço completo");
           }
 
@@ -2552,58 +2702,66 @@
         
         ordersForDate.forEach(order => {
           const orderElement = document.createElement('div');
-          orderElement.className = 'order-card p-3 mb-3';
-          if (newOrders.includes(order.id)) {
-            orderElement.classList.add('new-order');
-          }
+          orderElement.className = `admin-order-card ${newOrders.includes(order.id) ? 'admin-order-new' : ''}`;
+          
+          const itemsHtml = order.itens.map(item => `
+            <div class="admin-order-item">
+              <span>${item.quantidade}x ${item.nome}${item.opcoes && Object.keys(item.opcoes).length > 0 ? ` (${Object.values(item.opcoes).join(', ')})` : ''}</span>
+              <span>${Utils.formatCurrency(item.preco * item.quantidade)}</span>
+            </div>
+          `).join('');
           
           orderElement.innerHTML = `
-            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="admin-order-header">
               <div>
-                <h5 class="mb-1">Pedido #${order.id.slice(-6)}</h5>
-                <p class="mb-1 small text-muted"><i class="fas fa-user me-1"></i> ${order.cliente}</p>
-                <p class="mb-1 small text-muted"><i class="fas fa-phone me-1"></i> ${order.telefone}</p>
+                <span class="fw-bold">Pedido #${order.id.slice(-6)}</span>
+                <span class="admin-order-status ${Order.getStatusClass(order.status)}">${Order.getStatusText(order.status)}</span>
               </div>
-              <div>
-                <span class="badge order-status-badge ${Order.getStatusClass(order.status)}">${Order.getStatusText(order.status)}</span>
-              </div>
+              <div class="text-muted small">${order.data}</div>
             </div>
             
-            <div class="mb-2">
-              <p class="mb-1 small"><i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-1"></i> ${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</p>
-              <p class="mb-1 small text-muted"><i class="fas fa-money-bill-wave me-1"></i> ${Order.getPaymentText(order.metodoPagamento, order.trocoPara)}</p>
-              ${order.instrucoes ? `<p class="mb-1 small text-muted"><i class="fas fa-sticky-note me-1"></i> ${order.instrucoes}</p>` : ''}
-            </div>
-            
-            <div class="border-top pt-2 mb-2">
-              ${order.itens.map(item => `
-                <div class="d-flex justify-content-between small">
-                  <span>${item.quantidade}x ${item.nome}${item.opcoes && Object.keys(item.opcoes).length > 0 ? ` (${Object.values(item.opcoes).join(', ')})` : ''}</span>
-                  <span>${Utils.formatCurrency(item.preco * item.quantidade)}</span>
+            <div class="admin-order-body">
+              <div class="mb-2">
+                <div class="d-flex align-items-center mb-1">
+                  <i class="fas fa-user me-2"></i>
+                  <span>${order.cliente}</span>
                 </div>
-              `).join('')}
+                <div class="d-flex align-items-center mb-1">
+                  <i class="fas fa-phone me-2"></i>
+                  <span>${order.telefone}</span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <i class="fas ${order.tipoEntrega === 'entrega' ? 'fa-motorcycle' : 'fa-store'} me-2"></i>
+                  <span>${order.tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada'}</span>
+                </div>
+                ${order.instrucoes ? `
+                  <div class="d-flex align-items-center mt-2">
+                    <i class="fas fa-sticky-note me-2"></i>
+                    <span>${order.instrucoes}</span>
+                  </div>
+                ` : ''}
+              </div>
+              
+              <div class="border-top pt-2">
+                ${itemsHtml}
+              </div>
             </div>
             
-            <div class="d-flex justify-content-between border-top pt-2">
-              <div>
-                <span class="small text-muted">${order.data}</span>
-              </div>
-              <div class="text-end">
-                <div class="small text-muted">Total: ${Utils.formatCurrency(order.total)}</div>
-                <div class="order-actions mt-1">
-                  <button class="btn btn-outline-primary btn-sm update-status" data-id="${order.id}" data-status="preparing">
-                    <i class="fas fa-utensils me-1"></i> Preparar
-                  </button>
-                  <button class="btn btn-outline-success btn-sm update-status whatsapp-ready-btn" data-id="${order.id}" data-status="ready">
-                    <i class="fab fa-whatsapp me-1"></i> Avisar Pronto
-                  </button>
-                  <button class="btn btn-outline-danger btn-sm update-status" data-id="${order.id}" data-status="cancelled">
-                    <i class="fas fa-times me-1"></i> Cancelar
-                  </button>
-                  <button class="btn btn-outline-secondary btn-sm view-kitchen-order" data-id="${order.id}">
-                    <i class="fas fa-print me-1"></i> Imprimir
-                  </button>
-                </div>
+            <div class="admin-order-footer">
+              <div class="admin-order-total">Total: ${Utils.formatCurrency(order.total)}</div>
+              <div class="admin-order-actions">
+                <button class="btn btn-outline-primary btn-sm update-status admin-btn" data-id="${order.id}" data-status="preparing">
+                  <i class="fas fa-utensils me-1"></i> Preparar
+                </button>
+                <button class="btn btn-outline-success btn-sm update-status whatsapp-ready-btn admin-btn" data-id="${order.id}" data-status="ready">
+                  <i class="fab fa-whatsapp me-1"></i> Avisar Pronto
+                </button>
+                <button class="btn btn-outline-danger btn-sm update-status admin-btn" data-id="${order.id}" data-status="cancelled">
+                  <i class="fas fa-times me-1"></i> Cancelar
+                </button>
+                <button class="btn btn-outline-secondary btn-sm view-kitchen-order admin-btn" data-id="${order.id}">
+                  <i class="fas fa-print me-1"></i> Imprimir
+                </button>
               </div>
             </div>
           `;
@@ -2648,6 +2806,14 @@
           if (success) {
             Utils.showNotification(`Status do pedido #${orderId.slice(-6)} atualizado para ${Order.getStatusText(newStatus)}`, 'success');
             
+            // Se o status for "preparando", enviar mensagem pelo WhatsApp
+            if (newStatus === 'preparing') {
+              const order = orders.find(o => o.id === orderId);
+              if (order) {
+                Order.sendPreparingNotification(order);
+              }
+            }
+            
             // Se o status for "pronto", enviar mensagem pelo WhatsApp
             if (newStatus === 'ready') {
               const order = orders.find(o => o.id === orderId);
@@ -2657,6 +2823,13 @@
             }
           }
         });
+      },
+      
+      sendPreparingNotification: (order) => {
+        const message = `*🍳 Pedido em Preparo - ${APP_CONFIG.restaurantName}*%0A%0A👤 *Cliente:* ${order.cliente}%0A📞 *Telefone:* ${order.telefone}%0A%0A📦 *Número do Pedido:* #${order.id.slice(-6)}%0A%0A⏱ *Tempo estimado:* 45-50 minutos%0A%0A_Recebemos o seu pedido e estamos preparando. O tempo de espera é de 45-50 minutos. Obrigado por escolher a Cozinha da Vivi._`;
+        
+        const whatsappURL = `https://wa.me/${order.whatsapp.replace(/\D/g, '')}?text=${message}`;
+        window.open(whatsappURL, "_blank");
       },
       
       sendReadyNotification: (order) => {
@@ -2835,6 +3008,9 @@
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
           
+          // Esconde o carrinho de compras
+          DOM.cartIndicator.style.display = 'none';
+          
           // Esconde o botão de acesso admin
           DOM.adminAccessBtn.style.display = 'none';
           
@@ -2859,6 +3035,9 @@
         DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
         DOM.adminAccessBtn.style.display = 'flex';
+        
+        // Mostra o carrinho de compras novamente
+        DOM.cartIndicator.style.display = 'block';
       },
       
       checkLoginStatus: () => {
@@ -2867,6 +3046,7 @@
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
           DOM.adminPanel.classList.remove("d-none");
+          DOM.cartIndicator.style.display = 'none';
           DOM.adminAccessBtn.style.display = 'none';
           Order.updateAdminPanel();
         }
@@ -2876,52 +3056,357 @@
     // Funções para lidar com opções de produtos
     const ProductOptions = {
       showOptions: (productId, productName) => {
-        // Aqui você pode implementar a lógica para mostrar opções específicas para cada produto
-        // Por enquanto, vamos apenas mostrar um modal genérico
+        let optionsHtml = '';
+        let basePrice = 0;
+        
+        // Define as opções específicas para cada produto
+        if (productId === "101") { // Churrasco Misto
+          basePrice = 12.00;
+          optionsHtml = `
+            <div class="option-section">
+              <div class="option-section-title">Feijão <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="feijao" value="Feijão de caldo" required>
+                  Feijão de caldo
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="feijao" value="Feijão tropeiro" required>
+                  Feijão tropeiro
+                </label>
+              </div>
+            </div>
+            
+            <div class="option-section">
+              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Banana frita" required>
+                  Banana frita
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Batata frita" required>
+                  Batata frita
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Mandioca cozida" required>
+                  Mandioca cozida
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
+                  Mandioca frita
+                </label>
+              </div>
+            </div>
+            
+            <div class="option-section">
+              <div class="option-section-title">Carnes <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="checkbox" name="carnes" value="Coração de galinha">
+                  Coração de galinha
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="checkbox" name="carnes" value="Costelinha de porco">
+                  Costelinha de porco
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="checkbox" name="carnes" value="Filé de frango">
+                  Filé de frango
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="checkbox" name="carnes" value="Linguiça">
+                  Linguiça
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="checkbox" name="carnes" value="Maminha (+1€)" data-additional-price="1">
+                  Maminha <span class="additional-price">+€1,00</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="checkbox" name="carnes" value="Torresmo">
+                  Torresmo
+                </label>
+              </div>
+              <small class="text-muted">Escolha 2 opções (ou pague adicional por mais)</small>
+            </div>
+            
+            <div class="option-section">
+              <div class="option-section-title">Salada <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Salada mista" required>
+                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Vinagrete" required>
+                  Vinagrete
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Não quero salada" required>
+                  Não quero salada
+                </label>
+              </div>
+            </div>
+            
+            <div class="option-section">
+              <div class="option-section-title">Refrigerante</div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Água 500ml (+1€)" data-additional-price="1">
+                  Água 500ml <span class="additional-price">+€1,00</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Água Castelo 500ml (+1.5€)" data-additional-price="1.5">
+                  Água Castelo 500ml <span class="additional-price">+€1,50</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Água das Pedras 500ml (+1.5€)" data-additional-price="1.5">
+                  Água das Pedras 500ml <span class="additional-price">+€1,50</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Coca-Cola (+2€)" data-additional-price="2">
+                  Coca-Cola <span class="additional-price">+€2,00</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Coca-Cola Zero (+2€)" data-additional-price="2">
+                  Coca-Cola Zero <span class="additional-price">+€2,00</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Fanta (+2€)" data-additional-price="2">
+                  Fanta <span class="additional-price">+€2,00</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Guaraná do Brasil (+2€)" data-additional-price="2">
+                  Guaraná do Brasil <span class="additional-price">+€2,00</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Ice Tea de Manga (+2€)" data-additional-price="2">
+                  Ice Tea de Manga <span class="additional-price">+€2,00</span>
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="bebida" value="Sem refrigerante">
+                  Sem refrigerante
+                </label>
+              </div>
+            </div>
+          `;
+        } else if (productId === "102") { // Maminha
+          basePrice = 13.00;
+          optionsHtml = `
+            <div class="option-section">
+              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Arroz" required>
+                  Arroz
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Farofa" required>
+                  Farofa
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Batata frita" required>
+                  Batata frita
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
+                  Mandioca frita
+                </label>
+              </div>
+            </div>
+            
+            <div class="option-section">
+              <div class="option-section-title">Salada <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Salada mista" required>
+                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Vinagrete" required>
+                  Vinagrete
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Não quero salada" required>
+                  Não quero salada
+                </label>
+              </div>
+            </div>
+          `;
+        } else if (productId === "103") { // Linguiça Toscana
+          basePrice = 12.00;
+          optionsHtml = `
+            <div class="option-section">
+              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Arroz" required>
+                  Arroz
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Farofa" required>
+                  Farofa
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Batata frita" required>
+                  Batata frita
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
+                  Mandioca frita
+                </label>
+              </div>
+            </div>
+            
+            <div class="option-section">
+              <div class="option-section-title">Salada <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Salada mista" required>
+                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Vinagrete" required>
+                  Vinagrete
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Não quero salada" required>
+                  Não quero salada
+                </label>
+              </div>
+            </div>
+          `;
+        } else if (productId === "104") { // Costelinha de Porco
+          basePrice = 12.00;
+          optionsHtml = `
+            <div class="option-section">
+              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Arroz" required>
+                  Arroz
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Farofa" required>
+                  Farofa
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Batata frita" required>
+                  Batata frita
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
+                  Mandioca frita
+                </label>
+              </div>
+            </div>
+            
+            <div class="option-section">
+              <div class="option-section-title">Salada <span class="required-option">*</span></div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Salada mista" required>
+                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Vinagrete" required>
+                  Vinagrete
+                </label>
+              </div>
+              <div class="option-item">
+                <label>
+                  <input type="radio" name="salada" value="Não quero salada" required>
+                  Não quero salada
+                </label>
+              </div>
+            </div>
+          `;
+        } else {
+          // Opções padrão para outros produtos
+          optionsHtml = `
+            <div class="option-section">
+              <div class="option-section-title">Observações</div>
+              <div class="option-item">
+                <textarea class="form-control" id="observacoes" rows="3" placeholder="Alguma observação sobre este item?"></textarea>
+              </div>
+            </div>
+          `;
+        }
+        
         DOM.productOptionsModalTitle.textContent = `Opções: ${productName}`;
-        DOM.productOptionsContent.innerHTML = `
-          <div class="option-section">
-            <div class="option-section-title">Acompanhamentos</div>
-            <div class="option-item">
-              <label>
-                <input type="checkbox" name="acompanhamento" value="Arroz">
-                Arroz
-              </label>
-            </div>
-            <div class="option-item">
-              <label>
-                <input type="checkbox" name="acompanhamento" value="Feijão">
-                Feijão
-              </label>
-            </div>
-            <div class="option-item">
-              <label>
-                <input type="checkbox" name="acompanhamento" value="Farofa">
-                Farofa
-              </label>
-            </div>
-          </div>
-          <div class="option-section">
-            <div class="option-section-title">Saladas</div>
-            <div class="option-item">
-              <label>
-                <input type="checkbox" name="salada" value="Salada Mista">
-                Salada Mista
-              </label>
-            </div>
-            <div class="option-item">
-              <label>
-                <input type="checkbox" name="salada" value="Vinagrete">
-                Vinagrete
-              </label>
-            </div>
-          </div>
-        `;
+        DOM.productOptionsContent.innerHTML = optionsHtml;
         
         currentProductOptions = {
           id: productId,
           name: productName,
-          price: 0 // Você pode ajustar isso com base no produto real
+          price: basePrice,
+          image: document.querySelector(`.product[data-id="${productId}"] .product-image`)?.src || ''
         };
         
         DOM.productOptionsModal.show();
@@ -2931,21 +3416,52 @@
         if (!currentProductOptions) return;
         
         const selectedOptions = {};
-        const checkboxes = DOM.productOptionsContent.querySelectorAll('input[type="checkbox"]:checked');
+        let additionalPrice = 0;
         
+        // Processa todas as opções selecionadas
+        const radioGroups = DOM.productOptionsContent.querySelectorAll('input[type="radio"]:checked');
+        radioGroups.forEach(radio => {
+          const group = radio.name;
+          if (!selectedOptions[group]) {
+            selectedOptions[group] = [];
+          }
+          selectedOptions[group].push(radio.value);
+          
+          // Verifica se há preço adicional
+          if (radio.dataset.additionalPrice) {
+            additionalPrice += parseFloat(radio.dataset.additionalPrice);
+          }
+        });
+        
+        // Processa checkboxes (para o Churrasco Misto)
+        const checkboxes = DOM.productOptionsContent.querySelectorAll('input[type="checkbox"]:checked');
         checkboxes.forEach(checkbox => {
           const group = checkbox.name;
           if (!selectedOptions[group]) {
             selectedOptions[group] = [];
           }
           selectedOptions[group].push(checkbox.value);
+          
+          // Verifica se há preço adicional
+          if (checkbox.dataset.additionalPrice) {
+            additionalPrice += parseFloat(checkbox.dataset.additionalPrice);
+          }
         });
+        
+        // Processa observações se houver
+        const observacoes = DOM.productOptionsContent.querySelector('#observacoes')?.value;
+        if (observacoes) {
+          selectedOptions['observacoes'] = [observacoes];
+        }
+        
+        // Calcula o preço final
+        const finalPrice = currentProductOptions.price + additionalPrice;
         
         Cart.addItem(
           currentProductOptions.id,
           currentProductOptions.name,
-          currentProductOptions.price,
-          '',
+          finalPrice,
+          currentProductOptions.image,
           selectedOptions
         );
         
@@ -2962,13 +3478,13 @@
           const productElement = button.closest('.product');
           const id = productElement.getAttribute("data-id");
           const name = productElement.querySelector(".product-name").textContent;
-          const price = Utils.parsePrice(productElement.querySelector(".product-price").textContent);
-          const image = productElement.querySelector(".product-image")?.src || '';
           
-          // Verifica se o produto tem opções (você pode adicionar uma classe ou atributo para identificar)
+          // Verifica se o produto tem opções
           if (productElement.hasAttribute('data-has-options')) {
             ProductOptions.showOptions(id, name);
           } else {
+            const price = Utils.parsePrice(productElement.querySelector(".product-price").textContent);
+            const image = productElement.querySelector(".product-image")?.src || '';
             Cart.addItem(id, name, price, image);
           }
         }
@@ -3125,74 +3641,54 @@
         ProductOptions.handleOptionsConfirmation();
       });
       
-      DOM.logoHome.addEventListener('click', () => {
-        DOM.productSection.classList.remove("d-none");
-        DOM.checkoutSection.classList.add("d-none");
-        DOM.adminPanel.classList.add("d-none");
-        DOM.mainHeader.style.display = 'block';
-        DOM.adminAccessBtn.style.display = isAdminLoggedIn ? 'none' : 'flex';
-      });
+      // Removido o event listener do logoHome para evitar comportamento indesejado
     }
 
     // Inicialização
-   // Inicialização
-function init() {
-  // Limpa o estado de novos pedidos ao iniciar
-  newOrders = [];
-  pendingOrdersCount = 0;
-  DOM.notificationBadge.classList.add('d-none');
-  
-  setupEventListeners();
-  Cart.updateUI();
-  Filter.apply('all');
-  Checkout.toggleDeliveryFields(true);
-  
-  // Configura o listener de pedidos do Firebase
-  FirebaseService.listenForOrders((ordersFromFirebase) => {
-    const previousOrderCount = orders.length;
-    orders = ordersFromFirebase;
-    
-    // Identifica novos pedidos apenas após a carga inicial
-    if (previousOrderCount > 0) {
-      const currentOrderIds = orders.map(o => o.id);
-      const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
-      const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
+    function init() {
+      // Limpa o estado de novos pedidos ao iniciar
+      newOrders = [];
+      pendingOrdersCount = 0;
+      DOM.notificationBadge.classList.add('d-none');
       
-      if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
-        // Atualiza a lista de novos pedidos
-        newOrders = [...new Set([...newOrders, ...newlyAddedOrders])];
+      setupEventListeners();
+      Cart.updateUI();
+      Filter.apply('all');
+      Checkout.toggleDeliveryFields(true);
+      
+      // Configura o listener de pedidos do Firebase
+      FirebaseService.listenForOrders((ordersFromFirebase) => {
+        const previousOrderCount = orders.length;
+        orders = ordersFromFirebase;
         
-        // Atualiza notificações
-        pendingOrdersCount += newlyAddedOrders.length;
-        DOM.notificationBadge.textContent = pendingOrdersCount;
-        DOM.notificationBadge.classList.remove('d-none');
+        // Identifica novos pedidos apenas após a carga inicial
+        if (previousOrderCount > 0) {
+          const currentOrderIds = orders.map(o => o.id);
+          const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
+          const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
+          
+          if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
+            // Atualiza a lista de novos pedidos
+            newOrders = [...new Set([...newOrders, ...newlyAddedOrders])];
+            
+            // Atualiza notificações
+            pendingOrdersCount += newlyAddedOrders.length;
+            DOM.notificationBadge.textContent = pendingOrdersCount;
+            DOM.notificationBadge.classList.remove('d-none');
+            
+            Utils.showNewOrderNotification(newlyAddedOrders.length);
+          }
+        }
         
-        Utils.playNotificationSound();
-        Utils.showNewOrderNotification(newlyAddedOrders.length);
-      }
+        if (isAdminLoggedIn) {
+          Order.updateAdminPanel();
+        }
+      });
+      
+      Admin.checkLoginStatus();
     }
-    
-    if (isAdminLoggedIn) {
-      Order.updateAdminPanel();
-    }
-  });
-  
-  Admin.checkLoginStatus();
-}
 
-// Implementação do listener do Firebase
-FirebaseService.listenForOrders = (callback) => {
-  database.ref('orders').on('value', (snapshot) => {
-    const ordersData = snapshot.val();
-    const ordersArray = ordersData ? Object.keys(ordersData).map(key => ({
-      id: key,
-      ...ordersData[key]
-    })) : [];
-    callback(ordersArray);
-  });
-};
-
-document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
