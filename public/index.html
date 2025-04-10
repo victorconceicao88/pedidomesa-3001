@@ -3321,6 +3321,7 @@ body {
         
         return kitchenOrder;
       },
+      
       printKitchenOrder: async (orderId) => {
   try {
     // 1. Encontre o pedido no sistema
@@ -3350,8 +3351,7 @@ body {
 
     // 5. Gera o conteúdo para a impressão (ESC/POS)
     const generateThermalContent = () => {
-      let content = `
-        \x1B\x40\x1B\x61\x01\x1B\x21\x30${APP_CONFIG.restaurantName}\x0A
+      let content = `\x1B\x40\x1B\x61\x01\x1B\x21\x30${APP_CONFIG.restaurantName}\x0A
         \x1B\x21\x10-------------------------------\x0A
         \x1B\x21\x10     PEDIDO #${order.id.slice(-6)}\x0A
         \x1B\x21\x10-------------------------------\x0A
@@ -3361,8 +3361,7 @@ body {
         \x1B\x21\x00Data: ${order.data}\x0A
         ${order.tipoEntrega === 'entrega' ? `Endereço: ${order.endereco}\x0A` : 'RETIRADA NO LOCAL\x0A'}
         \x1B\x21\x00-------------------------------\x0A
-        \x1B\x21\x10 ITENS:\x0A
-      `;
+        \x1B\x21\x10 ITENS:\x0A`;
 
       order.itens.forEach(item => {
         content += `\x1B\x21\x00${item.quantidade}x ${item.nome}`;
@@ -3372,11 +3371,9 @@ body {
         content += `\x0A`;
       });
 
-      content += `
-        \x1B\x21\x00-------------------------------\x0A
+      content += `\x1B\x21\x00-------------------------------\x0A
         \x1B\x21\x30TOTAL: ${Utils.formatCurrency(order.total)}\x0A
-        \x0A\x0A\x0A\x1D\x56\x41\x0A
-      `;
+        \x0A\x0A\x0A\x1D\x56\x41\x0A`;
 
       return content;
     };
@@ -3385,11 +3382,12 @@ body {
     const encoder = new TextEncoder();
     const buffer = encoder.encode(generateThermalContent());
 
+    // Envia os dados em partes de 512 bytes (ajustável conforme necessário)
     for (let i = 0; i < buffer.length; i += 512) {
       await characteristic.writeValue(buffer.slice(i, i + 512));
     }
 
-    // Notificação de sucesso
+    // 7. Notificação de sucesso
     Utils.showNotification('Pedido enviado para a impressora Bluetooth!', 'success');
     
   } catch (error) {
