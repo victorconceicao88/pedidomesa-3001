@@ -3321,33 +3321,86 @@ body {
         
         return kitchenOrder;
       },
-      
-      printKitchenOrder: (orderId) => {
-        const kitchenOrder = Order.generateKitchenOrder(orderId);
-        DOM.kitchenOrderContent.innerHTML = kitchenOrder;
-        
-        // Abre janela de impressão
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Pedido Cozinha</title>
-            <style>
-              body { font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.3; }
-              .kitchen-order { max-width: 58mm; padding: 10px; }
-              .kitchen-order-header { text-align: center; font-weight: bold; margin-bottom: 10px; border-bottom: 1px dashed #000; padding-bottom: 5px; }
-              .kitchen-order-item { display: flex; justify-content: space-between; margin-bottom: 3px; }
-              .kitchen-order-footer { border-top: 1px dashed #000; margin-top: 10px; padding-top: 5px; font-weight: bold; }
-            </style>
-          </head>
-          <body onload="window.print();window.close()">
-            ${kitchenOrder}
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
-      }
+      printKitchenOrder: async (orderId) => {
+  try {
+    // 1. Encontre o pedido no sistema
+    const order = orders.find(o => o.id === orderId);
+    if (!order) {
+      throw new Error("Pedido não encontrado");
+    }
+
+    // 2. Verifica se o navegador tem suporte ao Bluetooth
+    if (!navigator.bluetooth) {
+      throw new Error("Bluetooth não é suportado neste navegador. Utilize Chrome ou Edge.");
+    }
+
+    // 3. Solicita a conexão com a impressora Bluetooth
+    const device = await navigator.bluetooth.requestDevice({
+      filters: [{ 
+        name: "BlueTooth Printer",  // Nome da impressora
+        deviceId: "27A0A417-4342-A5B4-3199-702B5E923859"  // ID do dispositivo Bluetooth
+      }],
+      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']  // Serviço Bluetooth da impressora
+    });
+
+    // 4. Conectar à impressora
+    const server = await device.gatt.connect();
+    const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+    const characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
+
+    // 5. Gera o conteúdo para a impressão (ESC/POS)
+    const generateThermalContent = () => {
+      let content = `
+        \x1B\x40\x1B\x61\x01\x1B\x21\x30${APP_CONFIG.restaurantName}\x0A
+        \x1B\x21\x10-------------------------------\x0A
+        \x1B\x21\x10     PEDIDO #${order.id.slice(-6)}\x0A
+        \x1B\x21\x10-------------------------------\x0A
+        \x0A
+        \x1B\x21\x00Cliente: ${order.cliente}\x0A
+        \x1B\x21\x00Telefone: ${order.telefone}\x0A
+        \x1B\x21\x00Data: ${order.data}\x0A
+        ${order.tipoEntrega === 'entrega' ? `Endereço: ${order.endereco}\x0A` : 'RETIRADA NO LOCAL\x0A'}
+        \x1B\x21\x00-------------------------------\x0A
+        \x1B\x21\x10 ITENS:\x0A
+      `;
+
+      order.itens.forEach(item => {
+        content += `\x1B\x21\x00${item.quantidade}x ${item.nome}`;
+        if (item.opcoes) {
+          content += ` (${Object.values(item.opcoes).join(', ')})`;
+        }
+        content += `\x0A`;
+      });
+
+      content += `
+        \x1B\x21\x00-------------------------------\x0A
+        \x1B\x21\x30TOTAL: ${Utils.formatCurrency(order.total)}\x0A
+        \x0A\x0A\x0A\x1D\x56\x41\x0A
+      `;
+
+      return content;
+    };
+
+    // 6. Envia os dados de impressão para a impressora em partes (chunks de 512 bytes)
+    const encoder = new TextEncoder();
+    const buffer = encoder.encode(generateThermalContent());
+
+    for (let i = 0; i < buffer.length; i += 512) {
+      await characteristic.writeValue(buffer.slice(i, i + 512));
+    }
+
+    // Notificação de sucesso
+    Utils.showNotification('Pedido enviado para a impressora Bluetooth!', 'success');
+    
+  } catch (error) {
+    console.error("Erro na impressão:", error);
+    Utils.showNotification(`Falha ao imprimir: ${error.message}`, 'danger');
+  }
+}
+
+
+
+
     };
 
     // Funções de Filtro
