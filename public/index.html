@@ -3324,18 +3324,16 @@ body {
       
       printKitchenOrder: async (orderId) => {
   try {
-    // 1. Encontre o pedido no sistema
+    // 1. Localizar o pedido
     const order = orders.find(o => o.id === orderId);
-    if (!order) {
-      throw new Error("Pedido não encontrado");
-    }
+    if (!order) throw new Error("Pedido não encontrado");
 
-    // 2. Verifica se o navegador tem suporte ao Bluetooth
+    // 2. Verificar suporte Bluetooth
     if (!navigator.bluetooth) {
-      throw new Error("Bluetooth não é suportado neste navegador. Utilize Chrome ou Edge.");
+      throw new Error("Bluetooth não suportado. Use Chrome ou Edge no Android.");
     }
 
-    // 3. Solicita a conexão com a impressora Bluetooth
+    // 3. Conectar à impressora
     const device = await navigator.bluetooth.requestDevice({
       filters: [{ 
         name: "BlueTooth Printer",
@@ -3344,38 +3342,42 @@ body {
       optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
     });
 
-    // 4. Conectar à impressora
     const server = await device.gatt.connect();
     const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
     const characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
 
-    // 5. Gera o conteúdo para a impressão (ESC/POS) com layout melhorado
-    const generateThermalContent = () => {
-      // Inicializa a impressora e define codificação
-      let content = '\x1B\x40'; // Inicializa a impressora
-      content += '\x1B\x74\x10'; // Define codificação para Western Europe (Windows-1252)
-      
-      // Cabeçalho - Centralizado e em negrito
-      content += '\x1B\x61\x01'; // Alinhamento centralizado
-      content += '\x1B\x21\x30'; // Texto em negrito e tamanho duplo
+    // 4. Função para envio seguro em chunks
+    const safePrint = async (data) => {
+      const encoder = new TextEncoder();
+      const buffer = encoder.encode(data);
+      const chunkSize = 100; // Tamanho reduzido para Android
+      const delay = 30; // Delay entre chunks em ms
+
+      for (let i = 0; i < buffer.length; i += chunkSize) {
+        const chunk = buffer.slice(i, i + chunkSize);
+        await characteristic.writeValue(chunk);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    };
+
+    // 5. Gerar conteúdo otimizado para impressão
+    const generatePrintContent = () => {
+      let content = '\x1B\x40'; // Inicializar impressora
+      content += '\x1B\x74\x10'; // Definir codificação Windows-1252
+
+      // Cabeçalho
+      content += '\x1B\x61\x01\x1B\x21\x30'; // Centralizado + negrito grande
       content += `${APP_CONFIG.restaurantName}\x0A\x0A`;
       
-      // Linha divisória
-      content += '\x1B\x21\x00'; // Reset de estilo
-      content += '\x1B\x61\x00'; // Alinhamento à esquerda
+      // Dados do pedido
+      content += '\x1B\x61\x00\x1B\x21\x00'; // Alinhar à esquerda + texto normal
       content += '--------------------------------\x0A';
-      
-      // Número do pedido - Centralizado
-      content += '\x1B\x61\x01'; // Centralizado
-      content += '\x1B\x21\x10'; // Texto em negrito
+      content += '\x1B\x21\x10'; // Negrito
       content += `PEDIDO #${order.id.slice(-6)}\x0A`;
-      
-      // Linha divisória
-      content += '\x1B\x61\x00'; // Alinhamento à esquerda
+      content += '\x1B\x21\x00'; // Voltar ao normal
       content += '--------------------------------\x0A\x0A';
       
       // Informações do cliente
-      content += '\x1B\x21\x00'; // Texto normal
       content += `Cliente: ${order.cliente}\x0A`;
       content += `Telefone: ${order.telefone}\x0A`;
       content += `Data: ${order.data}\x0A`;
@@ -3383,57 +3385,51 @@ body {
         ? `Endereço: ${order.endereco}\x0A\x0A` 
         : 'RETIRADA NO LOCAL\x0A\x0A';
       
-      // Itens do pedido - Título em negrito
-      content += '\x1B\x21\x10'; // Texto em negrito
-      content += 'ITENS DO PEDIDO:\x0A';
-      content += '\x1B\x21\x00'; // Volta ao texto normal
+      // Itens do pedido
+      content += '\x1B\x21\x10'; // Negrito
+      content += 'ITENS:\x0A';
+      content += '\x1B\x21\x00'; // Normal
       content += '--------------------------------\x0A';
       
-      // Lista de itens com alinhamento
       order.itens.forEach(item => {
-        // Nome do item e quantidade
         content += `${item.quantidade}x ${item.nome}`;
-        
-        // Opções do item (se houver)
-        if (item.opcoes && Object.keys(item.opcoes).length > 0) {
-          content += '\x0A'; // Nova linha para opções
-          content += '   '; // Indentação para opções
-          content += Object.entries(item.opcoes)
-            .map(([key, value]) => `${key}: ${value}`)
+        if (item.opcoes) {
+          content += '\x0A   ' + Object.entries(item.opcoes)
+            .map(([key, val]) => `${key}: ${val}`)
             .join(', ');
         }
-        
-        content += '\x0A'; // Nova linha para próximo item
+        content += '\x0A';
       });
       
-      // Total do pedido
+      // Total
       content += '--------------------------------\x0A';
-      content += '\x1B\x61\x02'; // Alinhamento à direita
-      content += '\x1B\x21\x10'; // Texto em negrito
+      content += '\x1B\x61\x02\x1B\x21\x10'; // Direita + negrito
       content += `TOTAL: ${Utils.formatCurrency(order.total)}\x0A\x0A`;
       
-      // Finalização da impressão
+      // Rodapé
       content += '\x1B\x61\x01'; // Centralizado
       content += 'Obrigado pela preferência!\x0A\x0A';
-      content += '\x1D\x56\x41\x03'; // Corta o papel (GS V 66)
+      content += '\x1D\x56\x41\x03'; // Corte total do papel
       
       return content;
     };
 
-    // 6. Envia os dados de impressão para a impressora em partes (chunks de 512 bytes)
-    const encoder = new TextEncoder();
-    const buffer = encoder.encode(generateThermalContent());
+    // 6. Executar impressão
+    await safePrint(generatePrintContent());
+    Utils.showNotification('Pedido impresso com sucesso!', 'success');
 
-    for (let i = 0; i < buffer.length; i += 512) {
-      await characteristic.writeValue(buffer.slice(i, i + 512));
-    }
-
-    // Notificação de sucesso
-    Utils.showNotification('Pedido enviado para a impressora Bluetooth!', 'success');
-    
   } catch (error) {
     console.error("Erro na impressão:", error);
     Utils.showNotification(`Falha ao imprimir: ${error.message}`, 'danger');
+    
+    // Tentar desconectar em caso de erro
+    try {
+      if (device && device.gatt.connected) {
+        await device.gatt.disconnect();
+      }
+    } catch (e) {
+      console.error("Erro ao desconectar:", e);
+    }
   }
 }
 
