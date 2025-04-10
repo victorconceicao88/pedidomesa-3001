@@ -3361,13 +3361,33 @@ body {
       }
     };
 
-    // 6. Função para remover acentos e caracteres especiais
+    // 6. Função alternativa para remover acentos e caracteres especiais (sem usar normalize)
     const removeSpecialChars = (str) => {
-      return str.normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // Remove acentos
-        .replace(/[^a-zA-Z0-9\s,.\-@]/g, "") // Remove caracteres especiais
-        .replace(/ç/g, "c") // Substitui ç por c
-        .replace(/Ç/g, "C"); // Substitui Ç por C
+      if (typeof str !== 'string') return str;
+      
+      const charMap = {
+        'á':'a', 'à':'a', 'ã':'a', 'â':'a', 'ä':'a',
+        'é':'e', 'è':'e', 'ê':'e', 'ë':'e',
+        'í':'i', 'ì':'i', 'î':'i', 'ï':'i',
+        'ó':'o', 'ò':'o', 'õ':'o', 'ô':'o', 'ö':'o',
+        'ú':'u', 'ù':'u', 'û':'u', 'ü':'u',
+        'Á':'A', 'À':'A', 'Ã':'A', 'Â':'A', 'Ä':'A',
+        'É':'E', 'È':'E', 'Ê':'E', 'Ë':'E',
+        'Í':'I', 'Ì':'I', 'Î':'I', 'Ï':'I',
+        'Ó':'O', 'Ò':'O', 'Õ':'O', 'Ô':'O', 'Ö':'O',
+        'Ú':'U', 'Ù':'U', 'Û':'U', 'Ü':'U',
+        'ç':'c', 'Ç':'C',
+        'ñ':'n', 'Ñ':'N'
+      };
+      
+      // Substitui caracteres acentuados
+      let result = '';
+      for (let i = 0; i < str.length; i++) {
+        result += charMap[str[i]] || str[i];
+      }
+      
+      // Remove outros caracteres especiais (mantém apenas ASCII básico)
+      return result.replace(/[^a-zA-Z0-9\s,.\-@$]/g, '');
     };
 
     // 7. Gerar conteúdo seguro para impressão
@@ -3396,7 +3416,7 @@ body {
       content += '\x1B\x21\x00';
       content += '--------------------------------\n\n';
       
-      // Informações do cliente (com tratamento de caracteres)
+      // Informações do cliente
       content += `Cliente: ${removeSpecialChars(order.cliente)}\n`;
       content += `Telefone: ${removeSpecialChars(order.telefone)}\n`;
       content += `Data: ${removeSpecialChars(new Date(order.data).toLocaleString('pt-BR'))}\n`;
@@ -3457,7 +3477,6 @@ body {
     }
   }
 }
-
     };
 
     // Funções de Filtro
