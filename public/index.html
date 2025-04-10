@@ -3337,10 +3337,10 @@ body {
     // 3. Conectar à impressora Bluetooth
     const device = await navigator.bluetooth.requestDevice({
       filters: [{ 
-        name: "BlueTooth Printer", // Nome exato da sua impressora
-        deviceId: "27A0A417-4342-A5B4-3199-702B5E923859" // ID do seu dispositivo
+        name: "BlueTooth Printer",
+        deviceId: "27A0A417-4342-A5B4-3199-702B5E923859"
       }],
-      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb'] // Serviço específico
+      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
     });
 
     // 4. Estabelecer conexão
@@ -3352,8 +3352,8 @@ body {
     const sendToPrinter = async (data) => {
       const encoder = new TextEncoder();
       const buffer = encoder.encode(data);
-      const CHUNK_SIZE = 64; // Tamanho reduzido para maior confiabilidade
-      const DELAY = 20; // Tempo entre envios
+      const CHUNK_SIZE = 32; // Tamanho ainda menor para maior confiabilidade
+      const DELAY = 30; // Tempo entre envios aumentado
       
       for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
         await characteristic.writeValue(buffer.slice(i, i + CHUNK_SIZE));
@@ -3361,80 +3361,90 @@ body {
       }
     };
 
-    // 6. Gerar conteúdo otimizado para impressão (versão corrigida)
+    // 6. Gerar conteúdo otimizado para impressão (versão definitiva)
     const generatePrintContent = () => {
       let content = '';
       
-      // Inicialização da impressora (comandos universais)
-      content += '\x1B\x40'; // Reset printer
-      content += '\x1B\x52\x0F'; // Select character table (Portugal)
+      // ===== INICIALIZAÇÃO DA IMPRESSORA =====
+      content += '\x1B\x40'; // Inicializar impressora (ESC @)
+      content += '\x1B\x52\x0A'; // Selecionar tabela de caracteres internacional (ESC R n)
+      content += '\x1B\x74\x02'; // Selecionar página de código 858 (Windows Latin-1)
       
-      // Configurações iniciais
-      content += '\x1B\x20\x00'; // Set default line spacing
-      content += '\x1B\x21\x00'; // Reset text style
+      // ===== CONFIGURAÇÕES GERAIS =====
+      content += '\x1B\x20\x00'; // Espaçamento entre linhas padrão
+      content += '\x1B\x21\x00'; // Resetar todos os atributos de texto
       
-      // Cabeçalho do restaurante
-      content += '\x1B\x61\x01'; // Center align
-      content += '\x1B\x21\x08'; // Double height
-      content += '\x1B\x21\x20'; // Bold
-      content += `${APP_CONFIG.restaurantName}\n`;
-      content += '\x1B\x21\x00'; // Reset text style
-      content += '\n';
+      // ===== CABEÇALHO =====
+      content += '\x1B\x61\x01'; // Centralizar texto (ESC a 1)
+      content += '\x1B\x21\x30'; // Texto dupla altura e negrito (ESC ! 48)
+      content += `${APP_CONFIG.restaurantName}\n\n`;
       
-      // Dados do pedido
-      content += '\x1B\x61\x00'; // Left align
+      // ===== DADOS DO PEDIDO =====
+      content += '\x1B\x61\x00'; // Alinhar à esquerda (ESC a 0)
+      content += '\x1B\x21\x00'; // Texto normal (ESC ! 0)
       content += '--------------------------------\n';
-      content += '\x1B\x21\x08'; // Bold
-      content += `PEDIDO #${order.id.slice(-6)}\n`;
-      content += '\x1B\x21\x00'; // Normal
+      content += '\x1B\x21\x08'; // Negrito (ESC ! 8)
+      content += `PEDIDO #${order.id.slice(-6).toUpperCase()}\n`;
+      content += '\x1B\x21\x00'; // Texto normal
       content += '--------------------------------\n\n';
       
       // Informações do cliente
       content += `Cliente: ${order.cliente}\n`;
-      content += `Telefone: ${order.telefone}\n`;
-      content += `Data: ${new Date(order.data).toLocaleString('pt-BR')}\n`;
+      content += `Telefone: ${formatPhone(order.telefone)}\n`;
+      content += `Data: ${formatDateTime(order.data)}\n`;
       content += order.tipoEntrega === 'entrega' 
         ? `Endereço: ${order.endereco}\n\n` 
         : 'RETIRADA NO LOCAL\n\n';
       
-      // Itens do pedido
-      content += '\x1B\x21\x08'; // Bold
+      // ===== ITENS DO PEDIDO =====
+      content += '\x1B\x21\x08'; // Negrito
       content += 'ITENS DO PEDIDO:\n';
       content += '\x1B\x21\x00'; // Normal
       content += '--------------------------------\n';
       
       order.itens.forEach(item => {
         content += `${item.quantidade}x ${item.nome}\n`;
-        if (item.opcoes) {
+        if (item.opcoes && Object.keys(item.opcoes).length > 0) {
           content += ' • ' + Object.entries(item.opcoes)
             .map(([key, value]) => `${key}: ${value}`)
             .join('\n • ') + '\n';
         }
       });
       
-      // Total
+      // ===== TOTAL =====
       content += '--------------------------------\n';
-      content += '\x1B\x61\x02'; // Right align
-      content += '\x1B\x21\x08'; // Bold
+      content += '\x1B\x61\x02'; // Alinhar à direita
+      content += '\x1B\x21\x08'; // Negrito
       content += `TOTAL: ${Utils.formatCurrency(order.total)}\n\n`;
       
-      // Rodapé
-      content += '\x1B\x61\x01'; // Center align
+      // ===== RODAPÉ =====
+      content += '\x1B\x61\x01'; // Centralizar
       content += 'Obrigado pela preferência!\n';
-      content += '\n\n\n';
+      content += '\n';
       
-      // Comandos finais
-      content += '\x1D\x56\x41\x00'; // Full cut with feed
-      content += '\x1B\x69'; // Partial cut (alternativa)
+      // ===== COMANDOS FINAIS =====
+      content += '\x1B\x69'; // Corte parcial (mais compatível)
+      content += '\x1D\x56\x41\x00'; // Corte total com alimentação
+      content += '\x1B\x64\x03'; // Alimentar 3 linhas adicionais
       
       return content;
     };
 
-    // 7. Executar impressão
+    // Funções auxiliares para formatação
+    const formatPhone = (phone) => {
+      return phone.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
+    };
+
+    const formatDateTime = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR');
+    };
+
+    // 7. Executar impressão em etapas
     await sendToPrinter(generatePrintContent());
     
     // Garantir que todos os dados foram enviados
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 300));
     
     Utils.showNotification('Comanda impressa com sucesso!', 'success');
 
@@ -3452,7 +3462,6 @@ body {
     }
   }
 }
-
 
     };
 
