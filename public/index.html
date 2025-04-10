@@ -3334,7 +3334,7 @@ body {
       throw new Error("Bluetooth não suportado neste navegador. Use Chrome ou Edge no Android.");
     }
 
-    // 3. Conectar à SUA impressora Bluetooth (dados específicos)
+    // 3. Conectar à impressora Bluetooth
     const device = await navigator.bluetooth.requestDevice({
       filters: [{ 
         name: "BlueTooth Printer", // Nome exato da sua impressora
@@ -3361,29 +3361,35 @@ body {
       }
     };
 
-    // 6. Gerar conteúdo otimizado para impressão
+    // 6. Gerar conteúdo otimizado para impressão (versão corrigida)
     const generatePrintContent = () => {
       let content = '';
       
-      // Inicialização e codificação (resolve caracteres estranhos)
-      content += '\x1B\x40'; // Inicializar impressora
-      content += '\x1B\x74\x11'; // Definir tabela de caracteres Latin1
+      // Inicialização da impressora (comandos universais)
+      content += '\x1B\x40'; // Reset printer
+      content += '\x1B\x52\x0F'; // Select character table (Portugal)
+      
+      // Configurações iniciais
+      content += '\x1B\x20\x00'; // Set default line spacing
+      content += '\x1B\x21\x00'; // Reset text style
       
       // Cabeçalho do restaurante
-      content += '\x1B\x61\x01'; // Centralizar
-      content += '\x1B\x21\x30'; // Texto grande e em negrito
-      content += `${APP_CONFIG.restaurantName}\n\n`;
+      content += '\x1B\x61\x01'; // Center align
+      content += '\x1B\x21\x08'; // Double height
+      content += '\x1B\x21\x20'; // Bold
+      content += `${APP_CONFIG.restaurantName}\n`;
+      content += '\x1B\x21\x00'; // Reset text style
+      content += '\n';
       
       // Dados do pedido
-      content += '\x1B\x61\x00'; // Alinhar à esquerda
-      content += '\x1B\x21\x00'; // Texto normal
+      content += '\x1B\x61\x00'; // Left align
       content += '--------------------------------\n';
-      content += '\x1B\x21\x10'; // Negrito
+      content += '\x1B\x21\x08'; // Bold
       content += `PEDIDO #${order.id.slice(-6)}\n`;
-      content += '\x1B\x21\x00'; // Voltar ao normal
+      content += '\x1B\x21\x00'; // Normal
       content += '--------------------------------\n\n';
       
-      // Informações do cliente (formato brasileiro)
+      // Informações do cliente
       content += `Cliente: ${order.cliente}\n`;
       content += `Telefone: ${order.telefone}\n`;
       content += `Data: ${new Date(order.data).toLocaleString('pt-BR')}\n`;
@@ -3392,7 +3398,7 @@ body {
         : 'RETIRADA NO LOCAL\n\n';
       
       // Itens do pedido
-      content += '\x1B\x21\x10'; // Negrito
+      content += '\x1B\x21\x08'; // Bold
       content += 'ITENS DO PEDIDO:\n';
       content += '\x1B\x21\x00'; // Normal
       content += '--------------------------------\n';
@@ -3408,26 +3414,27 @@ body {
       
       // Total
       content += '--------------------------------\n';
-      content += '\x1B\x61\x02'; // Alinhar à direita
-      content += '\x1B\x21\x10'; // Negrito
+      content += '\x1B\x61\x02'; // Right align
+      content += '\x1B\x21\x08'; // Bold
       content += `TOTAL: ${Utils.formatCurrency(order.total)}\n\n`;
       
       // Rodapé
-      content += '\x1B\x61\x01'; // Centralizar
-      content += 'Obrigado pela preferência!\n\n\n';
+      content += '\x1B\x61\x01'; // Center align
+      content += 'Obrigado pela preferência!\n';
+      content += '\n\n\n';
       
-      // Comando de corte completo (resolve problema do corte)
-      content += '\x1D\x56\x00'; // Versão mais compatível do comando de corte
+      // Comandos finais
+      content += '\x1D\x56\x41\x00'; // Full cut with feed
+      content += '\x1B\x69'; // Partial cut (alternativa)
       
       return content;
     };
 
-    // 7. Executar impressão em duas etapas
+    // 7. Executar impressão
     await sendToPrinter(generatePrintContent());
     
-    // Garantir o corte (envio adicional)
-    await new Promise(resolve => setTimeout(resolve, 100));
-    await sendToPrinter('\x1D\x56\x00'); // Comando de corte extra
+    // Garantir que todos os dados foram enviados
+    await new Promise(resolve => setTimeout(resolve, 200));
     
     Utils.showNotification('Comanda impressa com sucesso!', 'success');
 
