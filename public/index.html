@@ -3378,13 +3378,16 @@ body {
       return content;
     };
 
-    // 6. Envia os dados de impressão para a impressora em partes (chunks de 512 bytes)
+    // 6. Envia os dados de impressão para a impressora em partes (chunks de 256 bytes)
     const encoder = new TextEncoder();
     const buffer = encoder.encode(generateThermalContent());
 
-    // Envia os dados em partes de 512 bytes (ajustável conforme necessário)
-    for (let i = 0; i < buffer.length; i += 512) {
-      await characteristic.writeValue(buffer.slice(i, i + 512));
+    // Envia os dados em partes de 256 bytes
+    const chunkSize = 256;
+    for (let i = 0; i < buffer.length; i += chunkSize) {
+      await characteristic.writeValue(buffer.slice(i, i + chunkSize));
+      // Adiciona um pequeno atraso para garantir que a impressora processe cada chunk
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
     // 7. Notificação de sucesso
