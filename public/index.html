@@ -3321,120 +3321,130 @@ body {
         
         return kitchenOrder;
       },
-      printKitchenOrder: async (orderId) => {
+      printKitchenOrder: async (pedidoId) => {
   try {
-    const order = orders.find(o => o.id === orderId);
-    if (!order) throw new Error("Pedido não encontrado");
-
-    if (!navigator.bluetooth) {
-      throw new Error("Use Chrome/Edge no Android para impressão Bluetooth");
+    // 1. Buscar o pedido no sistema
+    const pedido = pedidos.find(p => p.id === pedidoId);
+    if (!pedido) {
+      throw new Error("Pedido não encontrado");
     }
 
-    // Conexão Bluetooth
-    const device = await navigator.bluetooth.requestDevice({
-      filters: [{ name: "BlueTooth Printer" }],
-      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
+    // 2. Verificar suporte ao Bluetooth
+    if (!navigator.bluetooth) {
+      throw new Error("Navegador não suporta Bluetooth. Use Chrome ou Edge no Android.");
+    }
+
+    // 3. Conexão com sua impressora específica
+    const dispositivo = await navigator.bluetooth.requestDevice({
+      filters: [{ 
+        name: "BlueTooth Printer",          // Nome exato da sua impressora
+        deviceId: "27A0A417-4342-A5B4-3199-702B5E923859"  // ID único do dispositivo
+      }],
+      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']  // Serviço Bluetooth
     });
 
-    const server = await device.gatt.connect();
-    const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-    const characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
+    // 4. Estabelecer conexão
+    const servidor = await dispositivo.gatt.conectar();
+    const servico = await servidor.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+    const caracteristica = await servico.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
 
-    // Função de envio com tratamento robusto
-    const sendToPrinter = async (data) => {
-      const encoder = new TextEncoder();
-      const buffer = encoder.encode(data);
-      const CHUNK_SIZE = 64; // Tamanho menor para maior confiabilidade
-      
-      for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
-        await characteristic.writeValue(buffer.slice(i, i + CHUNK_SIZE));
-        await new Promise(resolve => setTimeout(resolve, 20)); // Delay crítico
+    // 5. Função para envio seguro dos dados
+    const enviarParaImpressora = async (dados) => {
+      const codificador = new TextEncoder();
+      const buffer = codificador.encode(dados);
+      const tamanhoChunk = 64;  // Pedaços menores para maior confiabilidade
+      const intervalo = 20;     // Tempo entre envios em milissegundos
+
+      for (let i = 0; i < buffer.length; i += tamanhoChunk) {
+        await caracteristica.writeValue(buffer.slice(i, i + tamanhoChunk));
+        await new Promise(resolver => setTimeout(resolver, intervalo));
       }
     };
 
-    // Gerar conteúdo com codificação correta
-    const getPrintContent = () => {
-      let content = '';
+    // 6. Gerar conteúdo da comanda
+    const gerarConteudoImpressao = () => {
+      let conteudo = '';
       
-      // Inicialização e configuração
-      content += '\x1B\x40'; // Initialize printer
-      content += '\x1B\x74\x11'; // Character set Latin1
+      // Configurações iniciais
+      conteudo += '\x1B\x40';     // Inicializar impressora
+      conteudo += '\x1B\x74\x11'; // Usar tabela de caracteres Latin1
       
-      // Cabeçalho
-      content += '\x1B\x61\x01'; // Center align
-      content += '\x1B\x21\x30'; // Double size + bold
-      content += `${APP_CONFIG.restaurantName}\n\n`;
+      // Cabeçalho do restaurante
+      conteudo += '\x1B\x61\x01'; // Centralizar
+      conteudo += '\x1B\x21\x30'; // Texto grande e em negrito
+      conteudo += `${CONFIG_RESTAURANTE.nome}\n\n`;
       
       // Dados do pedido
-      content += '\x1B\x21\x00'; // Reset text style
-      content += '\x1B\x61\x00'; // Left align
-      content += '──────────────────────────────\n';
-      content += '\x1B\x21\x10'; // Bold
-      content += `PEDIDO #${order.id.slice(-6).toUpperCase()}\n`;
-      content += '\x1B\x21\x00'; // Normal
-      content += '──────────────────────────────\n\n';
+      conteudo += '\x1B\x61\x00'; // Alinhar à esquerda
+      conteudo += '\x1B\x21\x00'; // Texto normal
+      conteudo += '--------------------------------\n';
+      conteudo += '\x1B\x21\x10'; // Negrito
+      conteudo += `PEDIDO #${pedido.id.slice(-6)}\n`;
+      conteudo += '\x1B\x21\x00'; // Voltar ao normal
+      conteudo += '--------------------------------\n\n';
       
       // Informações do cliente
-      content += `Cliente: ${order.cliente}\n`;
-      content += `Telefone: ${order.telefone}\n`;
-      content += `Data: ${new Date(order.data).toLocaleString()}\n`;
-      content += order.tipoEntrega === 'entrega' 
-        ? `Endereço: ${order.endereco}\n\n` 
+      conteudo += `Cliente: ${pedido.cliente}\n`;
+      conteudo += `Telefone: ${pedido.telefone}\n`;
+      conteudo += `Data: ${new Date(pedido.data).toLocaleString('pt-BR')}\n`;
+      conteudo += pedido.tipoEntrega === 'entrega' 
+        ? `Endereço: ${pedido.endereco}\n\n` 
         : 'RETIRADA NO LOCAL\n\n';
       
-      // Itens
-      content += '\x1B\x21\x10'; // Bold
-      content += 'ITENS DO PEDIDO:\n';
-      content += '\x1B\x21\x00'; // Normal
-      content += '──────────────────────────────\n';
+      // Itens do pedido
+      conteudo += '\x1B\x21\x10'; // Negrito
+      conteudo += 'ITENS DO PEDIDO:\n';
+      conteudo += '\x1B\x21\x00'; // Normal
+      conteudo += '--------------------------------\n';
       
-      order.itens.forEach(item => {
-        content += `${item.quantidade}x ${item.nome}\n`;
+      pedido.itens.forEach(item => {
+        conteudo += `${item.quantidade}x ${item.nome}\n`;
         if (item.opcoes) {
-          content += ' • ' + Object.entries(item.opcoes)
-            .map(([k, v]) => `${k}: ${v}`)
+          conteudo += ' • ' + Object.entries(item.opcoes)
+            .map(([chave, valor]) => `${chave}: ${valor}`)
             .join('\n • ') + '\n';
         }
       });
       
       // Total
-      content += '──────────────────────────────\n';
-      content += '\x1B\x61\x02'; // Right align
-      content += '\x1B\x21\x10'; // Bold
-      content += `TOTAL: ${Utils.formatCurrency(order.total)}\n\n`;
+      conteudo += '--------------------------------\n';
+      conteudo += '\x1B\x61\x02'; // Alinhar à direita
+      conteudo += '\x1B\x21\x10'; // Negrito
+      conteudo += `TOTAL: ${formatarMoeda(pedido.total)}\n\n`;
       
-      // Rodapé
-      content += '\x1B\x61\x01'; // Center
-      content += 'Obrigado pela preferência!\n\n\n';
+      // Mensagem final
+      conteudo += '\x1B\x61\x01'; // Centralizar
+      conteudo += 'Obrigado pela preferência!\n\n\n';
       
-      // Corte do papel (comando completo e confiável)
-      content += '\x1D\x56\x00'; // Full cut (alguns modelos requerem este formato)
+      // Comando de corte (versão mais compatível)
+      conteudo += '\x1D\x56\x00'; // Cortar papel
       
-      return content;
+      return conteudo;
     };
 
-    // Execução em duas etapas para maior confiabilidade
-    await sendToPrinter(getPrintContent());
+    // 7. Executar impressão
+    await enviarParaImpressora(gerarConteudoImpressao());
     
-    // Envio extra para garantir o corte
-    await new Promise(resolve => setTimeout(resolve, 100));
-    await sendToPrinter('\x1D\x56\x00'); // Redundância no comando de corte
+    // Garantir que o corte foi realizado
+    await new Promise(resolver => setTimeout(resolver, 100));
+    await enviarParaImpressora('\x1D\x56\x00'); // Enviar comando de corte novamente
     
-    Utils.showNotification('Comanda impressa com sucesso!', 'success');
+    mostrarNotificacao('Comanda impressa com sucesso!', 'sucesso');
 
-  } catch (error) {
-    console.error("Falha na impressão:", error);
-    Utils.showNotification(`Erro: ${error.message}`, 'danger');
+  } catch (erro) {
+    console.error("Erro na impressão:", erro);
+    mostrarNotificacao(`Falha: ${erro.message}`, 'erro');
     
-    // Forçar desconexão em caso de erro
+    // Desconectar em caso de erro
     try {
-      if (device?.gatt?.connected) await device.gatt.disconnect();
+      if (dispositivo?.gatt?.conectado) {
+        await dispositivo.gatt.desconectar();
+      }
     } catch (e) {
-      console.error("Erro na desconexão:", e);
+      console.error("Erro ao desconectar:", e);
     }
   }
 }
-
 
 
 
