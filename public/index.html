@@ -3338,10 +3338,10 @@ body {
     // 3. Solicita a conexão com a impressora Bluetooth
     const device = await navigator.bluetooth.requestDevice({
       filters: [{ 
-        name: "BlueTooth Printer",  // Nome da impressora
-        deviceId: "27A0A417-4342-A5B4-3199-702B5E923859"  // ID do dispositivo Bluetooth
+        name: "BlueTooth Printer",
+        deviceId: "27A0A417-4342-A5B4-3199-702B5E923859"
       }],
-      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']  // Serviço Bluetooth da impressora
+      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
     });
 
     // 4. Conectar à impressora
@@ -3349,48 +3349,86 @@ body {
     const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
     const characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
 
-    // 5. Gera o conteúdo para a impressão (ESC/POS)
+    // 5. Gera o conteúdo para a impressão (ESC/POS) com layout melhorado
     const generateThermalContent = () => {
-      let content = `\x1B\x40\x1B\x61\x01\x1B\x21\x30${APP_CONFIG.restaurantName}\x0A
-        \x1B\x21\x10-------------------------------\x0A
-        \x1B\x21\x10     PEDIDO #${order.id.slice(-6)}\x0A
-        \x1B\x21\x10-------------------------------\x0A
-        \x0A
-        \x1B\x21\x00Cliente: ${order.cliente}\x0A
-        \x1B\x21\x00Telefone: ${order.telefone}\x0A
-        \x1B\x21\x00Data: ${order.data}\x0A
-        ${order.tipoEntrega === 'entrega' ? `Endereço: ${order.endereco}\x0A` : 'RETIRADA NO LOCAL\x0A'}
-        \x1B\x21\x00-------------------------------\x0A
-        \x1B\x21\x10 ITENS:\x0A`;
-
+      // Inicializa a impressora e define codificação
+      let content = '\x1B\x40'; // Inicializa a impressora
+      content += '\x1B\x74\x10'; // Define codificação para Western Europe (Windows-1252)
+      
+      // Cabeçalho - Centralizado e em negrito
+      content += '\x1B\x61\x01'; // Alinhamento centralizado
+      content += '\x1B\x21\x30'; // Texto em negrito e tamanho duplo
+      content += `${APP_CONFIG.restaurantName}\x0A\x0A`;
+      
+      // Linha divisória
+      content += '\x1B\x21\x00'; // Reset de estilo
+      content += '\x1B\x61\x00'; // Alinhamento à esquerda
+      content += '--------------------------------\x0A';
+      
+      // Número do pedido - Centralizado
+      content += '\x1B\x61\x01'; // Centralizado
+      content += '\x1B\x21\x10'; // Texto em negrito
+      content += `PEDIDO #${order.id.slice(-6)}\x0A`;
+      
+      // Linha divisória
+      content += '\x1B\x61\x00'; // Alinhamento à esquerda
+      content += '--------------------------------\x0A\x0A';
+      
+      // Informações do cliente
+      content += '\x1B\x21\x00'; // Texto normal
+      content += `Cliente: ${order.cliente}\x0A`;
+      content += `Telefone: ${order.telefone}\x0A`;
+      content += `Data: ${order.data}\x0A`;
+      content += order.tipoEntrega === 'entrega' 
+        ? `Endereço: ${order.endereco}\x0A\x0A` 
+        : 'RETIRADA NO LOCAL\x0A\x0A';
+      
+      // Itens do pedido - Título em negrito
+      content += '\x1B\x21\x10'; // Texto em negrito
+      content += 'ITENS DO PEDIDO:\x0A';
+      content += '\x1B\x21\x00'; // Volta ao texto normal
+      content += '--------------------------------\x0A';
+      
+      // Lista de itens com alinhamento
       order.itens.forEach(item => {
-        content += `\x1B\x21\x00${item.quantidade}x ${item.nome}`;
-        if (item.opcoes) {
-          content += ` (${Object.values(item.opcoes).join(', ')})`;
+        // Nome do item e quantidade
+        content += `${item.quantidade}x ${item.nome}`;
+        
+        // Opções do item (se houver)
+        if (item.opcoes && Object.keys(item.opcoes).length > 0) {
+          content += '\x0A'; // Nova linha para opções
+          content += '   '; // Indentação para opções
+          content += Object.entries(item.opcoes)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(', ');
         }
-        content += `\x0A`;
+        
+        content += '\x0A'; // Nova linha para próximo item
       });
-
-      content += `\x1B\x21\x00-------------------------------\x0A
-        \x1B\x21\x30TOTAL: ${Utils.formatCurrency(order.total)}\x0A
-        \x0A\x0A\x0A\x1D\x56\x41\x0A`;
-
+      
+      // Total do pedido
+      content += '--------------------------------\x0A';
+      content += '\x1B\x61\x02'; // Alinhamento à direita
+      content += '\x1B\x21\x10'; // Texto em negrito
+      content += `TOTAL: ${Utils.formatCurrency(order.total)}\x0A\x0A`;
+      
+      // Finalização da impressão
+      content += '\x1B\x61\x01'; // Centralizado
+      content += 'Obrigado pela preferência!\x0A\x0A';
+      content += '\x1D\x56\x41\x03'; // Corta o papel (GS V 66)
+      
       return content;
     };
 
-    // 6. Envia os dados de impressão para a impressora em partes (chunks de 256 bytes)
+    // 6. Envia os dados de impressão para a impressora em partes (chunks de 512 bytes)
     const encoder = new TextEncoder();
     const buffer = encoder.encode(generateThermalContent());
 
-    // Envia os dados em partes de 256 bytes
-    const chunkSize = 256;
-    for (let i = 0; i < buffer.length; i += chunkSize) {
-      await characteristic.writeValue(buffer.slice(i, i + chunkSize));
-      // Adiciona um pequeno atraso para garantir que a impressora processe cada chunk
-      await new Promise(resolve => setTimeout(resolve, 100));
+    for (let i = 0; i < buffer.length; i += 512) {
+      await characteristic.writeValue(buffer.slice(i, i + 512));
     }
 
-    // 7. Notificação de sucesso
+    // Notificação de sucesso
     Utils.showNotification('Pedido enviado para a impressora Bluetooth!', 'success');
     
   } catch (error) {
