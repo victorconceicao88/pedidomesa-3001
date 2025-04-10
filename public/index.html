@@ -3326,12 +3326,12 @@ body {
     // 1. Encontrar o pedido
     const order = orders.find(o => o.id === orderId);
     if (!order) {
-      throw new Error("Pedido não encontrado");
+      throw new Error("Pedido nao encontrado");
     }
 
     // 2. Verificar suporte Bluetooth
     if (!navigator.bluetooth) {
-      throw new Error("Bluetooth não suportado neste navegador. Use Chrome ou Edge no Android.");
+      throw new Error("Bluetooth nao suportado neste navegador. Use Chrome ou Edge no Android.");
     }
 
     // 3. Conectar à impressora Bluetooth
@@ -3352,8 +3352,8 @@ body {
     const sendToPrinter = async (data) => {
       const encoder = new TextEncoder();
       const buffer = encoder.encode(data);
-      const CHUNK_SIZE = 32; // Tamanho ainda menor para maior confiabilidade
-      const DELAY = 30; // Tempo entre envios aumentado
+      const CHUNK_SIZE = 32;
+      const DELAY = 30;
       
       for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
         await characteristic.writeValue(buffer.slice(i, i + CHUNK_SIZE));
@@ -3361,98 +3361,93 @@ body {
       }
     };
 
-    // 6. Gerar conteúdo otimizado para impressão (versão definitiva)
+    // 6. Função para remover acentos e caracteres especiais
+    const removeSpecialChars = (str) => {
+      return str.normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+        .replace(/[^a-zA-Z0-9\s,.\-@]/g, "") // Remove caracteres especiais
+        .replace(/ç/g, "c") // Substitui ç por c
+        .replace(/Ç/g, "C"); // Substitui Ç por C
+    };
+
+    // 7. Gerar conteúdo seguro para impressão
     const generatePrintContent = () => {
       let content = '';
       
-      // ===== INICIALIZAÇÃO DA IMPRESSORA =====
-      content += '\x1B\x40'; // Inicializar impressora (ESC @)
-      content += '\x1B\x52\x0A'; // Selecionar tabela de caracteres internacional (ESC R n)
-      content += '\x1B\x74\x02'; // Selecionar página de código 858 (Windows Latin-1)
+      // Inicialização da impressora
+      content += '\x1B\x40'; // Reset printer
+      content += '\x1B\x52\x00'; // US ASCII character set
       
-      // ===== CONFIGURAÇÕES GERAIS =====
-      content += '\x1B\x20\x00'; // Espaçamento entre linhas padrão
-      content += '\x1B\x21\x00'; // Resetar todos os atributos de texto
+      // Configurações gerais
+      content += '\x1B\x20\x00';
+      content += '\x1B\x21\x00';
       
-      // ===== CABEÇALHO =====
-      content += '\x1B\x61\x01'; // Centralizar texto (ESC a 1)
-      content += '\x1B\x21\x30'; // Texto dupla altura e negrito (ESC ! 48)
-      content += `${APP_CONFIG.restaurantName}\n\n`;
+      // Cabeçalho
+      content += '\x1B\x61\x01';
+      content += '\x1B\x21\x30';
+      content += `${removeSpecialChars(APP_CONFIG.restaurantName)}\n\n`;
       
-      // ===== DADOS DO PEDIDO =====
-      content += '\x1B\x61\x00'; // Alinhar à esquerda (ESC a 0)
-      content += '\x1B\x21\x00'; // Texto normal (ESC ! 0)
+      // Dados do pedido
+      content += '\x1B\x61\x00';
+      content += '\x1B\x21\x00';
       content += '--------------------------------\n';
-      content += '\x1B\x21\x08'; // Negrito (ESC ! 8)
+      content += '\x1B\x21\x08';
       content += `PEDIDO #${order.id.slice(-6).toUpperCase()}\n`;
-      content += '\x1B\x21\x00'; // Texto normal
+      content += '\x1B\x21\x00';
       content += '--------------------------------\n\n';
       
-      // Informações do cliente
-      content += `Cliente: ${order.cliente}\n`;
-      content += `Telefone: ${formatPhone(order.telefone)}\n`;
-      content += `Data: ${formatDateTime(order.data)}\n`;
+      // Informações do cliente (com tratamento de caracteres)
+      content += `Cliente: ${removeSpecialChars(order.cliente)}\n`;
+      content += `Telefone: ${removeSpecialChars(order.telefone)}\n`;
+      content += `Data: ${removeSpecialChars(new Date(order.data).toLocaleString('pt-BR'))}\n`;
       content += order.tipoEntrega === 'entrega' 
-        ? `Endereço: ${order.endereco}\n\n` 
+        ? `Endereco: ${removeSpecialChars(order.endereco)}\n\n` 
         : 'RETIRADA NO LOCAL\n\n';
       
-      // ===== ITENS DO PEDIDO =====
-      content += '\x1B\x21\x08'; // Negrito
+      // Itens do pedido
+      content += '\x1B\x21\x08';
       content += 'ITENS DO PEDIDO:\n';
-      content += '\x1B\x21\x00'; // Normal
+      content += '\x1B\x21\x00';
       content += '--------------------------------\n';
       
       order.itens.forEach(item => {
-        content += `${item.quantidade}x ${item.nome}\n`;
+        content += `${item.quantidade}x ${removeSpecialChars(item.nome)}\n`;
         if (item.opcoes && Object.keys(item.opcoes).length > 0) {
-          content += ' • ' + Object.entries(item.opcoes)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join('\n • ') + '\n';
+          content += ' * ' + Object.entries(item.opcoes)
+            .map(([key, value]) => `${removeSpecialChars(key)}: ${removeSpecialChars(value)}`)
+            .join('\n * ') + '\n';
         }
       });
       
-      // ===== TOTAL =====
+      // Total
       content += '--------------------------------\n';
-      content += '\x1B\x61\x02'; // Alinhar à direita
-      content += '\x1B\x21\x08'; // Negrito
-      content += `TOTAL: ${Utils.formatCurrency(order.total)}\n\n`;
+      content += '\x1B\x61\x02';
+      content += '\x1B\x21\x08';
+      content += `TOTAL: ${removeSpecialChars(Utils.formatCurrency(order.total))}\n\n`;
       
-      // ===== RODAPÉ =====
-      content += '\x1B\x61\x01'; // Centralizar
-      content += 'Obrigado pela preferência!\n';
+      // Rodapé
+      content += '\x1B\x61\x01';
+      content += 'Obrigado pela preferencia!\n';
       content += '\n';
       
-      // ===== COMANDOS FINAIS =====
-      content += '\x1B\x69'; // Corte parcial (mais compatível)
-      content += '\x1D\x56\x41\x00'; // Corte total com alimentação
-      content += '\x1B\x64\x03'; // Alimentar 3 linhas adicionais
+      // Comandos finais
+      content += '\x1B\x69';
+      content += '\x1D\x56\x41\x00';
+      content += '\x1B\x64\x03';
       
       return content;
     };
 
-    // Funções auxiliares para formatação
-    const formatPhone = (phone) => {
-      return phone.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
-    };
-
-    const formatDateTime = (dateString) => {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR');
-    };
-
-    // 7. Executar impressão em etapas
+    // 8. Executar impressão
     await sendToPrinter(generatePrintContent());
-    
-    // Garantir que todos os dados foram enviados
     await new Promise(resolve => setTimeout(resolve, 300));
     
     Utils.showNotification('Comanda impressa com sucesso!', 'success');
 
   } catch (error) {
-    console.error("Erro na impressão:", error);
+    console.error("Erro na impressao:", error);
     Utils.showNotification(`Falha ao imprimir: ${error.message}`, 'danger');
     
-    // Desconectar em caso de erro
     try {
       if (device?.gatt?.connected) {
         await device.gatt.disconnect();
