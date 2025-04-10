@@ -3348,23 +3348,30 @@ body {
     const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
     const characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
 
-    // 5. Função para envio seguro em pequenos pedaços
+    // 5. Função para envio seguro em pequenos pedaços (com tratamento de erro)
     const sendToPrinter = async (data) => {
-      const encoder = new TextEncoder();
-      const buffer = encoder.encode(data);
-      const CHUNK_SIZE = 32;
-      const DELAY = 30;
-      
-      for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
-        await characteristic.writeValue(buffer.slice(i, i + CHUNK_SIZE));
-        await new Promise(resolve => setTimeout(resolve, DELAY));
+      try {
+        const encoder = new TextEncoder();
+        const buffer = encoder.encode(data);
+        const CHUNK_SIZE = 20; // Tamanho ainda menor para garantir
+        const DELAY = 50; // Delay maior entre chunks
+        
+        for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
+          const chunk = buffer.slice(i, i + CHUNK_SIZE);
+          await characteristic.writeValue(chunk);
+          await new Promise(resolve => setTimeout(resolve, DELAY));
+        }
+      } catch (error) {
+        console.error("Erro durante envio:", error);
+        throw new Error("Falha ao enviar dados para impressora");
       }
     };
 
-    // 6. Função alternativa para remover acentos e caracteres especiais (sem usar normalize)
+    // 6. Função robusta para remoção de caracteres especiais
     const removeSpecialChars = (str) => {
-      if (typeof str !== 'string') return str;
+      if (typeof str !== 'string') return String(str);
       
+      // Mapeamento completo de caracteres
       const charMap = {
         'á':'a', 'à':'a', 'ã':'a', 'â':'a', 'ä':'a',
         'é':'e', 'è':'e', 'ê':'e', 'ë':'e',
@@ -3377,90 +3384,107 @@ body {
         'Ó':'O', 'Ò':'O', 'Õ':'O', 'Ô':'O', 'Ö':'O',
         'Ú':'U', 'Ù':'U', 'Û':'U', 'Ü':'U',
         'ç':'c', 'Ç':'C',
-        'ñ':'n', 'Ñ':'N'
+        'ñ':'n', 'Ñ':'N',
+        '€':'E', '$':'S', '£':'L', '¥':'Y', '¢':'c', '¤':'', '§':'', '©':'', '®':''
       };
       
-      // Substitui caracteres acentuados
       let result = '';
       for (let i = 0; i < str.length; i++) {
         result += charMap[str[i]] || str[i];
       }
       
       // Remove outros caracteres especiais (mantém apenas ASCII básico)
-      return result.replace(/[^a-zA-Z0-9\s,.\-@$]/g, '');
+      return result.replace(/[^a-zA-Z0-9\s,.\-@#&]/g, '');
     };
 
-    // 7. Gerar conteúdo seguro para impressão
+    // 7. Gerar conteúdo seguro para impressão em partes
     const generatePrintContent = () => {
-      let content = '';
+      const parts = [];
       
-      // Inicialização da impressora
+      // Parte 1: Cabeçalho
+      let content = '';
       content += '\x1B\x40'; // Reset printer
       content += '\x1B\x52\x00'; // US ASCII character set
-      
-      // Configurações gerais
       content += '\x1B\x20\x00';
       content += '\x1B\x21\x00';
-      
-      // Cabeçalho
-      content += '\x1B\x61\x01';
-      content += '\x1B\x21\x30';
+      content += '\x1B\x61\x01'; // Center align
+      content += '\x1B\x21\x30'; // Large and bold
       content += `${removeSpecialChars(APP_CONFIG.restaurantName)}\n\n`;
+      parts.push(content);
       
-      // Dados do pedido
-      content += '\x1B\x61\x00';
+      // Parte 2: Dados do pedido
+      content = '';
+      content += '\x1B\x61\x00'; // Left align
       content += '\x1B\x21\x00';
       content += '--------------------------------\n';
-      content += '\x1B\x21\x08';
+      content += '\x1B\x21\x08'; // Bold
       content += `PEDIDO #${order.id.slice(-6).toUpperCase()}\n`;
       content += '\x1B\x21\x00';
       content += '--------------------------------\n\n';
-      
-      // Informações do cliente
       content += `Cliente: ${removeSpecialChars(order.cliente)}\n`;
       content += `Telefone: ${removeSpecialChars(order.telefone)}\n`;
       content += `Data: ${removeSpecialChars(new Date(order.data).toLocaleString('pt-BR'))}\n`;
       content += order.tipoEntrega === 'entrega' 
         ? `Endereco: ${removeSpecialChars(order.endereco)}\n\n` 
         : 'RETIRADA NO LOCAL\n\n';
+      parts.push(content);
       
-      // Itens do pedido
+      // Parte 3: Itens do pedido (em chunks para evitar truncamento)
+      content = '';
       content += '\x1B\x21\x08';
       content += 'ITENS DO PEDIDO:\n';
       content += '\x1B\x21\x00';
       content += '--------------------------------\n';
+      parts.push(content);
       
-      order.itens.forEach(item => {
-        content += `${item.quantidade}x ${removeSpecialChars(item.nome)}\n`;
+      // Dividir itens em grupos para evitar truncamento
+      const itemGroups = [];
+      let currentGroup = '';
+      order.itens.forEach((item, index) => {
+        let itemText = `${item.quantidade}x ${removeSpecialChars(item.nome)}\n`;
         if (item.opcoes && Object.keys(item.opcoes).length > 0) {
-          content += ' * ' + Object.entries(item.opcoes)
+          itemText += ' * ' + Object.entries(item.opcoes)
             .map(([key, value]) => `${removeSpecialChars(key)}: ${removeSpecialChars(value)}`)
             .join('\n * ') + '\n';
         }
+        
+        if ((currentGroup + itemText).length > 200) { // Limite por chunk
+          itemGroups.push(currentGroup);
+          currentGroup = itemText;
+        } else {
+          currentGroup += itemText;
+        }
+        
+        if (index === order.itens.length - 1) {
+          itemGroups.push(currentGroup);
+        }
       });
       
-      // Total
-      content += '--------------------------------\n';
-      content += '\x1B\x61\x02';
-      content += '\x1B\x21\x08';
-      content += `TOTAL: ${removeSpecialChars(Utils.formatCurrency(order.total))}\n\n`;
+      parts.push(...itemGroups);
       
-      // Rodapé
-      content += '\x1B\x61\x01';
+      // Parte 4: Total e rodapé
+      content = '';
+      content += '--------------------------------\n';
+      content += '\x1B\x61\x02'; // Right align
+      content += '\x1B\x21\x08'; // Bold
+      content += `TOTAL: ${removeSpecialChars(Utils.formatCurrency(order.total).replace(/[R$]/g, ''))}\n\n`;
+      content += '\x1B\x61\x01'; // Center align
       content += 'Obrigado pela preferencia!\n';
       content += '\n';
+      content += '\x1B\x69'; // Partial cut
+      content += '\x1D\x56\x41\x00'; // Full cut
+      content += '\x1B\x64\x03'; // Feed 3 lines
+      parts.push(content);
       
-      // Comandos finais
-      content += '\x1B\x69';
-      content += '\x1D\x56\x41\x00';
-      content += '\x1B\x64\x03';
-      
-      return content;
+      return parts;
     };
 
-    // 8. Executar impressão
-    await sendToPrinter(generatePrintContent());
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // 8. Executar impressão em partes com delays maiores
+    const printParts = generatePrintContent();
+    for (const part of printParts) {
+      await sendToPrinter(part);
+      await new Promise(resolve => setTimeout(resolve, 200)); // Delay maior entre partes
+    }
     
     Utils.showNotification('Comanda impressa com sucesso!', 'success');
 
