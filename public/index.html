@@ -3322,6 +3322,7 @@ body {
         return kitchenOrder;
       },
       printKitchenOrder: async (pedidoId) => {
+  let dispositivo = null; // Declarar dispositivo para possível desconexão
   try {
     // 1. Buscar o pedido no sistema
     const pedido = pedidos.find(p => p.id === pedidoId);
@@ -3335,7 +3336,7 @@ body {
     }
 
     // 3. Conexão com sua impressora específica
-    const dispositivo = await navigator.bluetooth.requestDevice({
+    dispositivo = await navigator.bluetooth.requestDevice({
       filters: [{ 
         name: "BlueTooth Printer",          // Nome exato da sua impressora
         deviceId: "27A0A417-4342-A5B4-3199-702B5E923859"  // ID único do dispositivo
@@ -3344,7 +3345,7 @@ body {
     });
 
     // 4. Estabelecer conexão
-    const servidor = await dispositivo.gatt.conectar();
+    const servidor = await dispositivo.gatt.connect();
     const servico = await servidor.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
     const caracteristica = await servico.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
 
@@ -3438,7 +3439,7 @@ body {
     // Desconectar em caso de erro
     try {
       if (dispositivo?.gatt?.conectado) {
-        await dispositivo.gatt.desconectar();
+        await dispositivo.gatt.disconnect();
       }
     } catch (e) {
       console.error("Erro ao desconectar:", e);
