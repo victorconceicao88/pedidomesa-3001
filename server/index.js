@@ -7,7 +7,7 @@ const fs = require('fs');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Configuração do arquivo de persistência
 const PEDIDOS_FILE = path.join(__dirname, 'pedidos.json');
