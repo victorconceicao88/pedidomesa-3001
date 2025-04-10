@@ -16,173 +16,312 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
   <style>
-    :root {
-      --primary-color: #280b04;
-      --secondary-color: #ffb501;
-      --dark-color: #2f3542;
-      --light-color: #f1f2f6;
-      --success-color: #617c33;
-    }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #fff1ea;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .main-content {
-      flex: 1;
-      background-color: #fff1ea;
-    }
-    
-    /* Navbar Fixo */
-    .main-header {
-      position: sticky;
-      top: 0;
-      z-index: 1030;
-      background-color: #fff1e4;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 0.5rem 0;
-    }
-    
-    .navbar-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 0 15px;
-    }
-    
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      cursor: pointer;
-    }
-    
-    .logo-img {
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--primary-color);
-      transition: transform 0.2s;
-    }
-    
-    .logo-img:hover {
-      transform: scale(1.05);
-    }
-    
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    
-    .logo-text h1 {
-      font-size: 1.25rem;
-      margin-bottom: 0.25rem;
-      line-height: 1.2;
-      color: var(--primary-color);
-      font-weight: 700;
-    }
-    
-    .logo-text p {
-      font-size: 0.75rem;
-      margin-bottom: 0;
-      color: #5a4a42;
-    }
-    
-    /* Categorias melhoradas */
-    .filter-buttons {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE and Edge */
-    }
-    
-    .filter-buttons::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
-    }
-    
-    .filter-btn {
-      white-space: nowrap;
-      border-radius: 20px;
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      border: 1px solid var(--primary-color);
-      background-color: white;
-      color: var(--primary-color);
-    }
-    
-    .filter-btn.active {
-      background-color: var(--primary-color);
-      color: var(--secondary-color);
-      border-color: var(--primary-color);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(40, 11, 4, 0.2);
-    }
-    
-    .filter-btn:hover {
-      background-color: #f8f9fa;
-    }
-    
-    .filter-btn.active:hover {
-      background-color: var(--primary-color);
-    }
-    
-    .product {
-      transition: all 0.3s ease;
-      cursor: pointer;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid #e0d6d0;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      background-color: white;
-    }
-    
-    .product:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-      border-color: var(--primary-color);
-    }
-    
-    .product-image {
-      height: 220px;
-      width: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
-    
-    .product:hover .product-image {
-      transform: scale(1.03);
-    }
-    
-    .add-to-cart {
-      background-color: var(--primary-color);
-      color: var(--secondary-color);
-      border: 1px solid var(--primary-color);
-      transition: all 0.3s;
-      min-width: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 500;
-    }
-    
-    .add-to-cart.added {
-      background-color: var(--success-color);
-      border-color: var(--success-color);
-      color: white;
-    }
+:root {
+  --primary-color: #280b04;
+  --secondary-color: #ffb501;
+  --dark-color: #2f3542;
+  --light-color: #f1f2f6;
+  --success-color: #617c33;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff1ea;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  background-color: #fff1ea;
+}
+
+/* Navbar Fixo */
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background-color: #fff1e4;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 0.5rem 0;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 15px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.logo-img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+  transition: transform 0.2s;
+}
+
+.option-section .max-selection {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  display: none;
+}
+  
+.option-item.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+  
+.required-field {
+  border: 1px solid #dc3545 !important;
+}
+
+.logo-img:hover {
+  transform: scale(1.05);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo-text h1 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.logo-text p {
+  font-size: 0.75rem;
+  margin-bottom: 0;
+  color: #5a4a42;
+}
+
+/* Seção do Cardápio Atualizada */
+.menu-section {
+  margin-bottom: 3rem;
+  padding: 0 15px;
+}
+
+.menu-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.menu-title {
+  margin-top: 10px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.menu-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background-color: var(--secondary-color);
+  border-radius: 2px;
+}
+
+#confirm-product-options.added {
+    background-color: #617c33 !important;
+    border-color: #617c33 !important;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.category-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 12px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(40, 11, 4, 0.1);
+  background-color: white;
+  color: var(--primary-color);
+  cursor: pointer;
+  text-align: center;
+}
+
+.category-tab i {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.category-tab.active {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 11, 4, 0.15);
+}
+
+.category-tab.active i {
+  color: var(--secondary-color);
+}
+
+.category-tab:hover:not(.active) {
+  background-color: #f8f9fa;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.product-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 1;
+}
+
+.product-image-container {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-content {
+  padding: 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.product-description {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.product-price {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.add-to-cart {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.add-to-cart:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+.add-to-cart.added {
+  background-color: var(--success-color) !important;
+}
+
+#confirm-product-options.added {
+  background-color: var(--success-color) !important;
+}
+
     
     .add-to-cart:hover {
       background-color: var(--primary-color);
@@ -677,26 +816,127 @@
     /* Menu Section Styling */
     .menu-section {
       margin-bottom: 3rem;
+      padding: 0 15px;
     }
     
     .menu-title {
-      font-family: 'Playfair+Display', serif;
+      font-family: 'Playfair Display', serif;
       font-weight: 700;
+      font-size: 2rem;
       color: var(--primary-color);
       margin-bottom: 1.5rem;
       position: relative;
       display: inline-block;
+      padding-bottom: 10px;
     }
     
     .menu-title:after {
       content: '';
       position: absolute;
-      bottom: -8px;
+      bottom: 0;
       left: 0;
-      width: 50px;
-      height: 3px;
+      width: 60px;
+      height: 4px;
       background-color: var(--secondary-color);
+      border-radius: 2px;
     }
+
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .category-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+      padding: 12px 10px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(40, 11, 4, 0.1);
+      background-color: white;
+      color: var(--primary-color);
+      cursor: pointer;
+      text-align: center;
+    }
+    
+    .category-tab i {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: var(--primary-color);
+    }
+    
+    .category-tab.active {
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(40, 11, 4, 0.15);
+    }
+    
+    .category-tab.active i {
+      color: var(--secondary-color);
+    }
+    
+    .category-tab:hover:not(.active) {
+      background-color: #f8f9fa;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-color);
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 1;
+    }
+    
+    .product-image-container {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+
+
     
     /* Product Card Styling */
     .product .card-body {
@@ -842,6 +1082,8 @@
       border-left: 4px solid var(--primary-color);
     }
 
+    
+
     /* Responsive adjustments */
     @media (max-width: 992px) {
       .product-image {
@@ -901,6 +1143,18 @@
     }
     
     @media (max-width: 768px) {
+
+      .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .product-image-container {
+    height: 180px;
+  }
+  
+  .menu-title {
+    font-size: 1.8rem;
+  }
       .product-image {
         height: 160px;
       }
@@ -970,9 +1224,10 @@
 
       /* Correção para o cardápio em mobile */
       .menu-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 2rem;
+    }
       
       .filter-buttons {
         margin-top: 15px;
@@ -1011,6 +1266,24 @@
     }
     
     @media (max-width: 576px) {
+      .product-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-tab {
+    min-width: 80px;
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .category-tab i {
+    font-size: 1rem;
+  }
+  
+  .menu-title {
+    font-size: 1.6rem;
+  }
+      
       .product {
         margin-bottom: 15px;
       }
@@ -1428,6 +1701,18 @@
       font-weight: bold;
       margin-left: 5px;
     }
+
+    .required-highlight {
+      animation: pulse-border 0.5s ease-in-out;
+      border-left: 3px solid #ff4444;
+      padding-left: 8px;
+    }
+
+@keyframes pulse-border {
+  0% { border-left-color: transparent; }
+  50% { border-left-color: #ff4444; }
+  100% { border-left-color: #ff4444; }
+}
   </style>
 </head>
 <body>
@@ -1498,261 +1783,372 @@
     </div>
   </div>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Product Section (Visible by default) -->
-    <section id="product-section" class="container my-4">
-      <div class="row">
-        <!-- Seção de Produtos -->
-        <section id="products" class="col-12 mb-5">
-          <div class="menu-header">
-            <h2 class="menu-title">Nosso Cardápio</h2>
-            <div class="btn-group filter-buttons" role="group">
-              <button type="button" class="filter-btn btn btn-outline-secondary active" data-category="all">Todos</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="churrasco">Churrasco</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="burguers">Burguers</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="combos">Combos</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="porcoes">Porções</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="bebidas">Bebidas</button>
-              <button type="button" class="filter-btn btn btn-outline-secondary" data-category="sobremesas">Sobremesas</button>
-            </div>
+  <!-- Seção de Produtos Atualizada -->
+  <section id="products" class="menu-section">
+    <div class="container">
+      <div class="menu-header">
+        <h2 class="menu-title">O Nosso Menu</h2>
+        <div class="category-tabs">
+          <div class="category-tab active" data-category="all">
+            <i class="fas fa-utensils"></i>
+            <span>Todos</span>
           </div>
-
-          <div class="row g-4" id="product-container">
-            <!-- Churrasco Misto -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="101" data-category="churrasco" data-has-options="true">
-                <div class="badge bg-primary position-absolute" style="top: 0.5rem; right: 0.5rem">Mais pedido</div>
-                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Churrasco Misto" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Churrasco Misto</h3>
-                  <p class="card-text product-description">Refeição completa com carnes e acompanhamentos selecionados</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 12,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Maminha -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="102" data-category="churrasco" data-has-options="true">
-                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Maminha" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Maminha</h3>
-                  <p class="card-text product-description">Maminha suculenta grelhada na brasa</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 13,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Linguiça Toscana -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="103" data-category="churrasco" data-has-options="true">
-                <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Linguiça Toscana" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Linguiça Toscana</h3>
-                  <p class="card-text product-description">Linguiça toscana artesanal grelhada</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 12,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Costelinha de Porco -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="104" data-category="churrasco" data-has-options="true">
-                <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Costelinha de Porco" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Costelinha de Porco</h3>
-                  <p class="card-text product-description">Costelinha de porco assada lentamente</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 12,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- X-Salada -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="201" data-category="burguers">
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Salada" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">X-Salada</h3>
-                  <p class="card-text product-description">Pão de hambúrguer, bife de hambúrguer, fiambre, queijo, salada, batata palha e milho.</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 6,50</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- X-Bacon -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="202" data-category="burguers">
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Bacon" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">X-Bacon</h3>
-                  <p class="card-text product-description">Pão, hambúrguer, bacon, queijo, fiambre, ovo, alface, tomate, milho e batata palha.</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 8,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Combo Frango Supreme -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="301" data-category="combos">
-                <div class="badge bg-success position-absolute" style="top: 0.5rem; right: 0.5rem">Combo</div>
-                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo Frango Supreme" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Combo Frango Supreme</h3>
-                  <p class="card-text product-description">Sanduíche de frango com batata frita e bebida</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 10,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Combo X-Tudo -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="302" data-category="combos">
-                <div class="badge bg-success position-absolute" style="top: 0.5rem; right: 0.5rem">Combo</div>
-                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo X-Tudo" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Combo X-Tudo</h3>
-                  <p class="card-text product-description">Sanduíche completo com batata frita e bebida</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 12,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Porção de Arroz -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="401" data-category="porcoes">
-                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop" alt="Porção de Arroz" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Porção de Arroz</h3>
-                  <p class="card-text product-description">Porção de arroz branco</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 3,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Coca-Cola (lata) -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="5021" data-category="bebidas">
-                <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&auto=format&fit=crop" alt="Coca-Cola (lata)" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Coca-Cola (lata)</h3>
-                  <p class="card-text product-description">Refrigerante Coca-Cola em lata 350ml</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 2,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Açai Pequeno -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="601" data-category="sobremesas">
-                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&auto=format&fit=crop" alt="Açai Pequeno" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Açai Pequeno</h3>
-                  <p class="card-text product-description">Açai cremoso acompanhado com granola, banana, leite em pó e morango</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 6,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pudim Caseiro -->
-            <div class="col-md-6 col-lg-4 col-xl-3">
-              <div class="card product h-100 border-0 shadow-sm" data-id="603" data-category="sobremesas">
-                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&auto=format&fit=crop" alt="Pudim Caseiro" class="card-img-top product-image">
-                <div class="card-body">
-                  <h3 class="h5 card-title product-name">Pudim Caseiro</h3>
-                  <p class="card-text product-description">Pudim tradicional caseiro com calda de caramelo</p>
-                </div>
-                <div class="card-footer">
-                  <div class="product-footer">
-                    <span class="h5 mb-0 product-price">€ 3,00</span>
-                    <button class="add-to-cart btn btn-primary rounded-pill px-3">
-                      <i class="fas fa-plus me-1"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="category-tab" data-category="churrasco">
+            <i class="fas fa-fire-alt"></i>
+            <span>Churrasco</span>
           </div>
-        </section>
+          <div class="category-tab" data-category="burguers">
+            <i class="fas fa-hamburger"></i>
+            <span>Burguers</span>
+          </div>
+          <div class="category-tab" data-category="combos">
+            <i class="fas fa-box-open"></i>
+            <span>Combos</span>
+          </div>
+          <div class="category-tab" data-category="porcoes">
+            <i class="fas fa-utensil-spoon"></i>
+            <span>Porções</span>
+          </div>
+          <div class="category-tab" data-category="bebidas">
+            <i class="fas fa-glass-whiskey"></i>
+            <span>Bebidas</span>
+          </div>
+          <div class="category-tab" data-category="sobremesas">
+            <i class="fas fa-ice-cream"></i>
+            <span>Sobremesas</span>
+          </div>
+        </div>
       </div>
-    </section>
+
+      <div class="product-grid" id="product-container">
+        <!-- Churrasco Misto -->
+        <div class="product-card" data-id="101" data-category="churrasco" data-has-options="true">
+          <div class="product-badge bg-primary">Mais pedido</div>
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Churrasco Misto" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Churrasco Misto</h3>
+            <p class="product-description">Refeição completa com carnes e acompanhamentos selecionados, preparados na brasa com tempero especial.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 12,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maminha -->
+        <div class="product-card" data-id="102" data-category="churrasco" data-has-options="true">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Maminha" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Maminha</h3>
+            <p class="product-description">Maminha suculenta grelhada na brasa, servida com acompanhamentos à escolha.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 13,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linguiça Toscana -->
+        <div class="product-card" data-id="103" data-category="churrasco" data-has-options="true">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Linguiça Toscana" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Linguiça Toscana</h3>
+            <p class="product-description">Linguiça toscana artesanal grelhada, acompanhada de farofa e vinagrete.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 12,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Costelinha de Porco -->
+        <div class="product-card" data-id="104" data-category="churrasco" data-has-options="true">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop" alt="Costelinha de Porco" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Costelinha de Porco</h3>
+            <p class="product-description">Costelinha de porco assada lentamente, com molho barbecue caseiro.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 12,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- X-Salada -->
+        <div class="product-card" data-id="201" data-category="burguers">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Salada" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">X-Salada</h3>
+            <p class="product-description">Pão de hambúrguer, bife de hambúrguer, fiambre, queijo, salada, batata palha e milho.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 6,50</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- X-Bacon -->
+        <div class="product-card" data-id="202" data-category="burguers">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Bacon" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">X-Bacon</h3>
+            <p class="product-description">Pão, hambúrguer, bacon, queijo, fiambre, ovo, alface, tomate, milho e batata palha.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 8,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- X-frango -->
+        <div class="product-card" data-id="203" data-category="burguers">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" alt="X-Frango" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">X-Frango</h3>
+            <p class="product-description">Pão, hambúrguer de frango, queijo, fiambre, ovo, alface, tomate, milho e batata palha.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 8,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+       
+        <!-- Combo Frango Supreme -->
+        <div class="product-card" data-id="301" data-category="combos">
+          <div class="product-badge bg-success">Combo</div>
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo Frango Supreme" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Combo Frango Supreme</h3>
+            <p class="product-description">Sanduíche de frango com batata frita e bebida. Economize €2,50 em relação à compra separada.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 10,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Combo X-Tudo -->
+        <div class="product-card" data-id="302" data-category="combos">
+          <div class="product-badge bg-success">Combo</div>
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" alt="Combo X-Tudo" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Combo X-Tudo</h3>
+            <p class="product-description">Sanduíche completo com batata frita e bebida. Economize €3,00 em relação à compra separada.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 12,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Porção de Arroz -->
+        <div class="product-card" data-id="401" data-category="porcoes">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop" alt="Porção de Arroz" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Porção de Arroz</h3>
+            <p class="product-description">Porção de arroz branco soltinho, ideal para acompanhar seus pratos favoritos.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 3,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Porção de Queijo Coalho -->
+<div class="product-card" data-id="402" data-category="porcoes">
+  <div class="product-image-container">
+    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&auto=format&fit=crop" alt="Queijo Coalho" class="product-image">
+  </div>
+  <div class="product-content">
+    <h3 class="product-name">Queijo Coalho</h3>
+    <p class="product-description">Queijo coalho grelhado, tradicional do nordeste brasileiro, perfeito para acompanhar molhos.</p>
+    <div class="product-footer">
+      <span class="product-price">€ 6,00</span>
+      <button class="add-to-cart">
+        <i class="fas fa-plus"></i> Adicionar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Torresmo -->
+<div class="product-card" data-id="403" data-category="porcoes">
+  <div class="product-image-container">
+    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&auto=format&fit=crop" alt="Torresmo" class="product-image">
+  </div>
+  <div class="product-content">
+    <h3 class="product-name">Torresmo</h3>
+    <p class="product-description">Torresmo brasileiro: crocante e delicioso, feito com pedaços de carne de porco, ideal para acompanhar uma cerveja gelada.</p>
+    <div class="product-footer">
+      <span class="product-price">€ 6,00</span>
+      <button class="add-to-cart">
+        <i class="fas fa-plus"></i> Adicionar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Porção de Mandioca -->
+<div class="product-card" data-id="404" data-category="porcoes">
+  <div class="product-image-container">
+    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&auto=format&fit=crop" alt="Mandioca" class="product-image">
+  </div>
+  <div class="product-content">
+    <h3 class="product-name">Porção de Mandioca</h3>
+    <p class="product-description">Mandioca frita crocante por fora e macia por dentro, acompanha molho à escolha.</p>
+    <div class="product-footer">
+      <span class="product-price">€ 6,00</span>
+      <button class="add-to-cart">
+        <i class="fas fa-plus"></i> Adicionar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Porção de Batata Frita -->
+<div class="product-card" data-id="405" data-category="porcoes">
+  <div class="product-image-container">
+    <img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=500&auto=format&fit=crop" alt="Batata Frita" class="product-image">
+  </div>
+  <div class="product-content">
+    <h3 class="product-name">Porção de Batata Frita</h3>
+    <p class="product-description">Batata frita crocante temperada com sal e ervas finas, acompanha molho à escolha.</p>
+    <div class="product-footer">
+      <span class="product-price">€ 3,00</span>
+      <button class="add-to-cart">
+        <i class="fas fa-plus"></i> Adicionar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Porção de Carnes -->
+<div class="product-card" data-id="406" data-category="porcoes" data-has-options="true">
+  <div class="product-image-container">
+    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop" alt="Porção de Carnes" class="product-image">
+  </div>
+  <div class="product-content">
+    <h3 class="product-name">Porção de Carnes</h3>
+    <p class="product-description">Selecione suas carnes preferidas para montar sua porção especial.</p>
+    <div class="product-footer">
+      <span class="product-price">€ 10,00</span>
+      <button class="add-to-cart">
+        <i class="fas fa-plus"></i> Adicionar
+      </button>
+    </div>
+  </div>
+</div>
+
+        <!-- Coca-Cola (lata) -->
+        <div class="product-card" data-id="5021" data-category="bebidas">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&auto=format&fit=crop" alt="Coca-Cola (lata)" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Coca-Cola (lata)</h3>
+            <p class="product-description">Refrigerante Coca-Cola em lata 350ml, geladinho para acompanhar sua refeição.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 2,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+
+  <!-- Açai Pequeno -->
+<div class="product-card" data-id="601" data-category="sobremesas" data-has-options="true">
+  <div class="product-image-container">
+    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&auto=format&fit=crop" alt="Açai Pequeno" class="product-image">
+  </div>
+  <div class="product-content">
+    <h3 class="product-name">Açai Pequeno</h3>
+    <p class="product-description">Açai cremoso com acompanhamentos à escolha. Tamanho pequeno (300ml).</p>
+    <div class="product-footer">
+      <span class="product-price">€ 6,00</span>
+      <button class="add-to-cart">
+        <i class="fas fa-plus"></i> Adicionar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Açai Grande -->
+<div class="product-card" data-id="602" data-category="sobremesas" data-has-options="true">
+  <div class="product-image-container">
+    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&auto=format&fit=crop" alt="Açai Grande" class="product-image">
+  </div>
+  <div class="product-content">
+    <h3 class="product-name">Açai Grande</h3>
+    <p class="product-description">Açai cremoso com acompanhamentos à escolha. Tamanho grande (500ml).</p>
+    <div class="product-footer">
+      <span class="product-price">€ 10,00</span>
+      <button class="add-to-cart">
+        <i class="fas fa-plus"></i> Adicionar
+      </button>
+    </div>
+  </div>
+</div>
+
+        <!-- Pudim Caseiro -->
+        <div class="product-card" data-id="603" data-category="sobremesas">
+          <div class="product-image-container">
+            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&auto=format&fit=crop" alt="Pudim Caseiro" class="product-image">
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">Pudim Caseiro</h3>
+            <p class="product-description">Pudim tradicional caseiro com calda de caramelo. Feito com ingredientes selecionados.</p>
+            <div class="product-footer">
+              <span class="product-price">€ 3,00</span>
+              <button class="add-to-cart">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
     <!-- Checkout Section (Hidden by default) -->
     <section id="checkout-section" class="container my-4 d-none">
@@ -2026,31 +2422,32 @@
   </div>
 
   <!-- Modal de Login Admin -->
-  <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Acesso Administrativo</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="admin-login-form">
-            <div class="mb-3">
-              <label for="admin-username" class="form-label">Usuário</label>
-              <input type="text" class="form-control" id="admin-username" required>
-            </div>
-            <div class="mb-3">
-              <label for="admin-password" class="form-label">Senha</label>
-              <input type="password" class="form-control" id="admin-password" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">
-              <i class="fas fa-sign-in-alt me-1"></i> Entrar
-            </button>
-          </form>
-        </div>
+  <!-- Modal de Login Admin -->
+<div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Acesso Administrativo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="admin-login-form">
+          <div class="mb-3">
+            <label for="admin-username" class="form-label">Usuário</label>
+            <input type="text" class="form-control" id="admin-username" required>
+          </div>
+          <div class="mb-3">
+            <label for="admin-password" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="admin-password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-sign-in-alt me-1"></i> Entrar
+          </button>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
   <!-- Modal para Visualizar Pedido da Cozinha -->
   <div class="modal fade" id="kitchenOrderModal" tabindex="-1" aria-hidden="true">
@@ -2176,56 +2573,84 @@
 
     // Elementos do DOM
     const DOM = {
-      productSection: document.getElementById("product-section"),
-      checkoutSection: document.getElementById("checkout-section"),
-      adminPanel: document.getElementById("admin-panel"),
-      cartItems: document.getElementById("cart-items"),
-      totalElement: document.getElementById("total"),
-      subtotalElement: document.getElementById("subtotal"),
-      checkoutButton: document.getElementById("checkout-button"),
-      cartCount: document.getElementById("cart-count"),
-      cartIndicator: document.getElementById("cart-indicator"),
-      productContainer: document.getElementById("product-container"),
-      filterButtons: document.querySelectorAll('.filter-btn'),
-      confirmationModal: new bootstrap.Modal(document.getElementById('confirmationModal')),
-      adminLoginModal: new bootstrap.Modal(document.getElementById('adminLoginModal')),
-      kitchenOrderModal: new bootstrap.Modal(document.getElementById('kitchenOrderModal')),
-      productOptionsModal: new bootstrap.Modal(document.getElementById('productOptionsModal')),
-      adminAccessBtn: document.getElementById("admin-access-btn"),
-      adminLogoutButton: document.getElementById("admin-logout"),
-      backToCartButton: document.getElementById("back-to-cart-button"),
-      confirmOrderButton: document.getElementById("confirm-order-button"),
-      checkoutItems: document.getElementById("checkout-items"),
-      checkoutSubtotal: document.getElementById("checkout-subtotal"),
-      checkoutDeliveryFee: document.getElementById("checkout-delivery-fee"),
-      checkoutTotal: document.getElementById("checkout-total"),
-      deliveryOptionCards: document.querySelectorAll('.delivery-option-card'),
-      paymentMethodCards: document.querySelectorAll('.payment-method-card'),
-      deliveryFields: document.querySelectorAll('.delivery-field'),
-      customerInfoForm: document.getElementById("customer-info-form"),
-      cashChangeField: document.getElementById("cash-change-field"),
-      ordersList: document.getElementById("orders-accordion"),
-      todayOrders: document.getElementById("today-orders"),
-      preparingOrders: document.getElementById("preparing-orders"),
-      deliveryOrders: document.getElementById("delivery-orders"),
-      statusFilter: document.getElementById("status-filter"),
-      typeFilter: document.getElementById("type-filter"),
-      applyFilters: document.getElementById("apply-filters"),
-      kitchenOrderContent: document.getElementById("kitchen-order-content"),
-      printKitchenOrder: document.getElementById("print-kitchen-order"),
-      cartSidebar: document.getElementById("cart-sidebar"),
-      cartOverlay: document.getElementById("cart-overlay"),
-      closeCart: document.getElementById("close-cart"),
-      lastUpdate: document.getElementById("last-update"),
-      notificationBell: document.getElementById("notification-bell"),
-      notificationBadge: document.getElementById("notification-badge"),
-      dayTabs: document.getElementById("day-tabs"),
-      productOptionsContent: document.getElementById("product-options-content"),
-      productOptionsModalTitle: document.getElementById("productOptionsModalTitle"),
-      confirmProductOptions: document.getElementById("confirm-product-options"),
-      mainHeader: document.getElementById("main-header"),
-      logoHome: document.getElementById("logo-home")
-    };
+  // Seções principais
+  productSection: document.getElementById("products") || document.getElementById("product-section"),
+  checkoutSection: document.getElementById("checkout-section"),
+  adminPanel: document.getElementById("admin-panel"),
+  
+  // Elementos do carrinho
+  cartItems: document.getElementById("cart-items"),
+  totalElement: document.getElementById("total"),
+  subtotalElement: document.getElementById("subtotal"),
+  checkoutButton: document.getElementById("checkout-button"),
+  cartCount: document.getElementById("cart-count"),
+  cartIndicator: document.getElementById("cart-indicator"),
+  cartSidebar: document.getElementById("cart-sidebar"),
+  cartOverlay: document.getElementById("cart-overlay"),
+  closeCart: document.getElementById("close-cart"),
+  
+  // Produtos
+  productContainer: document.getElementById("product-container"),
+  
+  // Modais (com verificação de existência)
+  confirmationModal: document.getElementById("confirmationModal") ? 
+    new bootstrap.Modal(document.getElementById("confirmationModal")) : null,
+  adminLoginModal: document.getElementById("adminLoginModal") ? 
+    new bootstrap.Modal(document.getElementById("adminLoginModal")) : null,
+  kitchenOrderModal: document.getElementById("kitchenOrderModal") ? 
+    new bootstrap.Modal(document.getElementById("kitchenOrderModal")) : null,
+  productOptionsModal: document.getElementById("productOptionsModal") ? 
+    new bootstrap.Modal(document.getElementById("productOptionsModal")) : null,
+  
+  // Admin
+  adminAccessBtn: document.getElementById("admin-access-btn"),
+  adminLogoutButton: document.getElementById("admin-logout"),
+  ordersList: document.getElementById("orders-accordion"),
+  todayOrders: document.getElementById("today-orders"),
+  preparingOrders: document.getElementById("preparing-orders"),
+  deliveryOrders: document.getElementById("delivery-orders"),
+  statusFilter: document.getElementById("status-filter"),
+  typeFilter: document.getElementById("type-filter"),
+  applyFilters: document.getElementById("apply-filters"),
+  
+  // Checkout
+  backToCartButton: document.getElementById("back-to-cart-button"),
+  confirmOrderButton: document.getElementById("confirm-order-button"),
+  checkoutItems: document.getElementById("checkout-items"),
+  checkoutSubtotal: document.getElementById("checkout-subtotal"),
+  checkoutDeliveryFee: document.getElementById("checkout-delivery-fee"),
+  checkoutTotal: document.getElementById("checkout-total"),
+  deliveryOptionCards: document.querySelectorAll('.delivery-option-card'),
+  paymentMethodCards: document.querySelectorAll('.payment-method-card'),
+  deliveryFields: document.querySelectorAll('.delivery-field'),
+  customerInfoForm: document.getElementById("customer-info-form"),
+  cashChangeField: document.getElementById("cash-change-field"),
+  
+  // Cozinha/Impressão
+  kitchenOrderContent: document.getElementById("kitchen-order-content"),
+  printKitchenOrder: document.getElementById("print-kitchen-order"),
+  
+  // Outros
+  lastUpdate: document.getElementById("last-update"),
+  notificationBell: document.getElementById("notification-bell"),
+  notificationBadge: document.getElementById("notification-badge"),
+  dayTabs: document.getElementById("day-tabs"),
+  productOptionsContent: document.getElementById("product-options-content"),
+  productOptionsModalTitle: document.getElementById("productOptionsModalTitle"),
+  confirmProductOptions: document.getElementById("confirm-product-options"),
+  mainHeader: document.getElementById("main-header"),
+  logoHome: document.getElementById("logo-home"),
+  
+  // Verificação adicional para elementos críticos
+  isInitialized: function() {
+    return !!(
+      this.productSection && 
+      this.checkoutSection && 
+      this.checkoutButton && 
+      this.adminAccessBtn
+    );
+  }
+};
 
     // Funções do Firebase
     const FirebaseService = {
@@ -2336,35 +2761,37 @@
       },
 
       addItem: (id, name, price, image = '', options = {}) => {
-        const existingItem = cart.find(item => item.id === id && JSON.stringify(item.options) === JSON.stringify(options));
-        
-        if (existingItem) {
-          existingItem.quantity += 1;
-        } else {
-          cart.push({ id, name, price, quantity: 1, image, options });
-        }
-        
-        Cart.updateStorage();
-        Cart.updateUI();
-        
-        const productElement = document.querySelector(`.product[data-id="${id}"]`);
-        if (productElement) {
-          Utils.animateElement(productElement, 'pulse');
-        }
-        
-        // Muda o botão para "Adicionado" e cor verde
-        const addButton = productElement.querySelector('.add-to-cart');
-        if (addButton) {
-          addButton.innerHTML = '<i class="fas fa-check me-1"></i> Adicionado';
-          addButton.classList.add('added');
-          
-          // Retorna ao estado original após 2 segundos
-          setTimeout(() => {
-            addButton.innerHTML = '<i class="fas fa-plus me-1"></i> Adicionar';
-            addButton.classList.remove('added');
-          }, 2000);
-        }
-      },
+  const existingItem = cart.find(item => item.id === id && JSON.stringify(item.options) === JSON.stringify(options));
+  
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({ id, name, price, quantity: 1, image, options });
+  }
+  
+  Cart.updateStorage();
+  Cart.updateUI();
+  
+  const productElement = document.querySelector(`.product-card[data-id="${id}"]`);
+  if (productElement) {
+    Utils.animateElement(productElement, 'pulse');
+    
+    // Muda o botão para "Adicionado" e cor verde
+    const addButton = productElement.querySelector('.add-to-cart');
+    if (addButton) {
+      addButton.innerHTML = '<i class="fas fa-check me-1"></i> Adicionado';
+      addButton.classList.add('added');
+      addButton.style.backgroundColor = '#617c33';
+      
+      // Retorna ao estado original após 2 segundos
+      setTimeout(() => {
+        addButton.innerHTML = '<i class="fas fa-plus me-1"></i> Adicionar';
+        addButton.classList.remove('added');
+        addButton.style.backgroundColor = '';
+      }, 2000);
+    }
+  }
+},
 
       updateItemQuantity: (id, newQuantity) => {
         const item = cart.find(item => item.id === id);
@@ -2926,26 +3353,38 @@
     // Funções de Filtro
     const Filter = {
       apply: (category) => {
-        const products = document.querySelectorAll('.product');
+        const products = document.querySelectorAll('.product-card');
+        const tabs = document.querySelectorAll('.category-tab');
         
         products.forEach(product => {
           if (category === 'all' || product.dataset.category === category) {
             product.style.display = 'block';
+            setTimeout(() => {
+              product.style.opacity = '1';
+            }, 50);
           } else {
-            product.style.display = 'none';
+            product.style.opacity = '0';
+            setTimeout(() => {
+              product.style.display = 'none';
+            }, 300);
           }
         });
         
-        DOM.filterButtons.forEach(button => {
-          if (button.dataset.category === category) {
-            button.classList.add('active');
+        tabs.forEach(tab => {
+          if (tab.dataset.category === category) {
+            tab.classList.add('active');
           } else {
-            button.classList.remove('active');
+            tab.classList.remove('active');
           }
         });
       }
     };
-
+     // Adicionar event listeners para as novas abas de categoria
+     document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        Filter.apply(tab.dataset.category);
+      });
+    });
     // Funções de Checkout
     const Checkout = {
       init: () => {
@@ -2996,56 +3435,54 @@
     };
 
     // Funções de Admin
+    // Correção no processo de login
     const Admin = {
       login: (username, password) => {
-        if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
+        if (username === APP_CONFIG.adminCredentials.username && 
+            password === APP_CONFIG.adminCredentials.password) {
           isAdminLoggedIn = true;
           localStorage.setItem('adminLoggedIn', 'true');
           
-          // Esconde o cabeçalho principal e mostra apenas o painel administrativo
-          DOM.mainHeader.style.display = 'none';
+          // Esconde o modal de login
+          if (DOM.adminLoginModal) {
+            DOM.adminLoginModal.hide();
+          }
+          
+          // Mostra o painel admin
+          DOM.adminPanel.classList.remove("d-none");
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
-          DOM.adminPanel.classList.remove("d-none");
-          
-          // Esconde o carrinho de compras
           DOM.cartIndicator.style.display = 'none';
-          
-          // Esconde o botão de acesso admin
           DOM.adminAccessBtn.style.display = 'none';
           
-          // Esconde o modal de login imediatamente
-          DOM.adminLoginModal.hide();
-          
+          // Atualiza o painel de pedidos
           Order.updateAdminPanel();
           
           Utils.showNotification('Login realizado com sucesso!', 'success');
           return true;
+        } else {
+          Utils.showNotification('Usuário ou senha incorretos', 'danger');
+          return false;
         }
-        return false;
       },
       
       logout: () => {
         isAdminLoggedIn = false;
         localStorage.setItem('adminLoggedIn', 'false');
         
-        // Mostra o cabeçalho principal novamente
-        DOM.mainHeader.style.display = 'block';
-        DOM.productSection.classList.remove("d-none");
-        DOM.checkoutSection.classList.add("d-none");
         DOM.adminPanel.classList.add("d-none");
+        DOM.productSection.classList.remove("d-none");
+        DOM.cartIndicator.style.display = 'flex';
         DOM.adminAccessBtn.style.display = 'flex';
         
-        // Mostra o carrinho de compras novamente
-        DOM.cartIndicator.style.display = 'block';
+        Utils.showNotification('Logout realizado com sucesso', 'info');
       },
       
       checkLoginStatus: () => {
         if (isAdminLoggedIn) {
-          DOM.mainHeader.style.display = 'none';
+          DOM.adminPanel.classList.remove("d-none");
           DOM.productSection.classList.add("d-none");
           DOM.checkoutSection.classList.add("d-none");
-          DOM.adminPanel.classList.remove("d-none");
           DOM.cartIndicator.style.display = 'none';
           DOM.adminAccessBtn.style.display = 'none';
           Order.updateAdminPanel();
@@ -3055,640 +3492,812 @@
 
     // Funções para lidar com opções de produtos
     const ProductOptions = {
-      showOptions: (productId, productName) => {
-        let optionsHtml = '';
-        let basePrice = 0;
-        
-        // Define as opções específicas para cada produto
-        if (productId === "101") { // Churrasco Misto
-          basePrice = 12.00;
-          optionsHtml = `
-            <div class="option-section">
-              <div class="option-section-title">Feijão <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="feijao" value="Feijão de caldo" required>
-                  Feijão de caldo
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="feijao" value="Feijão tropeiro" required>
-                  Feijão tropeiro
-                </label>
-              </div>
-            </div>
-            
-            <div class="option-section">
-              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Banana frita" required>
-                  Banana frita
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Batata frita" required>
-                  Batata frita
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Mandioca cozida" required>
-                  Mandioca cozida
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
-                  Mandioca frita
-                </label>
-              </div>
-            </div>
-            
-            <div class="option-section">
-              <div class="option-section-title">Carnes <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="checkbox" name="carnes" value="Coração de galinha">
-                  Coração de galinha
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="checkbox" name="carnes" value="Costelinha de porco">
-                  Costelinha de porco
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="checkbox" name="carnes" value="Filé de frango">
-                  Filé de frango
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="checkbox" name="carnes" value="Linguiça">
-                  Linguiça
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="checkbox" name="carnes" value="Maminha (+1€)" data-additional-price="1">
-                  Maminha <span class="additional-price">+€1,00</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="checkbox" name="carnes" value="Torresmo">
-                  Torresmo
-                </label>
-              </div>
-              <small class="text-muted">Escolha 2 opções (ou pague adicional por mais)</small>
-            </div>
-            
-            <div class="option-section">
-              <div class="option-section-title">Salada <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Salada mista" required>
-                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Vinagrete" required>
-                  Vinagrete
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Não quero salada" required>
-                  Não quero salada
-                </label>
-              </div>
-            </div>
-            
-            <div class="option-section">
-              <div class="option-section-title">Refrigerante</div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Água 500ml (+1€)" data-additional-price="1">
-                  Água 500ml <span class="additional-price">+€1,00</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Água Castelo 500ml (+1.5€)" data-additional-price="1.5">
-                  Água Castelo 500ml <span class="additional-price">+€1,50</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Água das Pedras 500ml (+1.5€)" data-additional-price="1.5">
-                  Água das Pedras 500ml <span class="additional-price">+€1,50</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Coca-Cola (+2€)" data-additional-price="2">
-                  Coca-Cola <span class="additional-price">+€2,00</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Coca-Cola Zero (+2€)" data-additional-price="2">
-                  Coca-Cola Zero <span class="additional-price">+€2,00</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Fanta (+2€)" data-additional-price="2">
-                  Fanta <span class="additional-price">+€2,00</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Guaraná do Brasil (+2€)" data-additional-price="2">
-                  Guaraná do Brasil <span class="additional-price">+€2,00</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Ice Tea de Manga (+2€)" data-additional-price="2">
-                  Ice Tea de Manga <span class="additional-price">+€2,00</span>
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="bebida" value="Sem refrigerante">
-                  Sem refrigerante
-                </label>
-              </div>
-            </div>
-          `;
-        } else if (productId === "102") { // Maminha
-          basePrice = 13.00;
-          optionsHtml = `
-            <div class="option-section">
-              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Arroz" required>
-                  Arroz
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Farofa" required>
-                  Farofa
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Batata frita" required>
-                  Batata frita
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
-                  Mandioca frita
-                </label>
-              </div>
-            </div>
-            
-            <div class="option-section">
-              <div class="option-section-title">Salada <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Salada mista" required>
-                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Vinagrete" required>
-                  Vinagrete
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Não quero salada" required>
-                  Não quero salada
-                </label>
-              </div>
-            </div>
-          `;
-        } else if (productId === "103") { // Linguiça Toscana
-          basePrice = 12.00;
-          optionsHtml = `
-            <div class="option-section">
-              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Arroz" required>
-                  Arroz
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Farofa" required>
-                  Farofa
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Batata frita" required>
-                  Batata frita
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
-                  Mandioca frita
-                </label>
-              </div>
-            </div>
-            
-            <div class="option-section">
-              <div class="option-section-title">Salada <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Salada mista" required>
-                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Vinagrete" required>
-                  Vinagrete
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Não quero salada" required>
-                  Não quero salada
-                </label>
-              </div>
-            </div>
-          `;
-        } else if (productId === "104") { // Costelinha de Porco
-          basePrice = 12.00;
-          optionsHtml = `
-            <div class="option-section">
-              <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Arroz" required>
-                  Arroz
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Farofa" required>
-                  Farofa
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Batata frita" required>
-                  Batata frita
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="acompanhamento" value="Mandioca frita" required>
-                  Mandioca frita
-                </label>
-              </div>
-            </div>
-            
-            <div class="option-section">
-              <div class="option-section-title">Salada <span class="required-option">*</span></div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Salada mista" required>
-                  Salada mista (Alface, tomate, pepino, cebola, e salsa)
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Vinagrete" required>
-                  Vinagrete
-                </label>
-              </div>
-              <div class="option-item">
-                <label>
-                  <input type="radio" name="salada" value="Não quero salada" required>
-                  Não quero salada
-                </label>
-              </div>
-            </div>
-          `;
-        } else {
-          // Opções padrão para outros produtos
-          optionsHtml = `
-            <div class="option-section">
-              <div class="option-section-title">Observações</div>
-              <div class="option-item">
-                <textarea class="form-control" id="observacoes" rows="3" placeholder="Alguma observação sobre este item?"></textarea>
-              </div>
-            </div>
-          `;
-        }
-        
-        DOM.productOptionsModalTitle.textContent = `Opções: ${productName}`;
-        DOM.productOptionsContent.innerHTML = optionsHtml;
-        
-        currentProductOptions = {
-          id: productId,
-          name: productName,
-          price: basePrice,
-          image: document.querySelector(`.product[data-id="${productId}"] .product-image`)?.src || ''
-        };
-        
-        DOM.productOptionsModal.show();
-      },
-      
-      handleOptionsConfirmation: () => {
-        if (!currentProductOptions) return;
-        
-        const selectedOptions = {};
-        let additionalPrice = 0;
-        
-        // Processa todas as opções selecionadas
-        const radioGroups = DOM.productOptionsContent.querySelectorAll('input[type="radio"]:checked');
-        radioGroups.forEach(radio => {
-          const group = radio.name;
-          if (!selectedOptions[group]) {
-            selectedOptions[group] = [];
-          }
-          selectedOptions[group].push(radio.value);
-          
-          // Verifica se há preço adicional
-          if (radio.dataset.additionalPrice) {
-            additionalPrice += parseFloat(radio.dataset.additionalPrice);
-          }
-        });
-        
-        // Processa checkboxes (para o Churrasco Misto)
-        const checkboxes = DOM.productOptionsContent.querySelectorAll('input[type="checkbox"]:checked');
-        checkboxes.forEach(checkbox => {
-          const group = checkbox.name;
-          if (!selectedOptions[group]) {
-            selectedOptions[group] = [];
-          }
-          selectedOptions[group].push(checkbox.value);
-          
-          // Verifica se há preço adicional
-          if (checkbox.dataset.additionalPrice) {
-            additionalPrice += parseFloat(checkbox.dataset.additionalPrice);
-          }
-        });
-        
-        // Processa observações se houver
-        const observacoes = DOM.productOptionsContent.querySelector('#observacoes')?.value;
-        if (observacoes) {
-          selectedOptions['observacoes'] = [observacoes];
-        }
-        
-        // Calcula o preço final
-        const finalPrice = currentProductOptions.price + additionalPrice;
-        
-        Cart.addItem(
-          currentProductOptions.id,
-          currentProductOptions.name,
-          finalPrice,
-          currentProductOptions.image,
-          selectedOptions
-        );
-        
-        DOM.productOptionsModal.hide();
-        currentProductOptions = null;
-      }
-    };
+  showOptions: (productId, productName) => {
+    let optionsHtml = '';
+    let basePrice = 0;
+    
+    // Identifica o tipo de produto
+    const isChurrascoItem = ['101', '102', '103', '104'].includes(productId);
+    const isAcaiItem = ['601', '602'].includes(productId);
 
+    // Opções para Churrasco
+    if (isChurrascoItem) {
+      basePrice = productId === "101" ? 12.00 : 
+                 productId === "102" ? 13.00 : 
+                 productId === "103" ? 12.00 : 
+                 productId === "104" ? 12.00 : 0;
+      
+      
+      optionsHtml = `
+        <div class="option-section">
+          <div class="option-section-title">Feijão <span class="required-option">*</span></div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="feijao" value="Feijão de caldo" required>
+              Feijão de caldo
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="feijao" value="Feijão tropeiro" required>
+              Feijão tropeiro
+            </label>
+          </div>
+          <div class="max-selection">Selecione uma opção</div>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">Acompanhamentos <span class="required-option">*</span></div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="acompanhamento" value="Banana frita" required>
+              Banana frita
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="acompanhamento" value="Batata frita" required>
+              Batata frita
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="acompanhamento" value="Mandioca cozida" required>
+              Mandioca cozida
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="acompanhamento" value="Mandioca frita" required>
+              Mandioca frita
+            </label>
+          </div>
+          <div class="max-selection">Selecione uma opção</div>
+        </div>
+      `;
+     
+// Adicione este caso no início da função showOptions
+if (productId === "601" || productId === "602") {
+  basePrice = productId === "601" ? 6.00 : 10.00;
+  
+  optionsHtml = `
+    <div class="option-section">
+      <div class="option-section-title">Escolha seus acompanhamentos</div>
+      <div class="option-item">
+        <label>
+          <input type="checkbox" name="acompanhamentos" value="Granola">
+          Granola
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="checkbox" name="acompanhamentos" value="Leite condensado">
+          Leite condensado
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="checkbox" name="acompanhamentos" value="Banana">
+          Banana
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="checkbox" name="acompanhamentos" value="Morango">
+          Morango
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="checkbox" name="acompanhamentos" value="Leite Ninho">
+          Leite Ninho
+        </label>
+      </div>
+    </div>
+    
+    <div class="option-section">
+      <div class="option-section-title">Ou selecione:</div>
+      <div class="option-item">
+        <label>
+          <input type="radio" name="opcao_açai" value="completo" onclick="selectAllAçaiToppings()">
+          Quero Completo (todos os acompanhamentos)
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="radio" name="opcao_açai" value="personalizado" checked>
+          Personalizado (escolher acompanhamentos)
+        </label>
+      </div>
+    </div>
+  `;
+}
+      
+      // Seções específicas para cada tipo de item
+      if (productId === "101") { // Churrasco Misto
+        optionsHtml += `
+          <div class="option-section" id="carnes-section">
+            <div class="option-section-title">Carnes <span class="required-option">*</span></div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="carnes" value="Coração de galinha" data-max="2">
+                Coração de galinha
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="carnes" value="Costelinha de porco" data-max="2">
+                Costelinha de porco
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="carnes" value="Filé de frango" data-max="2">
+                Filé de frango
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="carnes" value="Linguiça" data-max="2">
+                Linguiça
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="carnes" value="Maminha (+1€)" data-additional-price="1" data-exclusive>
+                Maminha <span class="additional-price">+€1,00</span>
+              </label>
+            </div>
+            <div class="option-item">
+              <label>
+                <input type="checkbox" name="carnes" value="Torresmo" data-max="2">
+                Torresmo
+              </label>
+            </div>
+            <div class="max-selection" id="max-carnes">Escolha até 2 carnes (ou somente Maminha)</div>
+          </div>
+          
+             <div class="option-section" id="ponto-carne-section" style="display:none;">
+      <div class="option-section-title">Ponto da Carne <span class="required-option">*</span></div>
+      <div class="option-item">
+        <label>
+          <input type="radio" name="ponto_carne" value="Selada" required>
+          Selada
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="radio" name="ponto_carne" value="Mal passada" required>
+          Mal passada
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="radio" name="ponto_carne" value="Ao ponto" required>
+          Ao ponto
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="radio" name="ponto_carne" value="Ao ponto para bem" required>
+          Ao ponto para bem
+        </label>
+      </div>
+      <div class="option-item">
+        <label>
+          <input type="radio" name="ponto_carne" value="Bem passado" required>
+          Bem passado
+        </label>
+      </div>
+      <div class="max-selection">Selecione uma opção</div>
+    </div>
+  `;
+      }
+      
+      // Opções comuns para salada
+      optionsHtml += `
+        <div class="option-section">
+          <div class="option-section-title">Salada <span class="required-option">*</span></div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="salada" value="Salada mista" required>
+              Salada mista (Alface, tomate, pepino, cebola, e salsa)
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="salada" value="Vinagrete" required>
+              Vinagrete
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="salada" value="Não quero salada" required>
+              Não quero salada
+            </label>
+          </div>
+          <div class="max-selection">Selecione uma opção</div>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">Refrigerante</div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Água 500ml (+1€)" data-additional-price="1">
+              Água 500ml <span class="additional-price">+€1,00</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Água Castelo 500ml (+1.5€)" data-additional-price="1.5">
+              Água Castelo 500ml <span class="additional-price">+€1,50</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Água das Pedras 500ml (+1.5€)" data-additional-price="1.5">
+              Água das Pedras 500ml <span class="additional-price">+€1,50</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Coca-Cola (+2€)" data-additional-price="2">
+              Coca-Cola <span class="additional-price">+€2,00</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Coca-Cola Zero (+2€)" data-additional-price="2">
+              Coca-Cola Zero <span class="additional-price">+€2,00</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Fanta (+2€)" data-additional-price="2">
+              Fanta <span class="additional-price">+€2,00</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Guaraná do Brasil (+2€)" data-additional-price="2">
+              Guaraná do Brasil <span class="additional-price">+€2,00</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Ice Tea de Manga (+2€)" data-additional-price="2">
+              Ice Tea de Manga <span class="additional-price">+€2,00</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <label>
+              <input type="radio" name="bebida" value="Sem refrigerante">
+              Sem refrigerante
+            </label>
+          </div>
+        </div>
+      `;
+    } else {
+      // Opções padrão para outros produtos
+      optionsHtml = `
+        <div class="option-section">
+          <div class="option-section-title">Observações</div>
+          <div class="option-item">
+            <textarea class="form-control" id="observacoes" rows="3" placeholder="Alguma observação sobre este item?"></textarea>
+          </div>
+        </div>
+      `;
+    }
+    
+    DOM.productOptionsModalTitle.textContent = `Opções: ${productName}`;
+    DOM.productOptionsContent.innerHTML = optionsHtml;
+    
+    currentProductOptions = {
+      id: productId,
+      name: productName,
+      price: basePrice,
+      image: document.querySelector(`.product-card[data-id="${productId}"] .product-image`)?.src || ''
+    };
+    
+    // Adiciona eventos para controlar a seleção máxima
+    if (isChurrascoItem && productId === "101") {
+      const carnesSection = DOM.productOptionsContent.querySelector('#carnes-section');
+      const carnesCheckboxes = carnesSection.querySelectorAll('input[type="checkbox"]');
+      const maxMessage = carnesSection.querySelector('.max-selection');
+      
+      carnesCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const isExclusive = this.hasAttribute('data-exclusive');
+        const checkedCount = Array.from(carnesCheckboxes)
+            .filter(cb => cb.checked && !cb.hasAttribute('data-exclusive')).length;
+        
+        if (isExclusive && this.checked) {
+            // Se selecionou Maminha (opção exclusiva)
+            // Desmarca e desabilita todas as outras carnes
+            carnesCheckboxes.forEach(cb => {
+                if (cb !== this) {
+                    cb.checked = false;
+                    cb.disabled = true;
+                    cb.closest('.option-item').classList.add('disabled');
+                }
+            });
+            
+            // Mostra a seção de ponto da carne
+            document.getElementById('ponto-carne-section').style.display = 'block';
+            maxMessage.textContent = "Opção 'Maminha' selecionada";
+        } 
+        else if (this.checked && checkedCount >= 2) {
+            // Se selecionou 2 carnes normais
+            // Desabilita as não selecionadas
+            carnesCheckboxes.forEach(cb => {
+                if (!cb.checked && !cb.hasAttribute('data-exclusive')) {
+                    cb.disabled = true;
+                    cb.closest('.option-item').classList.add('disabled');
+                }
+            });
+            maxMessage.textContent = "Máximo de 2 carnes selecionadas";
+        } 
+        else {
+            // Reativa todas as opções (exceto se Maminha estiver selecionada)
+            const maminhaSelected = Array.from(carnesCheckboxes)
+                .some(cb => cb.hasAttribute('data-exclusive') && cb.checked);
+            
+            if (!maminhaSelected) {
+                carnesCheckboxes.forEach(cb => {
+                    cb.disabled = false;
+                    cb.closest('.option-item').classList.remove('disabled');
+                });
+                
+                // Atualiza mensagem
+                if (checkedCount === 0) {
+                    maxMessage.textContent = "Escolha até 2 carnes (ou somente Maminha)";
+                } else {
+                    maxMessage.textContent = `Selecionado: ${checkedCount}/2 carnes`;
+                }
+                
+                // Esconde a seção de ponto da carne
+                document.getElementById('ponto-carne-section').style.display = 'none';
+            }
+        }
+        
+        maxMessage.style.display = 'block';
+    });
+});
+      
+      // Validação de campos obrigatórios
+      const requiredSections = DOM.productOptionsContent.querySelectorAll('.option-section [required]');
+      requiredSections.forEach(section => {
+        section.addEventListener('change', function() {
+          const sectionContainer = this.closest('.option-section');
+          const maxMessage = sectionContainer.querySelector('.max-selection');
+          
+          if (this.type === 'checkbox' || this.type === 'radio') {
+            const selected = sectionContainer.querySelector('input:checked');
+            if (selected) {
+              maxMessage.style.display = 'none';
+              sectionContainer.classList.remove('required-field');
+            } else {
+              maxMessage.style.display = 'block';
+              maxMessage.textContent = 'Selecione uma opção';
+              sectionContainer.classList.add('required-field');
+            }
+          }
+        });
+      });
+    }
+    
+    DOM.productOptionsModal.show();
+  },
+  handleOptionsConfirmation: () => {
+    // Validação de campos obrigatórios
+    const requiredSections = DOM.productOptionsContent.querySelectorAll('.option-section [required]');
+    let isValid = true;
+    
+    requiredSections.forEach(section => {
+      const sectionContainer = section.closest('.option-section');
+      if (sectionContainer.style.display !== 'none') {
+        const maxMessage = sectionContainer.querySelector('.max-selection');
+        
+        if (section.type === 'checkbox' || section.type === 'radio') {
+          const selected = sectionContainer.querySelector('input:checked');
+          if (!selected) {
+            maxMessage.style.display = 'block';
+            sectionContainer.classList.add('required-field');
+            isValid = false;
+          }
+        }
+      }
+    });
+    
+    if (!isValid) {
+      Utils.showNotification('Por favor, selecione todas as opções obrigatórias', 'danger');
+      return;
+    }
+    
+    // Coletar todas as opções selecionadas
+    const options = {};
+    
+    // Lógica específica para Açaí
+    if (currentProductOptions.id === "601" || currentProductOptions.id === "602") {
+      const opcaoCompleta = document.querySelector('input[name="opcao_açai"]:checked').value === "completo";
+      const acompanhamentos = [];
+      
+      if (opcaoCompleta) {
+        // Adiciona todos os acompanhamentos
+        acompanhamentos.push("Granola", "Leite condensado", "Banana", "Morango", "Leite Ninho");
+      } else {
+        // Adiciona apenas os selecionados
+        const selected = document.querySelectorAll('input[name="acompanhamentos"]:checked');
+        selected.forEach(input => {
+          acompanhamentos.push(input.value);
+        });
+      }
+      
+      options["Acompanhamentos"] = acompanhamentos.length > 0 ? acompanhamentos : ["Sem acompanhamentos"];
+    } 
+    else {
+      // Lógica para outros produtos
+      const sections = DOM.productOptionsContent.querySelectorAll('.option-section');
+      
+      sections.forEach(section => {
+        const title = section.querySelector('.option-section-title')?.textContent.replace(' *', '');
+        const inputs = section.querySelectorAll('input:checked');
+        
+        if (inputs.length > 0 && title) {
+          options[title] = Array.from(inputs).map(input => {
+            const additionalPrice = input.getAttribute('data-additional-price') || 0;
+            if (additionalPrice) {
+              currentProductOptions.price += parseFloat(additionalPrice);
+            }
+            return input.value;
+          });
+        }
+      });
+    }
+    
+    // Adicionar ao carrinho com as opções
+    Cart.addItem(
+      currentProductOptions.id,
+      currentProductOptions.name,
+      currentProductOptions.price,
+      currentProductOptions.image,
+      options
+    );
+    
+    // Resetar o produto atual e fechar o modal
+    currentProductOptions = null;
+    DOM.productOptionsModal.hide();
+    
+    // Mostrar feedback visual
+    DOM.confirmProductOptions.classList.add('added');
+    setTimeout(() => {
+      DOM.confirmProductOptions.classList.remove('added');
+    }, 2000);
+  }
+};
+
+// Função auxiliar para selecionar todos os acompanhamentos do açaí
+function selectAllAçaiToppings() {
+  const checkboxes = document.querySelectorAll('input[name="acompanhamentos"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = true;
+  });
+}
     // Event Listeners
     function setupEventListeners() {
+      // Botão Adicionar ao Carrinho
       document.addEventListener('click', (event) => {
         if (event.target.closest('.add-to-cart')) {
           const button = event.target.closest('.add-to-cart');
-          const productElement = button.closest('.product');
-          const id = productElement.getAttribute("data-id");
-          const name = productElement.querySelector(".product-name").textContent;
+          const productCard = button.closest('.product-card');
           
-          // Verifica se o produto tem opções
-          if (productElement.hasAttribute('data-has-options')) {
-            ProductOptions.showOptions(id, name);
-          } else {
-            const price = Utils.parsePrice(productElement.querySelector(".product-price").textContent);
-            const image = productElement.querySelector(".product-image")?.src || '';
-            Cart.addItem(id, name, price, image);
+          if (productCard) {
+            const id = productCard.getAttribute("data-id");
+            const nameElement = productCard.querySelector(".product-name");
+            const priceElement = productCard.querySelector(".product-price");
+            const imageElement = productCard.querySelector(".product-image");
+            
+            if (nameElement && priceElement) {
+              const name = nameElement.textContent;
+              const price = Utils.parsePrice(priceElement.textContent);
+              const image = imageElement?.src || '';
+              
+              if (productCard.getAttribute('data-has-options') === 'true') {
+                ProductOptions.showOptions(id, name);
+              } else {
+                Cart.addItem(id, name, price, image);
+              }
+            }
           }
         }
-      });
 
-      DOM.cartItems.addEventListener("click", (event) => {
-        if (event.target.closest(".remove-item")) {
-          const id = event.target.closest(".remove-item").getAttribute("data-id");
-          Cart.removeItem(id);
-        }
-        
-        if (event.target.closest(".increase")) {
-          const id = event.target.closest(".increase").getAttribute("data-id");
-          const item = cart.find(item => item.id === id);
-          if (item) {
-            Cart.updateItemQuantity(id, item.quantity + 1);
-          }
-        }
-        
-        if (event.target.closest(".decrease")) {
-          const id = event.target.closest(".decrease").getAttribute("data-id");
-          const item = cart.find(item => item.id === id);
-          if (item) {
-            Cart.updateItemQuantity(id, item.quantity - 1);
-          }
-        }
-      });
+    // Remover item do carrinho
+    if (event.target.closest('.remove-item')) {
+      const id = event.target.closest('.remove-item').getAttribute("data-id");
+      Cart.removeItem(id);
+    }
 
-      DOM.checkoutButton.addEventListener("click", () => {
+    // Aumentar quantidade
+    if (event.target.closest('.increase')) {
+      const id = event.target.closest('.increase').getAttribute("data-id");
+      const item = cart.find(item => item.id === id);
+      if (item) {
+        Cart.updateItemQuantity(id, item.quantity + 1);
+      }
+    }
+
+    // Diminuir quantidade
+    if (event.target.closest('.decrease')) {
+      const id = event.target.closest('.decrease').getAttribute("data-id");
+      const item = cart.find(item => item.id === id);
+      if (item) {
+        Cart.updateItemQuantity(id, item.quantity - 1);
+      }
+    }
+  });
+
+  // Botão Finalizar Pedido
+  if (DOM.checkoutButton) {
+    DOM.checkoutButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      if (cart.length === 0) {
+        alert('Seu carrinho está vazio!');
+        return;
+      }
+
+      if (DOM.productSection && DOM.checkoutSection) {
         DOM.productSection.classList.add("d-none");
         DOM.checkoutSection.classList.remove("d-none");
         Checkout.init();
-        Cart.toggleSidebar();
-      });
+        
+        if (DOM.cartSidebar && DOM.cartSidebar.classList.contains('show')) {
+          Cart.toggleSidebar();
+        }
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
 
-      DOM.backToCartButton.addEventListener("click", () => {
+  // Botão Voltar para o Carrinho
+  if (DOM.backToCartButton) {
+    DOM.backToCartButton.addEventListener("click", () => {
+      if (DOM.productSection && DOM.checkoutSection) {
         DOM.productSection.classList.remove("d-none");
         DOM.checkoutSection.classList.add("d-none");
-      });
+      }
+    });
+  }
 
-      DOM.confirmOrderButton.addEventListener("click", async () => {
-        const pedido = await Order.sendToBackend();
-        if (pedido) {
-          Order.sendToWhatsApp(pedido);
+  // Botões de Categoria
+  document.querySelectorAll('.category-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.category-tab').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      Filter.apply(tab.dataset.category);
+    });
+  });
+
+  // Botão do Carrinho
+  if (DOM.cartIndicator) {
+    DOM.cartIndicator.addEventListener('click', () => {
+      Cart.toggleSidebar();
+    });
+  }
+
+  // Botão Fechar Carrinho
+  if (DOM.closeCart) {
+    DOM.closeCart.addEventListener('click', () => {
+      Cart.toggleSidebar();
+    });
+  }
+  
+  // Overlay do Carrinho
+  if (DOM.cartOverlay) {
+    DOM.cartOverlay.addEventListener('click', () => {
+      Cart.toggleSidebar();
+    });
+  }
+  
+  // Opções de Entrega
+  DOM.deliveryOptionCards?.forEach(card => {
+    card.addEventListener('click', () => {
+      const input = card.querySelector('input');
+      if (input) {
+        input.checked = true;
+        DOM.deliveryOptionCards?.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        Checkout.toggleDeliveryFields(input.value === 'entrega');
+      }
+    });
+  });
+
+  // Métodos de Pagamento
+  DOM.paymentMethodCards?.forEach(card => {
+    card.addEventListener('click', () => {
+      const input = card.querySelector('input');
+      if (input) {
+        input.checked = true;
+        DOM.paymentMethodCards?.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        
+        if (input.value === 'dinheiro' && DOM.cashChangeField) {
+          DOM.cashChangeField.classList.remove('d-none');
+        } else if (DOM.cashChangeField) {
+          DOM.cashChangeField.classList.add('d-none');
         }
-      });
+      }
+    });
+  });
 
-      DOM.filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          Filter.apply(button.dataset.category);
+   // Botão de acesso admin (NOVO)
+   if (DOM.adminAccessBtn) {
+        DOM.adminAccessBtn.addEventListener('click', () => {
+          if (DOM.adminLoginModal) {
+            DOM.adminLoginModal.show();
+          }
         });
-      });
-
-      DOM.cartIndicator.addEventListener('click', () => {
-        Cart.toggleSidebar();
-      });
-      
-      DOM.closeCart.addEventListener('click', () => {
-        Cart.toggleSidebar();
-      });
-      
-      DOM.cartOverlay.addEventListener('click', () => {
-        Cart.toggleSidebar();
-      });
-      
-      DOM.deliveryOptionCards.forEach(card => {
-        card.addEventListener('click', () => {
-          const input = card.querySelector('input');
-          input.checked = true;
+      }
+  
+   // Formulário de Login Admin (ATUALIZADO)
+   const adminLoginForm = document.getElementById('admin-login-form');
+      if (adminLoginForm) {
+        adminLoginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const username = document.getElementById('admin-username')?.value;
+          const password = document.getElementById('admin-password')?.value;
           
-          DOM.deliveryOptionCards.forEach(c => c.classList.remove('active'));
-          card.classList.add('active');
-          
-          Checkout.toggleDeliveryFields(input.value === 'entrega');
-        });
-      });
-      
-      DOM.paymentMethodCards.forEach(card => {
-        card.addEventListener('click', () => {
-          const input = card.querySelector('input');
-          input.checked = true;
-          
-          DOM.paymentMethodCards.forEach(c => c.classList.remove('active'));
-          card.classList.add('active');
-          
-          if (input.value === 'dinheiro') {
-            DOM.cashChangeField.classList.remove('d-none');
+          if (username && password) {
+            Admin.login(username, password);
           } else {
-            DOM.cashChangeField.classList.add('d-none');
+            Utils.showNotification('Por favor, preencha todos os campos', 'danger');
           }
         });
-      });
-      
-      DOM.adminAccessBtn.addEventListener('click', () => {
-        if (isAdminLoggedIn) {
-          Utils.showNotification('Você já está logado', 'info');
-        } else {
-          DOM.adminLoginModal.show();
-        }
-      });
-      
-      document.getElementById('admin-login-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('admin-username').value;
-        const password = document.getElementById('admin-password').value;
-        
-        Admin.login(username, password);
-      });
-      
-      DOM.adminLogoutButton.addEventListener('click', () => {
-        Admin.logout();
-        Utils.showNotification('Logout realizado com sucesso', 'info');
-      });
-      
-      DOM.ordersList.addEventListener('click', (event) => {
-        if (event.target.closest('.update-status')) {
-          const button = event.target.closest('.update-status');
-          const orderId = button.getAttribute('data-id');
-          const newStatus = button.getAttribute('data-status');
-          
-          Order.updateStatus(orderId, newStatus);
-        }
-        
-        if (event.target.closest('.view-kitchen-order')) {
-          const button = event.target.closest('.view-kitchen-order');
-          const orderId = button.getAttribute('data-id');
-          const kitchenOrder = Order.generateKitchenOrder(orderId);
-          
-          DOM.kitchenOrderContent.innerHTML = kitchenOrder;
-          DOM.kitchenOrderModal.show();
-        }
-      });
-      
-      DOM.printKitchenOrder.addEventListener('click', () => {
-        const orderId = document.querySelector('.view-kitchen-order.active')?.getAttribute('data-id') || 
-                        document.querySelector('.view-kitchen-order')?.getAttribute('data-id');
-        if (orderId) {
-          Order.printKitchenOrder(orderId);
-          DOM.kitchenOrderModal.hide();
-        }
-      });
-      
-      DOM.applyFilters.addEventListener('click', () => {
-        Order.updateAdminPanel();
-      });
-      
-      DOM.notificationBell.addEventListener('click', () => {
-        DOM.notificationBadge.classList.add('d-none');
-        pendingOrdersCount = 0;
-        newOrders = []; // Limpa a lista de novos pedidos
-      });
-      
-      DOM.confirmProductOptions.addEventListener('click', () => {
-        ProductOptions.handleOptionsConfirmation();
-      });
-      
-      // Removido o event listener do logoHome para evitar comportamento indesejado
-    }
+      }
 
-    // Inicialização
-    function init() {
-      // Limpa o estado de novos pedidos ao iniciar
-      newOrders = [];
-      pendingOrdersCount = 0;
+  // Botão Logout Admin
+  if (DOM.adminLogoutButton) {
+    DOM.adminLogoutButton.addEventListener('click', () => {
+      Admin.logout();
+    });
+  }
+  
+  // Botões no Painel Admin
+  if (DOM.ordersList) {
+    DOM.ordersList.addEventListener('click', (event) => {
+      if (event.target.closest('.update-status')) {
+        const button = event.target.closest('.update-status');
+        const orderId = button.getAttribute('data-id');
+        const newStatus = button.getAttribute('data-status');
+        Order.updateStatus(orderId, newStatus);
+      }
+      
+      if (event.target.closest('.view-kitchen-order')) {
+        const button = event.target.closest('.view-kitchen-order');
+        const orderId = button.getAttribute('data-id');
+        const kitchenOrder = Order.generateKitchenOrder(orderId);
+        DOM.kitchenOrderContent.innerHTML = kitchenOrder;
+        DOM.kitchenOrderModal.show();
+      }
+    });
+  }
+
+  // Botão Imprimir Pedido
+  if (DOM.printKitchenOrder) {
+    DOM.printKitchenOrder.addEventListener('click', () => {
+      const orderId = document.querySelector('.view-kitchen-order.active')?.getAttribute('data-id') || 
+                      document.querySelector('.view-kitchen-order')?.getAttribute('data-id');
+      if (orderId) {
+        Order.printKitchenOrder(orderId);
+        DOM.kitchenOrderModal.hide();
+      }
+    });
+  }
+  
+  // Botão Aplicar Filtros
+  if (DOM.applyFilters) {
+    DOM.applyFilters.addEventListener('click', () => {
+      Order.updateAdminPanel();
+    });
+  }
+
+  // Notificação de Pedidos
+  if (DOM.notificationBell) {
+    DOM.notificationBell.addEventListener('click', () => {
       DOM.notificationBadge.classList.add('d-none');
-      
-      setupEventListeners();
-      Cart.updateUI();
-      Filter.apply('all');
-      Checkout.toggleDeliveryFields(true);
-      
-      // Configura o listener de pedidos do Firebase
-      FirebaseService.listenForOrders((ordersFromFirebase) => {
-        const previousOrderCount = orders.length;
-        orders = ordersFromFirebase;
-        
-        // Identifica novos pedidos apenas após a carga inicial
-        if (previousOrderCount > 0) {
-          const currentOrderIds = orders.map(o => o.id);
-          const previousOrderIds = ordersFromFirebase.slice(0, previousOrderCount).map(o => o.id);
-          const newlyAddedOrders = currentOrderIds.filter(id => !previousOrderIds.includes(id));
+      pendingOrdersCount = 0;
+      newOrders = [];
+    });
+  }
+  
+  // Confirmar Opções do Produto
+  if (DOM.confirmProductOptions) {
+    DOM.confirmProductOptions.addEventListener('click', () => {
+      ProductOptions.handleOptionsConfirmation();
+    });
+  }
+}
+    
+ 
+
+    // Adicionar este código na seção de Event Listeners
+  // Botão Confirmar Pedido (ATUALIZADO)
+  if (DOM.confirmOrderButton) {
+        DOM.confirmOrderButton.addEventListener('click', async (e) => {
+          e.preventDefault();
           
-          if (newlyAddedOrders.length > 0 && isAdminLoggedIn) {
-            // Atualiza a lista de novos pedidos
-            newOrders = [...new Set([...newOrders, ...newlyAddedOrders])];
-            
-            // Atualiza notificações
-            pendingOrdersCount += newlyAddedOrders.length;
-            DOM.notificationBadge.textContent = pendingOrdersCount;
-            DOM.notificationBadge.classList.remove('d-none');
-            
-            Utils.showNewOrderNotification(newlyAddedOrders.length);
+          // Validar campos obrigatórios
+          const name = document.getElementById('customer-name').value;
+          const phone = document.getElementById('customer-phone').value;
+          const isDelivery = document.getElementById('delivery-method').checked;
+          const address = document.getElementById('customer-address').value;
+          
+          if (!name || !phone) {
+            Utils.showNotification('Por favor, preencha seu nome e telefone', 'danger');
+            return;
           }
-        }
-        
-        if (isAdminLoggedIn) {
-          Order.updateAdminPanel();
-        }
-      });
-      
-      Admin.checkLoginStatus();
+          
+          if (!Utils.validatePhone(phone)) {
+            Utils.showNotification('Por favor, insira um telefone válido', 'danger');
+            return;
+          }
+          
+          if (isDelivery && !address) {
+            Utils.showNotification('Por favor, preencha seu endereço completo', 'danger');
+            return;
+          }
+
+          try {
+            // Mostrar estado de carregamento
+            DOM.confirmOrderButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
+            DOM.confirmOrderButton.disabled = true;
+
+            // Criar e salvar o pedido
+            const order = Order.create();
+            const savedOrder = await Order.saveOrder(order);
+            
+            if (!savedOrder) {
+              throw new Error("Falha ao salvar pedido");
+            }
+
+            // Enviar para WhatsApp
+            Order.sendToWhatsApp(savedOrder);
+            
+          } catch (error) {
+            console.error("Erro ao confirmar pedido:", error);
+            Utils.showNotification(`Erro: ${error.message}`, 'danger');
+            
+          } finally {
+            // Restaurar o botão
+            DOM.confirmOrderButton.innerHTML = '<i class="fas fa-check-circle me-2"></i> Confirmar Pedido';
+            DOM.confirmOrderButton.disabled = false;
+          }
+        });
+      }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+  if (DOM.productSection && DOM.checkoutSection && DOM.adminPanel) {
+    DOM.productSection.classList.remove("d-none");
+    DOM.checkoutSection.classList.add("d-none");
+    DOM.adminPanel.classList.add("d-none");
+  }
+
+  setupEventListeners();
+  Cart.updateUI();
+  Filter.apply('all');
+  Checkout.toggleDeliveryFields(true);
+  Admin.checkLoginStatus();
+
+  FirebaseService.listenForOrders((ordersFromFirebase) => {
+    orders = ordersFromFirebase;
+    if (isAdminLoggedIn) {
+      Order.updateAdminPanel();
     }
+  });
+});
 
     document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
-</html>
+</html>   
