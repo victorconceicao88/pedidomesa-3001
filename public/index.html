@@ -1707,19 +1707,21 @@ body {
   
   <script>
     // Configurações do Firebase (substitua com suas credenciais)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCV809Fi4JTLZclARfU4MtNSAVkJIrGcfk",
-      authDomain: "cozinha-da-vivi-83d09.firebaseapp.com",
-      projectId: "cozinha-da-vivi-83d09",
-      storageBucket: "cozinha-da-vivi-83d09.appspot.com",
-      messagingSenderId: "740046409209",
-      appId: "1:740046409209:web:f8cff12dc530e22fba4128",
-      databaseURL: "https://cozinha-da-vivi-83d09-default-rtdb.europe-west1.firebasedatabase.app"
-    };
+   // Your web app's Firebase configuration
+   const firebaseConfig = {
+  apiKey: "AIzaSyBbJmwq5Ia68S3UPhnaUerEl0paRdXQNqM",
+  authDomain: "vivi-sala.firebaseapp.com",
+  projectId: "vivi-sala",
+  storageBucket: "vivi-sala.firebasestorage.app",
+  messagingSenderId: "1082904016563",
+  appId: "1:1082904016563:web:044e5502b10e0ae4d922c6",
+  databaseURL: "https://vivi-sala-default-rtdb.europe-west1.firebasedatabase.app"  // Atualizado para a URL da região correta
+};
 
-    // Inicializa o Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+// Inicializa o Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 
     // Configurações do aplicativo
     const APP_CONFIG = {
