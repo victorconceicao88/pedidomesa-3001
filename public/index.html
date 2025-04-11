@@ -1980,13 +1980,17 @@ body {
 
           // Filtrar apenas itens que precisam ser enviados para a cozinha
           const kitchenItems = items.filter(item => {
-            const category = document.querySelector(`.product-card[data-id="${item.id}"]`)?.dataset.category;
+            const productCard = document.querySelector(`.product-card[data-id="${item.id}"]`);
+            if (!productCard) return false;
+            const category = productCard.dataset.category;
             return ['churrasco', 'burguers', 'combos', 'pratos'].includes(category);
           });
 
           // Itens que não precisam ser enviados para a cozinha (bebidas, sobremesas)
           const nonKitchenItems = items.filter(item => {
-            const category = document.querySelector(`.product-card[data-id="${item.id}"]`)?.dataset.category;
+            const productCard = document.querySelector(`.product-card[data-id="${item.id}"]`);
+            if (!productCard) return false;
+            const category = productCard.dataset.category;
             return ['bebidas', 'sobremesas'].includes(category);
           });
 
@@ -2003,6 +2007,8 @@ body {
               document.getElementById('kitchen-order-content').innerHTML = kitchenOrder;
               kitchenOrderModal.show();
             }
+          } else {
+            Utils.showNotification('Itens adicionados diretamente à comanda da mesa', 'success');
           }
 
           // Adicionar todos os itens ao consumo da mesa
